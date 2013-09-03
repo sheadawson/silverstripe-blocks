@@ -1,0 +1,3 @@
+SiteTree:
+  extensions:
+    - BlocksSiteTreeExtension
