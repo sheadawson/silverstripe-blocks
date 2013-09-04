@@ -1,15 +1,20 @@
 <?php
-
+/**
+ * @package silverstipe blocks
+ * @author Shea Dawson <shea@silverstripe.com.au>
+ */
 class Block extends DataObject{
 
 	private static $db = array(
 		'Title' => 'Varchar',
 		'Area' => 'Varchar',
 		'Published' => 'Boolean',
+		'Weight' => 'Int'
 	);
 
 	private static $belongs_many_many = array(
-		'Pages' => 'SiteTree'
+		'Pages' => 'SiteTree',
+		'BlockSets' => 'BlockSet'
 	);
 
 	private static $summary_fields = array(
@@ -18,7 +23,13 @@ class Block extends DataObject{
 		'Published' => 'Published'
 	);
 
-	private static $areas = array();
+	private static $default_sort = 'Weight';
+
+	private static $dependencies = array(
+        'blockConfig' => '%$blockConfig',
+    );
+
+    public $blockConfig;
 
 
 	public function getCMSFields(){
@@ -30,26 +41,34 @@ class Block extends DataObject{
 				TextField::create('Title', 'Title'),
 				DropdownField::create('ClassName', 'Block Type', $classes)
 			);
-		}else{
-			$fields = parent::getCMSFields();
-			$fields->replaceField('Area', DropdownField::create('Area', 'Area', $this->getAreasFor($this->getCurrentTheme(), Controller::curr()->currentPage()->ClassName)));
-			return $fields;
+		
+			
 		}
+
+		$fields = parent::getCMSFields();
+		
+		$pageClass = null;
+
+		$controller = Controller::curr();
+		if($controller->class == 'BlockAdmin' && $controller->modelClass == 'BlockSet'){
+			// TODO filter areasForPageClass by the page types defined on the BlockSet
+			$fields->replaceField('Area', DropdownField::create('Area', 'Area', $this->blockConfig->getAreasForTheme()));			
+		}else{
+			$fields->replaceField('Area', DropdownField::create('Area', 'Area', $this->blockConfig->getAreasForPageClass()));
+		}
+		
+
+		return $fields;
+
+		
+		
 	}
 
 
-	public function getAreasFor($theme, $pageClass){
-		$config = $this->config()->get('areas');
-		$areas = $config[$this->getCurrentTheme()];
-		return ArrayLib::valuekey(array_keys($areas));
-		//return array_combine() array_keys($areas);
-	}
-
-
-	public function getCurrentTheme(){
-		return Config::inst()->get('SSViewer', 'theme');
-		return Multisites::inst()->getActiveSite()->Theme;
-	}
+	// public function getCurrentTheme(){
+	// 	return Config::inst()->get('SSViewer', 'theme');
+	// 	return Multisites::inst()->getActiveSite()->Theme;
+	// }
 
 
 	public function validate() {
