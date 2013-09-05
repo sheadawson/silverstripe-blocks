@@ -17,11 +17,18 @@ class BlockSet extends DataObject {
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
 
-		$fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', 'Apply to Page Types:', $this->pageTypesOptions())->setDescription('Selected Page Types will inherit this Block Set automatically'));
+		$fields->addFieldToTab('Root.Main', HeaderField::create('SettingsHeading', 'Settings'), 'Title');
+		$fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', 'Apply to Page Types:', $this->pageTypeOptions())->setDescription('Selected Page Types will inherit this Block Set automatically'));
 
 		if(!$this->ID){
 			$fields->addFieldToTab('Root.Main', LiteralField::create('NotSaved', "<p class='message warning'>You can add Blocks to this set once you have saved it for the first time</p>"));
 		}
+
+		$fields->removeFieldFromTab('Root', 'Blocks');
+		$gridConfig = GridFieldConfig_BlockManager::create(true);
+		$gridSource = $this->Blocks();
+		$fields->addFieldToTab('Root.Main', HeaderField::create('BlocksHeading', 'Blocks'));
+		$fields->addFieldToTab('Root.Main', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
 
 		return $fields;
 	}

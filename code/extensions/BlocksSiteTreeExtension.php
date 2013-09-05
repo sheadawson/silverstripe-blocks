@@ -6,53 +6,53 @@
 class BlocksSiteTreeExtension extends SiteTreeExtension{
 
 	private static $db = array(
-		'InheritBlocks' => 'Boolean',
-		'ExcludeInheritedBlocks' => 'MultiValueField'
+		'InheritGlobalBlocks' => 'Boolean',
+		'InheritBlockSets' => 'Boolean',
 	);
 
 	private static $many_many = array(
-		'Blocks' => 'Block'
+		'Blocks' => 'Block',
+		'DisabledBlocks' => 'Block'
 	);
 
-	// private static $many_many_extraFields = array(
-	// 	'Sort' => 'Int'
-	// );
-
 	private static $defaults = array(
-    	'InheritBlocks' => 1
+    	'InheritGlobalBlocks' => 1,
+    	'InheritBlockSets' => 1
     );
 
 	private static $dependencies = array(
-        'blockConfig' => '%$blockConfig',
+        'blockManager' => '%$blockManager',
     );
 
-    public $blockConfig;
+    public $blockManager;
 
 
 	/**
 	 * Block manager for Pages
 	 **/
 	public function updateCMSFields(FieldList $fields) {
-		if(count($this->blockConfig->getAreasForPageClass($this->owner->ClassName))){
+		if(count($this->blockManager->getAreasForPageType($this->owner->ClassName))){
 	
 			// Blocks related directly to this Page 
-			$fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', 'Blocks', $this->owner->Blocks(), GridFieldConfig_BlockManager::create()));
-
-			// Blocks inherited from BlockSets 
-			$fields->addFieldToTab('Root.Blocks', HeaderField::create('InheritedFromSets', 'Block Sets'));
-			$blockSets = $this->getAppliedSets()->column('Title');
-			if(count($blockSets)){
-				$blockSetsMessage = 'This page inherits blocks from the following BlockSets: ' . implode(',', $blockSets);
-			}else{
-				$blockSetsMessage = 'This page does not inherit any Blocks from Block Sets';
-			}
-			$fields->addFieldToTab('Root.Blocks', LiteralField::create('BlockSetsMessage', $blockSetsMessage));
+			$gridConfig = GridFieldConfig_BlockManager::create(true, $this->owner->class);
+			$gridSource = $this->getBlockList(null, false);
+			$fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig)
+				->setModelClass('Block')
+			);
 			
-			// Blocks inherited from SiteConfig
-			$fields->addFieldToTab('Root.Blocks', HeaderField::create('InheritedGlobalBlocks', 'Inherited Global Blocks'));
-			$fields->addFieldToTab('Root.Blocks', CheckboxField::create('InheritBlocks', 'Inherit Global Blocks from Site Configuration'));
-			$excludables = $this->owner->Site()->Blocks()->map('ID', 'Title')->toArray();
-			$fields->addFieldToTab('Root.Blocks', MultiValueCheckboxField::create('ExcludeInheritedBlocks', 'Exclude', $excludables));
+			// Blocks inherited from SiteConfig and BlockSets
+			$fields->addFieldToTab('Root.Blocks', HeaderField::create('InheritedBlocksHeader', 'Inherited Blocks'));
+			$fields->addFieldToTab('Root.Blocks', CheckboxField::create('InheritGlobalBlocks', 'Inherit Global Blocks from Site Configuration'));
+			$fields->addFieldToTab('Root.Blocks', CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
+			
+			$excludables = $this->getBlockList(null, false, false, true, true, true, true)->map('ID', 'Title');
+			if(is_array($excludables)){
+				$fields->addFieldToTab('Root.Blocks', ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks', $excludables, null, null, true)
+					->setDescription('Select any inherited blocks that you would not like displayed on this page.')
+				);
+			}else{
+				$fields->addFieldToTab('Root.Blocks', ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks', 'This page has no inherited blocks to disable.'));
+			}
 
 		}else{
 			$fields->addFieldToTab('Root.Blocks', LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
@@ -73,43 +73,171 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 * @param string $area
 	 **/
 	public function BlockArea($area){
-		$data['BlockList'] = $this->getAllPublishedBlocks($area);
+		$data['BlockList'] = $this->getBlockList($area, true);
 		return $this->owner->customise($data)->renderWith(array("BlockArea_$area", "BlockArea"));
 	}
 
 
 	/**
 	 * Get a merged list of all blocks on this page and ones inherited from SiteConfig, BlockSets etc 
-	 * @return ArraList
+	 * @param string|null $area filter by block area
+	 * @param boolean $publishedOnly only return published blocks
+	 * @return ArrayList
 	 **/
-	public function getAllPublishedBlocks($area = null){
+	public function getBlockList(
+		$area = null, 
+		$publishedOnly = true, 
+		$includeNative = true, 
+		$includeGlobal = true, 
+		$includeSets = true, 
+		$includeDisabled = false){
+
+		$disabledBlockIDs = $includeDisabled ? null : $this->owner->DisabledBlocks()->column('ID');
+
+		////// start rewrite ///////
+
+		$blocks = DataList::create('Block');
+		$filter = array();
+
+		if($includeNative){
+			$siteTreeIDs[] = $this->owner->ID;
+		}
+
+		if($includeGlobal){
+			if($this->owner->InheritGlobalBlocks){
+				$siteTreeIDs[] = $this->owner->SiteID;
+			}
+		}
+
+		if(isset($siteTreeIDs)){
+			$blocks->innerJoin(
+				"SiteTree_Blocks", 
+				"SiteTree_Blocks.SiteTreeID = SiteTree.ID", 
+				"Pages"
+			);
+
+			$filter["Pages.ID"] = $siteTreeIDs;
+		}
+
+
+		// if($includeSets){
+		// 	if($this->owner->InheritBlockSets){
+		// 		if($blocksFromSets = $this->getAppliedSets($area, $includeDisabled)){
+		// 			$setIDsFilter = $blocksFromSets->column('ID');
+		// 		}
+		// 	}
+		// }
+
+		// if(isset($setIDsFilter)){
+		// 	$blocks->innerJoin(
+		// 		"BlockSet_Blocks", 
+		// 		"BlockSet_Blocks.BlockSetID = BlockSet.ID", 
+		// 		"BlockSets"
+		// 	);
+
+		// 	$filter["BlockSets.ID"] = $setIDsFilter;
+		// }
+
+		// PROBLEM 1 - $filter BREAKS gf when redirecting after adding new block - x page filters...
+
+		// this WORKS though
+		// $filter = array(
+		// 	'ID' => 4,
+		// 	'Area' => 'BeforeContent'
+		// );
+
+		// PROBLEM 2 - filterAny does not seem to work with x table filters either, it just behaves like filter...
+
+
+		// PROBLEM 3 - Cant use ArrayList instead of DataList because that also 
+
+
+		// Solution? Use ArrayList for now for frontend
+		// in backend, display the different sources in their own gridfields
+
+		
+		$blocks = $blocks->filter($filter);	
+
+		//$ids = implode(',', $siteTreeIDs);
+		//$blocks = $blocks->where("(Pages.ID IN ($ids))");
+
+		return $blocks;
+
+		/////// END REWRITE /////
+
+
+
+
+
 		// get blocks directly linked to this page
-		$blocks = $this->getPublishedBlocks();
-		if($area) $blocks = $blocks->filter('Area', $area);
-		$blocks = ArrayList::create($blocks->toArray());
+		if($includeNative){
+			$nativeBlocks = $this->owner->Blocks();
+			if($area) $nativeBlocks = $nativeBlocks->filter('Area', $area);
+			
+			if($nativeBlocks->count()){
+				foreach ($nativeBlocks as $block) {
+					$block->InheritedFrom = '-';
+					$blocks->add($block);
+				}
+			}
+		}
 
+
+		$blocks = ArrayList::create();
+
+		
+		
 		// get blocks inherited from SiteConfig
-		if($this->owner->InheritBlocks){
-			$inheritedBlocks = $this->owner->Site()->getPublishedBlocks()->exclude('ID', $this->owner->ExcludeInheritedBlocks->getValue());
-	
-			if($area) $inheritedBlocks = $inheritedBlocks->filter('Area', $area);
-			$inheritedBlocks = ArrayList::create($inheritedBlocks->toArray());
+		if($includeGlobal){
+			if($this->owner->InheritGlobalBlocks){
+				$inheritedBlocks = $this->owner->Site()->Blocks();
+				if(!$includeDisabled){
+					$inheritedBlocks = $inheritedBlocks->exclude('ID', $disabledBlockIDs);
+				}
+		
+				if($area) {
+					$inheritedBlocks = $inheritedBlocks->filter('Area', $area);
+				}
 
-			// merge inherited sources
-			foreach ($inheritedBlocks as $inheritedBlock) {
-				if(!$blocks->find('ID', $inheritedBlock->ID)) $blocks->unshift($inheritedBlock);
-			}
+				$inheritedBlocks = ArrayList::create($inheritedBlocks->toArray());
+
+				// merge inherited sources
+				foreach ($inheritedBlocks as $block) {
+					if(!$blocks->find('ID', $block->ID)) {
+						$block->InheritedFrom = 'Global Blocks';
+						$blocks->unshift($block);
+					}
+				}
+			}	
 		}
-
+		
 		// get blocks from BlockSets
-		if($blocksFromSets = $this->getBlocksFromAppliedBlockSets($area)){
-			// merge set sources
-			foreach ($blocksFromSets as $blocksFromSet) {
-				if(!$blocks->find('ID', $blocksFromSet->ID)) $blocks->unshift($blocksFromSet);
+		if($includeSets){
+			if($this->owner->InheritBlockSets){
+				if($blocksFromSets = $this->getBlocksFromAppliedBlockSets($area, $includeDisabled)){
+
+					// merge set sources
+					foreach ($blocksFromSets as $block) {
+						if(!$blocks->find('ID', $block->ID)) {
+							$block->InheritedFrom = 'Block Set';
+							$blocks->unshift($block);
+						}
+					}
+				}	
 			}
 		}
 
-		return $blocks->sort('Weight');
+		// hack - GridField can't get data class from empty ArrayList
+		// so return empty Block DataList
+		if($blocks->count() == 0){
+			return DataList::create('Block')->filter('ID', -1);
+		}
+		
+		// filter out unpublished blocks?
+		$blocks = $publishedOnly ? $blocks->filter('Published', 1) : $blocks;
+		$blocks = $blocks->sort(array('Area'=>'ASC', 'Weight'=>'ASC'));
+
+		return $blocks;
 	}
 
 
@@ -135,14 +263,39 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 * Get all Blocks from BlockSets that apply to this page 
 	 * @return ArrayList
 	 **/
-	public function getBlocksFromAppliedBlockSets($area = null){
+	public function getBlocksFromAppliedBlockSets($area = null, $includeDisabled = false){
 		$sets = $this->getAppliedSets();
 
 		if(!$sets) return;
 
+		
+
+		/// DATALIST
+		//$sets = $sets->column('ID');
+		// $blocks = Block::get();
+
+		// $blocks = $blocks->innerJoin(
+		// 	"BlockSet_Blocks", 
+		// 	"BlockSet_Blocks.BlockSetID = BlockSet.ID", 
+		// 	"BlockSets"
+		// );
+
+		// $blocks = $blocks->filter("BlockSets.ID:exactMatch", $sets);
+
+		// if(!$includeDisabled){
+		// 	$blocks = $blocks->exclude('ID', $this->owner->DisabledBlocks()->column('ID'));
+		// }
+
+		// return $blocks;
+		///
+
 		$blocks = ArrayList::create();
 		foreach ($sets as $set) {
-			$setBlocks = $set->getPublishedBlocks();
+			$setBlocks = $set->Blocks();
+			if($includeDisabled){
+				$setBlocks = $setBlocks->exclude('ID', $this->owner->DisabledBlocks()->column('ID'));
+			}
+
 			if($area) {
 				$setBlocks = $setBlocks->filter('Area', $area);
 			}

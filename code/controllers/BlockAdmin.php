@@ -12,4 +12,14 @@ class BlockAdmin extends ModelAdmin {
 	static $url_segment = 'block-admin';
 
 	static $menu_title = "Blocks";
+
+
+	// public function getEditForm($id = null, $fields = null) {
+	// 	$form = parent::getEditForm($id, $fields);
+	// 	foreach ($form->Fields() as $field) {
+	// 		var_dump($field->class);
+	// 		var_dump($field->getName());
+	// 	}
+	// 	return $form;
+	// }
 }

@@ -17,58 +17,50 @@ class Block extends DataObject{
 		'BlockSets' => 'BlockSet'
 	);
 
-	private static $summary_fields = array(
-		'Title' => 'Title', 
-		'Area' => 'Area',
-		'Published' => 'Published'
-	);
+	// private static $summary_fields = array(
+	// 	'Title' => 'Title', 
+	// 	'Area' => 'Area',
+	// 	'Published' => 'Published',
+	// );
 
 	private static $default_sort = 'Weight';
 
 	private static $dependencies = array(
-        'blockConfig' => '%$blockConfig',
+        'blockManager' => '%$blockManager',
     );
 
-    public $blockConfig;
-
+    public $blockManager;
 
 	public function getCMSFields(){
+		
+		if(Controller::curr()->class == 'CMSPageEditController'){
+			$areasFieldSource = $this->blockManager->getAreasForPageType(Controller::curr()->currentPage()->ClassName);	
+		}else{
+			$areasFieldSource = $this->blockManager->getAreasForTheme();	
+		}
+		
+		$areasField = DropdownField::create('Area', 'Area', $areasFieldSource);
+		
 		if(!$this->ID){
-			$classes = ArrayLib::valuekey(ClassInfo::subclassesFor($this->class));
-			unset($classes[$this->class]);
+			//var_dump($this->class);
+			$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
+			unset($classes['Block']);
 
 			return FieldList::create(
 				TextField::create('Title', 'Title'),
-				DropdownField::create('ClassName', 'Block Type', $classes)
+				DropdownField::create('ClassName', 'Block Type', $classes),
+				$areasField
 			);
-		
-			
-		}
 
-		$fields = parent::getCMSFields();
-		
-		$pageClass = null;
-
-		$controller = Controller::curr();
-		if($controller->class == 'BlockAdmin' && $controller->modelClass == 'BlockSet'){
-			// TODO filter areasForPageClass by the page types defined on the BlockSet
-			$fields->replaceField('Area', DropdownField::create('Area', 'Area', $this->blockConfig->getAreasForTheme()));			
 		}else{
-			$fields->replaceField('Area', DropdownField::create('Area', 'Area', $this->blockConfig->getAreasForPageClass()));
+			$fields = parent::getCMSFields();
+			$pageClass = null;
+			$controller = Controller::curr();		
+			$fields->replaceField('Area', $areasField);
+			return $fields;
 		}
-		
-
-		return $fields;
-
-		
 		
 	}
-
-
-	// public function getCurrentTheme(){
-	// 	return Config::inst()->get('SSViewer', 'theme');
-	// 	return Multisites::inst()->getActiveSite()->Theme;
-	// }
 
 
 	public function validate() {
@@ -83,6 +75,30 @@ class Block extends DataObject{
 
 	public function forTemplate(){
 		return $this->renderWith($this->class);
+	}
+
+
+	public function PagesCount(){
+		return $this->Pages()->count();
+	}
+
+
+	public function getInheritedFrom(){
+		if(Controller::curr()->class == 'CMSPageEditController'){
+			if($page = Controller::curr()->currentPage()){
+				if(!$this->Pages()->filter('ID', $page->ID)->count()){
+					return 'Inherited';
+				}else{
+					return '-';
+				}
+			}
+		}
+	}
+
+	public function onBeforeDelete(){
+		parent::onBeforeDelete();
+		$this->Pages()->removeAll();
+		$this->BlockSets()->removeAll();
 	}
 
 }
