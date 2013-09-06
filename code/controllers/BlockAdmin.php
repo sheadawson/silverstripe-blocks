@@ -23,8 +23,6 @@ class BlockAdmin extends ModelAdmin {
 			);
 		}
 
-		
-
 		return $form;
 	}
 }

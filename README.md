@@ -2,6 +2,8 @@
 
 ## Quickstart
 
+### Installation
+
 1. Add the module folder to your project
 
 2. Define Block Areas for your theme in mysite/_config/config.yml
@@ -21,6 +23,11 @@ BlockManager:
 ```
 
 You will now be able to add Blocks to Pages, Sites if using Multisites. You can also define "BlockSets" in the Blocks model admin, blocks in these sets can be automatically inherited by any page that matched the BlockSets page criteria.
+
+
+### Restrict Blocks to viewer groups or logged in users
+
+When editing a block, you can restrict who can see it in the frontend by selecting "logged in users" or "users from these groups" under the Viewer Groups tab.
 
 
 

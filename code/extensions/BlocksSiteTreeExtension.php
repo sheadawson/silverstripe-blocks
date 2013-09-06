@@ -83,6 +83,9 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 **/
 	public function BlockArea($area){
 		$list = $this->getBlockList($area, true);
+		foreach ($list as $block) {
+			if(!$block->canView()) $list->remove($block);
+		}
 		$data['BlockList'] = $list;
 		return $this->owner->customise($data)->renderWith(array("BlockArea_$area", "BlockArea"));
 	}
