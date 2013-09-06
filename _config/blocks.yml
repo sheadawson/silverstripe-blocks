@@ -4,4 +4,7 @@ SiteConfig:
 SiteTree:
   extensions:
     - BlocksSiteTreeExtension
+ContentController:
+  extensions:
+    - BlocksContentControllerExtension
 

@@ -87,6 +87,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 			if(!$block->canView()) $list->remove($block);
 		}
 		$data['BlockList'] = $list;
+		$data['AreaID'] = $area;
 		return $this->owner->customise($data)->renderWith(array("BlockArea_$area", "BlockArea"));
 	}
 
