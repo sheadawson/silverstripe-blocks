@@ -19,6 +19,7 @@ class Block extends DataObject{
 
 	private static $belongs_many_many = array(
 		'Pages' => 'SiteTree',
+		'SiteConfigs' => 'SiteConfig',
 		'BlockSets' => 'BlockSet'
 	);
 

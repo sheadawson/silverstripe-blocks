@@ -259,7 +259,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 * @return DataList
 	 **/
 	public function getInheritedGlobalBlocks($area = null, $includeDisabled = false){
-		$blocks = $this->owner->Site()->Blocks();
+		$blocks = $this->getGloablBlockSource()->Blocks();
 
 		if($area){
 			$blocks = $blocks->filter('Area', $area);
@@ -273,6 +273,19 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 		}
 
 		return $blocks;
+	}
+
+
+	/**
+	 * The source of "Global" Blocks may be Site or SiteConfig
+	 * @return Site|SiteConfig
+	 **/
+	public function getGloablBlockSource(){
+		if(class_exists('Multisites')){
+			return $this->owner->Site();
+		}else{
+			return SiteConfig::current_site_config();
+		}
 	}
 
 

@@ -1,3 +1,7 @@
+SiteConfig:
+  extensions: 
+   - BlocksSiteConfigExtension
 SiteTree:
   extensions:
     - BlocksSiteTreeExtension
+

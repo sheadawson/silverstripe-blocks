@@ -47,7 +47,7 @@ For example, adding the BeforeContent and AfterContent blocks would look somethi
 
 $BlockArea(BeforeContent) will loop over and display all blocks assigned to the BeforeContent area on the current page
 
-### Add Blocks in the CMS
+### Add Blocks to a page in the CMS
 
 You will now be able to add Blocks to Pages and "Global Blocks" to SiteConfig(TODO) (or Sites if using [Multisites](https://github.com/sheadawson/silverstripe-multisites)). You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
 
