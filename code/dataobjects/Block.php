@@ -23,7 +23,7 @@ class Block extends DataObject{
 	// 	'Published' => 'Published',
 	// );
 
-	private static $default_sort = 'Weight';
+	private static $default_sort = array('Area'=>'ASC', 'Weight'=>'ASC', 'Title' => 'ASC');
 
 	private static $dependencies = array(
         'blockManager' => '%$blockManager',
@@ -57,6 +57,7 @@ class Block extends DataObject{
 			$pageClass = null;
 			$controller = Controller::curr();		
 			$fields->replaceField('Area', $areasField);
+			$fields->dataFieldByName('Weight')->setRightTitle('Controls block ordering. A small weight value will float, a large will sink.');
 			return $fields;
 		}
 		
@@ -83,17 +84,17 @@ class Block extends DataObject{
 	}
 
 
-	public function getInheritedFrom(){
-		if(Controller::curr()->class == 'CMSPageEditController'){
-			if($page = Controller::curr()->currentPage()){
-				if(!$this->Pages()->filter('ID', $page->ID)->count()){
-					return 'Inherited';
-				}else{
-					return '-';
-				}
-			}
-		}
-	}
+	// public function getInheritedFrom(){
+	// 	if(Controller::curr()->class == 'CMSPageEditController'){
+	// 		if($page = Controller::curr()->currentPage()){
+	// 			if(!$this->Pages()->filter('ID', $page->ID)->count()){
+	// 				return 'Inherited';
+	// 			}else{
+	// 				return '-';
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	public function onBeforeDelete(){
 		parent::onBeforeDelete();

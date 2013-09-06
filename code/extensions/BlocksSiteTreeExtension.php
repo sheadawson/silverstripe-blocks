@@ -34,22 +34,31 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 		if(count($this->blockManager->getAreasForPageType($this->owner->ClassName))){
 	
 			// Blocks related directly to this Page 
-			$gridConfig = GridFieldConfig_BlockManager::create(true, $this->owner->class);
-			$gridSource = $this->getBlockList(null, false);
-			$fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig)
-				->setModelClass('Block')
-			);
+			$gridConfig = GridFieldConfig_BlockManager::create()
+				->addExisting($this->owner->class)
+				->addBulkEditing();
+
+			//$gridSource = $this->getBlockList(null, false);
+			$gridSource = $this->owner->Blocks();
+			$fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
 			
 			// Blocks inherited from SiteConfig and BlockSets
 			$fields->addFieldToTab('Root.Blocks', HeaderField::create('InheritedBlocksHeader', 'Inherited Blocks'));
 			$fields->addFieldToTab('Root.Blocks', CheckboxField::create('InheritGlobalBlocks', 'Inherit Global Blocks from Site Configuration'));
 			$fields->addFieldToTab('Root.Blocks', CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
 			
-			$excludables = $this->getBlockList(null, false, false, true, true, true, true)->map('ID', 'Title');
-			if(is_array($excludables)){
-				$fields->addFieldToTab('Root.Blocks', ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks', $excludables, null, null, true)
+			$allInherited = $this->getBlockList(null, false, false, true, true, true, true);
+			if($allInherited->count()){
+				$fields->addFieldToTab('Root.Blocks', ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks', $allInherited->map('ID', 'Title'), null, null, true)
 					->setDescription('Select any inherited blocks that you would not like displayed on this page.')
 				);
+
+				$activeInherited = $this->getBlockList(null, false, false, true, true, false);
+				//var_dump($activeInherited->count());
+				if($activeInherited->count()){
+
+					$fields->addFieldToTab('Root.Blocks', GridField::create('InheritedBlockList', 'Inherited Blocks', $activeInherited, GridFieldConfig_BlockManager::create(false, false, false)));	
+				}
 			}else{
 				$fields->addFieldToTab('Root.Blocks', ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks', 'This page has no inherited blocks to disable.'));
 			}
@@ -73,7 +82,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 * @param string $area
 	 **/
 	public function BlockArea($area){
-		$data['BlockList'] = $this->getBlockList($area, true);
+		$list = $this->getBlockList($area, true);
+		$data['BlockList'] = $list;
 		return $this->owner->customise($data)->renderWith(array("BlockArea_$area", "BlockArea"));
 	}
 
@@ -94,30 +104,30 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 
 		$disabledBlockIDs = $includeDisabled ? null : $this->owner->DisabledBlocks()->column('ID');
 
-		////// start rewrite ///////
+		////// DataList rewrite ///////
 
-		$blocks = DataList::create('Block');
-		$filter = array();
+		// $blocks = DataList::create('Block');
+		// $filter = array();
 
-		if($includeNative){
-			$siteTreeIDs[] = $this->owner->ID;
-		}
+		// if($includeNative){
+		// 	$siteTreeIDs[] = $this->owner->ID;
+		// }
 
-		if($includeGlobal){
-			if($this->owner->InheritGlobalBlocks){
-				$siteTreeIDs[] = $this->owner->SiteID;
-			}
-		}
+		// if($includeGlobal){
+		// 	if($this->owner->InheritGlobalBlocks){
+		// 		$siteTreeIDs[] = $this->owner->SiteID;
+		// 	}
+		// }
 
-		if(isset($siteTreeIDs)){
-			$blocks->innerJoin(
-				"SiteTree_Blocks", 
-				"SiteTree_Blocks.SiteTreeID = SiteTree.ID", 
-				"Pages"
-			);
+		// if(isset($siteTreeIDs)){
+		// 	$blocks->innerJoin(
+		// 		"SiteTree_Blocks", 
+		// 		"SiteTree_Blocks.SiteTreeID = SiteTree.ID", 
+		// 		"Pages"
+		// 	);
 
-			$filter["Pages.ID"] = $siteTreeIDs;
-		}
+		// 	$filter["Pages.ID"] = $siteTreeIDs;
+		// }
 
 
 		// if($includeSets){
@@ -152,22 +162,20 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 		// PROBLEM 3 - Cant use ArrayList instead of DataList because that also 
 
 
-		// Solution? Use ArrayList for now for frontend
-		// in backend, display the different sources in their own gridfields
-
+		// Workaround? Use ArrayList for now for frontend
+		// in backend, display the different sources in their own gridfields 
+		// 
 		
-		$blocks = $blocks->filter($filter);	
+		//$blocks = $blocks->filter($filter);	
 
 		//$ids = implode(',', $siteTreeIDs);
 		//$blocks = $blocks->where("(Pages.ID IN ($ids))");
 
-		return $blocks;
+		//return $blocks;
 
 		/////// END REWRITE /////
 
-
-
-
+		$blocks = ArrayList::create();
 
 		// get blocks directly linked to this page
 		if($includeNative){
@@ -181,16 +189,13 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 				}
 			}
 		}
-
-
-		$blocks = ArrayList::create();
-
 		
 		
 		// get blocks inherited from SiteConfig
 		if($includeGlobal){
 			if($this->owner->InheritGlobalBlocks){
-				$inheritedBlocks = $this->owner->Site()->Blocks();
+				$inheritedBlocks = $this->getInheritedGlobalBlocks($area, $includeDisabled);
+
 				if(!$includeDisabled){
 					$inheritedBlocks = $inheritedBlocks->exclude('ID', $disabledBlockIDs);
 				}
@@ -226,16 +231,10 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 				}	
 			}
 		}
-
-		// hack - GridField can't get data class from empty ArrayList
-		// so return empty Block DataList
-		if($blocks->count() == 0){
-			return DataList::create('Block')->filter('ID', -1);
-		}
 		
 		// filter out unpublished blocks?
 		$blocks = $publishedOnly ? $blocks->filter('Published', 1) : $blocks;
-		$blocks = $blocks->sort(array('Area'=>'ASC', 'Weight'=>'ASC'));
+		$blocks = $blocks->sort(Config::inst()->get('Block', 'default_sort'));
 
 		return $blocks;
 	}
@@ -247,6 +246,30 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 **/
 	public function getPublishedBlocks(){
 		return $this->owner->Blocks()->filter('Published', 1);
+	}
+
+
+	/**
+	 * Get Global Blocks that are inherited from SiteConfig
+	 * @param string $area block area to filter by
+	 * @param boolean $includeDisabled global blocks disabled on this page are not included by default 
+	 * @return DataList
+	 **/
+	public function getInheritedGlobalBlocks($area = null, $includeDisabled = false){
+		$blocks = $this->owner->Site()->Blocks();
+
+		if($area){
+			$blocks = $blocks->filter('Area', $area);
+		}
+
+		if(!$includeDisabled){
+			$disabledIDs = $this->owner->DisabledBlocks()->column('ID');
+			if(count($disabledIDs)){
+				$blocks = $blocks->filter('ID', $disabledIDs);	
+			}
+		}
+
+		return $blocks;
 	}
 
 
@@ -268,27 +291,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 
 		if(!$sets) return;
 
-		
-
-		/// DATALIST
-		//$sets = $sets->column('ID');
-		// $blocks = Block::get();
-
-		// $blocks = $blocks->innerJoin(
-		// 	"BlockSet_Blocks", 
-		// 	"BlockSet_Blocks.BlockSetID = BlockSet.ID", 
-		// 	"BlockSets"
-		// );
-
-		// $blocks = $blocks->filter("BlockSets.ID:exactMatch", $sets);
-
-		// if(!$includeDisabled){
-		// 	$blocks = $blocks->exclude('ID', $this->owner->DisabledBlocks()->column('ID'));
-		// }
-
-		// return $blocks;
-		///
-
 		$blocks = ArrayList::create();
 		foreach ($sets as $set) {
 			$setBlocks = $set->Blocks();
@@ -307,8 +309,4 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 
 		return $blocks;
 	}
-
-
-
-
 }

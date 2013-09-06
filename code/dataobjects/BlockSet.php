@@ -22,6 +22,7 @@ class BlockSet extends DataObject {
 
 		if(!$this->ID){
 			$fields->addFieldToTab('Root.Main', LiteralField::create('NotSaved', "<p class='message warning'>You can add Blocks to this set once you have saved it for the first time</p>"));
+			return $fields;
 		}
 
 		$fields->removeFieldFromTab('Root', 'Blocks');

@@ -4,28 +4,12 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 
     public $blockManager;
 
-	/**
-	 * @param int $itemsPerPage - How many items per page should show up
-	 */
-	public function __construct($addExisting = true, $pageClass = null) {
+	public function __construct($canAdd = true, $canEdit = true, $canDelete = true) {
 		parent::__construct();
 
 		$this->blockManager = Injector::inst()->get('BlockManager');
 		
-		$this->addComponent(new GridFieldButtonRow('before'));
-		$this->addComponent(new GridFieldAddNewButton('buttons-before-left'));
-		$this->addComponent(new GridFieldToolbarHeader());
-		$this->addComponent($sort = new GridFieldSortableHeader());
-		$this->addComponent($filter = new GridFieldFilterHeader());
 		$this->addComponent($editable = new GridFieldEditableColumns());
-		$this->addComponent(new GridFieldEditButton());
-		$this->addComponent(new GridFieldDeleteAction(true));
-		$this->addComponent(new GridFieldDeleteAction());
-		$this->addComponent(new GridFieldDetailForm());
-		
-		$filter->setThrowExceptionOnBadDataType(false);
-		$sort->setThrowExceptionOnBadDataType(false);
-
 		$editable->setDisplayFields(array(
 			'Title'        	=> array('title' => 'Title', 'field' => 'ReadonlyField'),
 			'ClassName' 	=> array('title' => 'Block Type', 'field' => 'ReadonlyField'),
@@ -37,18 +21,51 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			//'PublishedOnThisPage' => array('title' => 'Published (just for this page)', 'callback' => $this->getPublishedOnThisPageField()),
 		));
 
-		// if($addExisting){
-		// 	$this->addComponent($add = new GridFieldAddExistingSearchButton());
+		$this->addComponent(new GridFieldButtonRow('before'));
+		$this->addComponent(new GridFieldToolbarHeader());
+		$this->addComponent(new GridFieldDetailForm());
+		$this->addComponent($sort = new GridFieldSortableHeader());
+		$this->addComponent($filter = new GridFieldFilterHeader());
 
-		// 	if($pageClass){
-		// 		$areas = $this->blockManager->getAreasForPageType($pageClass);	
-		// 	}else{
-		// 		$areas = $this->blockManager->getAreasForTheme();	
-		// 	}
+		$filter->setThrowExceptionOnBadDataType(false);
+		$sort->setThrowExceptionOnBadDataType(false);
+
+		if($canAdd){
+			$this->addComponent(new GridFieldAddNewButton('buttons-before-left'));	
+		}
 		
-		// 	$add->setSearchList(ArrayList::create(Block::get()->filter('Area', $areas)->toArray()));
-		// }
 		
+			$this->addComponent(new GridFieldEditButton());	
+		
+
+		if($canDelete){
+			$this->addComponent(new GridFieldDeleteAction(true));
+		}
+
+		return $this;		
+		
+	}
+
+	public function addExisting($pageClass = null){
+		$this->addComponent($add = new GridFieldAddExistingSearchButton());
+
+		if($pageClass){
+			$areas = $this->blockManager->getAreasForPageType($pageClass);	
+		}else{
+			$areas = $this->blockManager->getAreasForTheme();	
+		}
+	
+		$add->setSearchList(ArrayList::create(Block::get()->filter('Area', $areas)->toArray()));
+
+		return $this;
+	}
+
+
+	public function addBulkEditing(){
+		if(class_exists('GridFieldBulkManager')){
+			$this->addComponent(new GridFieldBulkManager());
+		}
+		return $this;
 	}
 
 }
