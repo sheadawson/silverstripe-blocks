@@ -45,7 +45,7 @@ For example, adding the BeforeContent and AfterContent blocks would look somethi
 </article>
 ```
 
-$BlockArea(BeforeContent) will loop over and display all blocks added to the current page
+$BlockArea(BeforeContent) will loop over and display all blocks assigned to the BeforeContent area on the current page
 
 ### Add Blocks in the CMS
 
