@@ -20,7 +20,12 @@ class BlockManager extends Object{
 	 * @return array $areas
 	 **/	
 	public function getAreasForTheme($theme = null, $keyAsValue = true){
-		$theme 	= $theme ? $theme : Config::inst()->get('SSViewer', 'theme');
+		$theme 	= $theme ? $theme : $this->getTheme();
+
+		if(!$theme){
+			return false;
+		}
+
 		$config = $this->config()->get('themes');
 		$areas 	= $config[$theme]['areas'];
 
@@ -60,6 +65,15 @@ class BlockManager extends Object{
 		}
 
 		return ArrayLib::valuekey(array_keys($areas));
+	}
+
+
+	private function getTheme(){
+		if(class_exists('Multisites')){
+			return Multisites::inst()->getActiveSite()->Theme;
+		}else{
+			return Config::inst()->get('SSViewer', 'theme');
+		}
 	}
 
 }

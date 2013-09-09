@@ -1,5 +1,5 @@
 <div class='block-area' data-areaid='$AreaID'>
-	<% loop BlockList %>
-		$forTemplate
+	<% loop BlockArea %>
+		$BlockHTML
 	<% end_loop %>
 </div>

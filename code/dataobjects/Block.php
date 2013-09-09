@@ -107,8 +107,27 @@ class Block extends DataObject{
 	}
 
 
+	/**
+	 * Renders this block with appropriate templates
+	 * looks for templates that match BlockClassName_AreaName 
+	 * falls back to BlockClassName
+	 **/
 	public function forTemplate(){
-		return $this->renderWith($this->class);
+		// TODO standard render with always seemed to default to $this->ClassName template
+		// so having to use SSViewer::hasTemplate() here
+		if($this->Area){
+			$template[] = $this->class . '_' . $this->Area;
+			if(SSViewer::hasTemplate($template)){
+				return $this->renderWith($template);
+			}
+		}
+
+		return $this->renderWith($this->ClassName);
+	}
+
+
+	public function BlockHTML(){
+		return $this->forTemplate();
 	}
 
 

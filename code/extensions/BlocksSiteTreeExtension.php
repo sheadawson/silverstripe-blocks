@@ -82,13 +82,28 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 * @param string $area
 	 **/
 	public function BlockArea($area){
-		$list = $this->getBlockList($area, true);
+
+		$publishedOnly = Versioned::current_stage() == 'Stage' ? false : true;
+		$list = $this->getBlockList($area, $publishedOnly);
+
 		foreach ($list as $block) {
 			if(!$block->canView()) $list->remove($block);
 		}
-		$data['BlockList'] = $list;
+
+		$data['BlockArea'] = $list;
 		$data['AreaID'] = $area;
-		return $this->owner->customise($data)->renderWith(array("BlockArea_$area", "BlockArea"));
+
+		$data = $this->owner->customise($data);
+
+		
+		$template[] = 'BlockArea_' . $area;
+		if(SSViewer::hasTemplate($template)){
+			return $data->renderWith($template);
+		}else{
+			return $data->renderWith('BlockArea');
+		}
+	
+		//return $data->renderWith(array("BlockArea_$area", "BlockArea"));
 	}
 
 
@@ -238,6 +253,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 		
 		// filter out unpublished blocks?
 		$blocks = $publishedOnly ? $blocks->filter('Published', 1) : $blocks;
+
 		$blocks = $blocks->sort(Config::inst()->get('Block', 'default_sort'));
 
 		return $blocks;
