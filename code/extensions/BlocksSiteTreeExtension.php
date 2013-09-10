@@ -31,7 +31,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 * Block manager for Pages
 	 **/
 	public function updateCMSFields(FieldList $fields) {
-		$fields->addFieldToTab('Root.Blocks', LiteralField::create('PreviewLink', "<p><a href='" . $this->blockPreviewLink() . "' target='_blank'>Preview Block Areas for this page</a></p>"));
+		$fields->addFieldToTab('Root.Blocks', LiteralField::create('PreviewLink', $this->areasPreviewButton()));
 		if(count($this->blockManager->getAreasForPageType($this->owner->ClassName))){
 			
 			
@@ -366,7 +366,20 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	}
 
 
-	public function blockPreviewLink(){
+	/**
+	 * Get's the link for a block area preview button
+	 * @return string
+	 **/
+	public function areasPreviewLink(){
 		return Controller::join_links($this->owner->Link(), '?block_preview=1');
+	}
+
+
+	/**
+	 * Get's html for a block area preview button
+	 * @return string
+	 **/
+	public function areasPreviewButton(){
+		return "<p><a href='" . $this->areasPreviewLink() . "' target='_blank'>Preview Block Areas for this page</a></p>";
 	}
 }

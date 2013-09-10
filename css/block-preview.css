@@ -1,4 +1,34 @@
 .block-area{
-	border: 2px solid #ff1111;
+	position: relative;
 	min-height: 100px;
+}
+
+.block-preview-overlay, .block-preview-label{
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.block-preview-overlay{
+	background: #fff;
+	opacity: 0.8;
+	z-index: 20;
+}
+
+.block-preview-label{
+	border: 2px dashed #ff4444;
+	z-index: 21;
+	text-align: center;
+}
+
+.block-preview-label span{
+	display: inline-block;
+	background: #ff4444;
+	color: #fff;
+	font-size: 14px;
+	padding: 10px;
+	position: relative;
+	top: -2px;
 }

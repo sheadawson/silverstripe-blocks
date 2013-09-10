@@ -39,9 +39,12 @@ class Block extends DataObject{
 
 	public function getCMSFields(){
 		if(Controller::curr()->class == 'CMSPageEditController'){
-			$areasFieldSource = $this->blockManager->getAreasForPageType(Controller::curr()->currentPage()->ClassName);	
+			$currentPage = Controller::curr()->currentPage();
+			$areasFieldSource = $this->blockManager->getAreasForPageType($currentPage->ClassName);	
+			$areasPreviewButton = LiteralField::create('PreviewLink', $currentPage->areasPreviewButton());
 		}else{
-			$areasFieldSource = $this->blockManager->getAreasForTheme();	
+			$areasFieldSource = $this->blockManager->getAreasForTheme();
+			$areasPreviewButton = false;	
 		}
 		
 		$areasField = DropdownField::create('Area', 'Area', $areasFieldSource);
@@ -54,7 +57,8 @@ class Block extends DataObject{
 			return FieldList::create(
 				TextField::create('Title', 'Title'),
 				DropdownField::create('ClassName', 'Block Type', $classes),
-				$areasField
+				$areasField,
+				$areasPreviewButton
 			);
 
 		}else{
@@ -62,6 +66,9 @@ class Block extends DataObject{
 			$pageClass = null;
 			$controller = Controller::curr();		
 			$fields->replaceField('Area', $areasField);
+			if($areasPreviewButton){
+				$fields->addFieldToTab('Root.Main', $areasPreviewButton);
+			}
 			$fields->removeFieldFromTab('Root', 'SiteConfigs');
 			$fields->dataFieldByName('Weight')->setRightTitle('Controls block ordering. A small weight value will float, a large will sink.');
 
