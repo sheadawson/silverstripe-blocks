@@ -64,9 +64,7 @@ Each block has a "Weight" attribute. Set a large value to Sink or high value to 
 
 ## TODO
 
-* User - Ability to restrict BlockSets criteria to restrict to certain parent ids
 * Dev - Forms inside Blocks (BlockController?)
 * Dev - Ability to limit a block area to a maximum number of blocks
 * User - Ability to view site with BlockAreas mapped/highlighted/labeled
-* User - Ability to restrict viewing of blocks to specific groups/users 
 * Write Tests

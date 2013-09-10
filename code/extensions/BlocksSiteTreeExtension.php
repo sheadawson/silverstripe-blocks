@@ -311,10 +311,29 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 
 	/**
 	 * Get Any BlockSets that apply to this page 
-	 * @return DataList
+	 * @todo could be more efficient
+	 * @return ArrayList
 	 **/
 	public function getAppliedSets(){
-		return BlockSet::get()->filter('PageTypesValue:partialMatch', sprintf(':"%s"', $this->owner->ClassName));
+		
+		$sets = BlockSet::get()->filter('PageTypesValue:partialMatch', sprintf(':"%s"', $this->owner->ClassName));
+		$list = ArrayList::create();
+		$ancestors = $this->owner->getAncestors()->column('ID');
+
+		foreach ($sets as $set) {
+			$restrictedToParerentIDs = $set->PageParents()->column('ID');
+			if(count($restrictedToParerentIDs && count($ancestors))){
+				foreach ($ancestors as $ancestor) {
+					if(in_array($ancestor, $restrictedToParerentIDs)){
+						$list->add($set);	
+						continue;
+					}
+				}
+			}else{
+				$list->add($set);
+			}
+		}
+		return $list;
 	}
 
 
