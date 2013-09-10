@@ -38,7 +38,6 @@ class Block extends DataObject{
     public $blockManager;
 
 	public function getCMSFields(){
-		
 		if(Controller::curr()->class == 'CMSPageEditController'){
 			$areasFieldSource = $this->blockManager->getAreasForPageType(Controller::curr()->currentPage()->ClassName);	
 		}else{
@@ -63,6 +62,7 @@ class Block extends DataObject{
 			$pageClass = null;
 			$controller = Controller::curr();		
 			$fields->replaceField('Area', $areasField);
+			$fields->removeFieldFromTab('Root', 'SiteConfigs');
 			$fields->dataFieldByName('Weight')->setRightTitle('Controls block ordering. A small weight value will float, a large will sink.');
 
 			// Viewer groups
