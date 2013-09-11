@@ -27,6 +27,11 @@ class BlockManager extends Object{
 		}
 
 		$config = $this->config()->get('themes');
+
+		if(!isset($config[$theme]['areas'])){
+			return false;
+		}
+
 		$areas 	= $config[$theme]['areas'];
 
 		return $keyAsValue ? ArrayLib::valuekey(array_keys($areas)) : $areas;
@@ -41,6 +46,10 @@ class BlockManager extends Object{
 	 **/
 	public function getAreasForPageType($class){
 		$areas 	= $this->getAreasForTheme(null, false);
+
+		if(!$areas){
+			return false;
+		}
 
 		foreach($areas as $area => $config) {
 			if(!is_array($config)) {

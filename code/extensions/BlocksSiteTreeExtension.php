@@ -31,10 +31,9 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 * Block manager for Pages
 	 **/
 	public function updateCMSFields(FieldList $fields) {
-		$fields->addFieldToTab('Root.Blocks', LiteralField::create('PreviewLink', $this->areasPreviewButton()));
-		if(count($this->blockManager->getAreasForPageType($this->owner->ClassName))){
-			
-			
+		$areas = $this->blockManager->getAreasForPageType($this->owner->ClassName);
+		if($areas && count($areas)){
+			$fields->addFieldToTab('Root.Blocks', LiteralField::create('PreviewLink', $this->areasPreviewButton()));
 			
 			// Blocks related directly to this Page 
 			$gridConfig = GridFieldConfig_BlockManager::create()
