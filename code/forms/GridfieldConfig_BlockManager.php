@@ -34,9 +34,9 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$this->addComponent(new GridFieldAddNewButton('buttons-before-left'));	
 		}
 		
-		
+		if($canEdit){
 			$this->addComponent(new GridFieldEditButton());	
-		
+		}
 
 		if($canDelete){
 			$this->addComponent(new GridFieldDeleteAction(true));

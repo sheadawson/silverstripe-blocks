@@ -66,9 +66,7 @@ class Block extends DataObject{
 			$pageClass = null;
 			$controller = Controller::curr();		
 			$fields->replaceField('Area', $areasField->setRightTitle($areasPreviewButton));
-			if($areasPreviewButton){
-				$fields->addFieldToTab('Root.Main', $areasPreviewButton);
-			}
+
 			$fields->removeFieldFromTab('Root', 'SiteConfigs');
 			$fields->dataFieldByName('Weight')->setRightTitle('Controls block ordering. A small weight value will float, a large will sink.');
 
