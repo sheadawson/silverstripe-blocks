@@ -379,6 +379,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 * @return string
 	 **/
 	public function areasPreviewButton(){
-		return "<p><a href='" . $this->areasPreviewLink() . "' target='_blank'>Preview Block Areas for this page</a></p>";
+		return "<a class='ss-ui-button ss-ui-button-small' style='font-style:normal;' href='" . $this->areasPreviewLink() . "' target='_blank'>Preview Block Areas for this page</a>";
 	}
 }

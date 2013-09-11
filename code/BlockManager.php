@@ -72,8 +72,8 @@ class BlockManager extends Object{
 				}
 			}
 		}
-
-		return ArrayLib::valuekey(array_keys($areas));
+		
+		return count($areas) ? ArrayLib::valuekey(array_keys($areas)) : $areas;
 	}
 
 

@@ -50,22 +50,22 @@ class Block extends DataObject{
 		$areasField = DropdownField::create('Area', 'Area', $areasFieldSource);
 		
 		if(!$this->ID){
-			//var_dump($this->class);
 			$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
 			unset($classes['Block']);
 
-			return FieldList::create(
+			$fields = array(
 				TextField::create('Title', 'Title'),
 				DropdownField::create('ClassName', 'Block Type', $classes),
-				$areasField,
-				$areasPreviewButton
+				$areasField->setRightTitle($areasPreviewButton),
 			);
+			
+			return FieldList::create($fields);
 
 		}else{
 			$fields = parent::getCMSFields();
 			$pageClass = null;
 			$controller = Controller::curr();		
-			$fields->replaceField('Area', $areasField);
+			$fields->replaceField('Area', $areasField->setRightTitle($areasPreviewButton));
 			if($areasPreviewButton){
 				$fields->addFieldToTab('Root.Main', $areasPreviewButton);
 			}
