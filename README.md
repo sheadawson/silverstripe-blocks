@@ -96,5 +96,4 @@ There is some markup required in your BlockArea templates to facilitate this: Th
 
 * Dev - Forms inside Blocks (BlockController?)
 * Dev - Ability to limit a block area to a maximum number of blocks
-* User - Ability to view site with BlockAreas mapped/highlighted/labeled
 * Write Tests
