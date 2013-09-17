@@ -84,6 +84,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 	 * @param string $area
 	 **/
 	public function BlockArea($area){
+		if($this->owner->ID <= 0) return; // blocks break on fake pages ie Security/login
 
 		$publishedOnly = Versioned::current_stage() == 'Stage' ? false : true;
 		$list = $this->getBlockList($area, $publishedOnly);
