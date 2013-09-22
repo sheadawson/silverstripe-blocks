@@ -3,7 +3,7 @@
  * @package silverstipe blocks
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
-class Block extends DataObject{
+class Block extends DataObject implements PermissionProvider{
 
 	private static $db = array(
 		'Title' => 'Varchar',
@@ -175,6 +175,35 @@ class Block extends DataObject{
 		} 
 		
 		return false;
+	}
+
+	public function canEdit($member = null) {
+		return Permission::check('ADMIN') || Permission::check('BLOCK_EDIT');
+	}
+
+	public function canDelete($member = null) {
+		return Permission::check('ADMIN') || Permission::check('BLOCK_DELETE');
+	}
+
+	public function canCreate($member = null) {
+		return Permission::check('ADMIN') || Permission::check('BLOCK_CREATE');
+	}
+
+	public function providePermissions() {
+		return array(
+			'BLOCK_EDIT' => array(
+				'name' => 'Edit a Block',
+				'category' => 'Blocks',
+			),
+			'BLOCK_DELETE' => array(
+				'name' => 'Delete a Block',
+				'category' => 'Blocks',
+			),
+			'BLOCK_CREATE' => array(
+				'name' => 'Create a Block',
+				'category' => 'Blocks'
+			)
+		);
 	}
 
 }

@@ -55,7 +55,14 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$areas = $this->blockManager->getAreasForTheme();	
 		}
 	
-		$add->setSearchList(ArrayList::create(Block::get()->filter('Area', $areas)->toArray()));
+		$list = Block::get()->filter('Area', $areas);
+
+		// TODO find a more appropriate way of doing this
+		if(Block::has_extension('MultisitesAware')){
+			$list = $list->filter('SiteID', Multisites::inst()->getActiveSite()->ID);
+		}
+
+		$add->setSearchList($list);
 
 		return $this;
 	}
