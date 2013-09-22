@@ -13,8 +13,8 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		$editable->setDisplayFields(array(
 			'ClassName' 	=> array('title' => 'Block Type', 'field' => 'ReadonlyField'),
 			'Title'        	=> array('title' => 'Title', 'field' => 'ReadonlyField'),
-			'Area' 			=> array('title' => 'Blcok Area', 'field' => 'ReadonlyField'),
-			'InheritedFrom' => array('title' => 'Inhereted From', 'field' => 'ReadonlyField'),
+			'Area' 			=> array('title' => 'Block Area', 'field' => 'ReadonlyField'),
+			'InheritedFrom' => array('title' => 'Inherited From', 'field' => 'ReadonlyField'),
 			'Weight'    	=> array('title' => 'Weight', 'field' => 'NumericField'),
 			//'PagesCount'  	=> array('title' => 'Number of Pages', 'field' => 'ReadonlyField'),
 			'Published' 	=> array('title' => 'Published (global)', 'field' => 'CheckboxField'),
