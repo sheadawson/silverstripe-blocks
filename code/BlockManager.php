@@ -73,7 +73,14 @@ class BlockManager extends Object{
 			}
 		}
 		
-		return count($areas) ? ArrayLib::valuekey(array_keys($areas)) : $areas;
+		if(count($areas)){
+			foreach ($areas as $k => $v) {
+				$areas[$k] = FormField::name_to_label($k);
+			}
+			return $areas;
+		}else{
+			return $areas;
+		}
 	}
 
 

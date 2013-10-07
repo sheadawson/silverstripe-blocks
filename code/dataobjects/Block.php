@@ -52,6 +52,9 @@ class Block extends DataObject implements PermissionProvider{
 		if(!$this->ID){
 			$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
 			unset($classes['Block']);
+			foreach ($classes as $k => $v) {
+				$classes[$k] = singleton($k)->singular_name();
+			}
 
 			$fields = array(
 				TextField::create('Title', 'Title'),
