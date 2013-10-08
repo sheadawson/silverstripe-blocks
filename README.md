@@ -60,7 +60,7 @@ When editing a block, you can restrict who can see it in the frontend by selecti
 
 #### Ordering blocks
 
-Each block has a "Weight" attribute. Set a large value to Sink or high value to float.
+Each block has a "Weight" attribute. Set a big value to Sink or small value to float.
 
 ### Templates
 
