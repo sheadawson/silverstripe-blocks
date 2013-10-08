@@ -18,6 +18,8 @@ class BlockSet extends DataObject implements PermissionProvider{
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
 
+		$fields->removeFieldFromTab('Root', 'PageParents');
+
 		$fields->addFieldToTab('Root.Main', HeaderField::create('SettingsHeading', 'Settings'), 'Title');
 		$fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', 'Only apply to these Page Types:', $this->pageTypeOptions())->setDescription('Selected Page Types will inherit this Block Set automatically'));
 		$fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', 'Only apply to children of these Pages:', 'SiteTree'));
