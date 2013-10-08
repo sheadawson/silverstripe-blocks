@@ -209,4 +209,13 @@ class Block extends DataObject implements PermissionProvider{
 		);
 	}
 
+
+	/**
+	 * Format this blocks area name into something nicer to read, cammel-case to spaces
+	 * @return string
+	 **/
+	public function AreaNice(){
+		return FormField::name_to_label($this->Area);
+	}
+
 }
