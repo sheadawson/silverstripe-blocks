@@ -45,7 +45,7 @@ class BlockSet extends DataObject implements PermissionProvider{
 	protected function pageTypeOptions() {
 		$pageTypes = array();
 		foreach(SiteTree::page_type_classes() as $pageTypeClass) {
-			$pageTypes[$pageTypeClass] = _t($pageTypeClass.'.SINGULARNAME', $pageTypeClass);
+			$pageTypes[$pageTypeClass] = singleton($pageTypeClass)->i18n_singular_name();
 		}
 		asort($pageTypes);
 		return $pageTypes;
