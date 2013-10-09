@@ -34,7 +34,15 @@ class BlockManager extends Object{
 
 		$areas 	= $config[$theme]['areas'];
 
-		return $keyAsValue ? ArrayLib::valuekey(array_keys($areas)) : $areas;
+		$areas = $keyAsValue ? ArrayLib::valuekey(array_keys($areas)) : $areas;
+
+		if(count($areas)){
+			foreach ($areas as $k => $v) {
+				$areas[$k] = FormField::name_to_label($k);
+			}	
+		}
+		return $areas;
+		
 	}
 
 
