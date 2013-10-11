@@ -55,7 +55,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$areas = $this->blockManager->getAreasForTheme();	
 		}
 	
-		$list = Block::get()->filter('Area', $areas);
+		$list = Block::get()->filter('Area', array_keys($areas));
 
 		// TODO find a more appropriate way of doing this
 		if(Block::has_extension('MultisitesAware')){
