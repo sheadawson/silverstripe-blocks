@@ -1,4 +1,4 @@
-<div class='block-area' data-areaid='$AreaID'>
+<div class='block-area block-area-$AreaID' data-areaid='$AreaID'>
 	<% loop BlockArea %>
 		$BlockHTML
 	<% end_loop %>

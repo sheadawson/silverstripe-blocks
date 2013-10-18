@@ -11,6 +11,7 @@ class Block extends DataObject implements PermissionProvider{
 		'Published' => 'Boolean',
 		'Weight' => 'Int',
 		"CanViewType" => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
+		'ExtraCSSClasses' => 'Varchar'
 	);
 
 	private static $many_many = array(
@@ -48,9 +49,10 @@ class Block extends DataObject implements PermissionProvider{
 		}
 		
 		$areasField = DropdownField::create('Area', 'Area', $areasFieldSource);
-		
+		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
+		$classField = DropdownField::create('ClassName', 'Block Type', $classes);
+
 		if(!$this->ID){
-			$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
 			unset($classes['Block']);
 			foreach ($classes as $k => $v) {
 				$classes[$k] = singleton($k)->singular_name();
@@ -58,7 +60,7 @@ class Block extends DataObject implements PermissionProvider{
 
 			$fields = array(
 				TextField::create('Title', 'Title'),
-				DropdownField::create('ClassName', 'Block Type', $classes),
+				$classField,
 				$areasField->setRightTitle($areasPreviewButton),
 			);
 			
@@ -72,6 +74,8 @@ class Block extends DataObject implements PermissionProvider{
 
 			$fields->removeFieldFromTab('Root', 'SiteConfigs');
 			$fields->dataFieldByName('Weight')->setRightTitle('Controls block ordering. A small weight value will float, a large will sink.');
+			$fields->addFieldToTab('Root.Main', TextField::create('ExtraCSSClasses', 'Extra CSS Classes'));
+			$fields->addFieldToTab('Root.Main', $classField, 'Area');
 
 			// Viewer groups
 			$fields->removeFieldFromTab('Root', 'ViewerGroups');
