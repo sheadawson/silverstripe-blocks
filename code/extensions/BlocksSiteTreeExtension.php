@@ -326,7 +326,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 
 		foreach ($sets as $set) {
 			$restrictedToParerentIDs = $set->PageParents()->column('ID');
-			if(count($restrictedToParerentIDs && count($ancestors))){
+			if(count($restrictedToParerentIDs) && count($ancestors)){
 				foreach ($ancestors as $ancestor) {
 					if(in_array($ancestor, $restrictedToParerentIDs)){
 						$list->add($set);	
