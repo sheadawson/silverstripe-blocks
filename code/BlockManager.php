@@ -38,7 +38,7 @@ class BlockManager extends Object{
 
 		if(count($areas)){
 			foreach ($areas as $k => $v) {
-				$areas[$k] = FormField::name_to_label($k);
+				$areas[$k] = $keyAsValue ? FormField::name_to_label($k) : $v;
 			}	
 		}
 		return $areas;
