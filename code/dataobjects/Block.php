@@ -50,14 +50,10 @@ class Block extends DataObject implements PermissionProvider{
 		
 		$areasField = DropdownField::create('Area', 'Area', $areasFieldSource);
 		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
+		unset($classes['Block']);
 		$classField = DropdownField::create('ClassName', 'Block Type', $classes);
 
 		if(!$this->ID){
-			unset($classes['Block']);
-			foreach ($classes as $k => $v) {
-				$classes[$k] = singleton($k)->singular_name();
-			}
-
 			$fields = array(
 				TextField::create('Title', 'Title'),
 				$classField,
