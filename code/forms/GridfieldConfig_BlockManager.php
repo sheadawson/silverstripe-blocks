@@ -47,14 +47,18 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 	}
 
 	public function addExisting($pageClass = null){
-		$this->addComponent($add = new GridFieldAddExistingSearchButton());
-
 		if($pageClass){
 			$areas = $this->blockManager->getAreasForPageType($pageClass);	
 		}else{
 			$areas = $this->blockManager->getAreasForTheme();	
 		}
-	
+
+		if(!is_array($areas)){
+			return $this;
+		}
+
+		$this->addComponent($add = new GridFieldAddExistingSearchButton());
+		
 		$list = Block::get()->filter('Area', array_keys($areas));
 
 		// TODO find a more appropriate way of doing this
