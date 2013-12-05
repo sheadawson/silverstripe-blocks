@@ -66,7 +66,10 @@ class BlockManager extends Object{
 
 			if(isset($config['except'])) {
 				$except = $config['except'];
-				if (($except == $class) || (is_array($except) && in_array($class, $config['except']))) {
+				if (is_array($except)
+					? in_array($class, $except)
+					: $except == $class
+				) {
 					unset($areas[$area]);
 					continue;
 				}
@@ -74,7 +77,10 @@ class BlockManager extends Object{
 
 			if(isset($config['only'])) {
 				$only = $config['only'];
-				if (($only != $class) || (is_array($only) && !in_array($class, $config['only']))) {
+				if (is_array($only)
+					? !in_array($class, $only)
+					: $only != $class
+				) {
 					unset($areas[$area]);
 					continue;
 				}
