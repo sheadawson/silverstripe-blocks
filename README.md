@@ -49,6 +49,14 @@ Adding the BeforeContent and AfterContent blocks would look something like
 
 $BlockArea(BeforeContent) will loop over and display all blocks assigned to the BeforeContent area on the current page
 
+You can limit a block area to a maximum number of blocks using the second limit parameter
+
+```html
+<article>
+	$BlockArea(NewsBlocks, 3)
+</article>
+```
+
 ### Add Blocks to a page in the CMS
 
 You will now be able to add Blocks to Pages and "Global Blocks" to SiteConfig (or Sites if using [Multisites](https://github.com/sheadawson/silverstripe-multisites)). You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
@@ -95,5 +103,4 @@ There is some markup required in your BlockArea templates to facilitate this: Th
 ## TODO
 
 * Dev - Forms inside Blocks (BlockController?)
-* Dev - Ability to limit a block area to a maximum number of blocks
 * Write Tests
