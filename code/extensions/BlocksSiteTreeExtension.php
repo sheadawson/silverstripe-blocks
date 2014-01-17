@@ -121,8 +121,14 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 
 	/**
 	 * Get a merged list of all blocks on this page and ones inherited from SiteConfig, BlockSets etc 
+	 * 
 	 * @param string|null $area filter by block area
 	 * @param boolean $publishedOnly only return published blocks
+	 * @param boolean $includeNative Include blocks directly assigned to this page
+	 * @param boolean $includeGlobal Include global blocks
+	 * @param boolean $includeSets Include block sets
+	 * @param boolean $includeDisabled Include blocks that have been explicitly excluded from this page
+	 * i.e. global blocks added to the "disable inherited blocks" list
 	 * @return ArrayList
 	 **/
 	public function getBlockList(
@@ -131,9 +137,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 		$includeNative = true, 
 		$includeGlobal = true, 
 		$includeSets = true, 
-		$includeDisabled = false){
-
-		$disabledBlockIDs = $includeDisabled ? null : $this->owner->DisabledBlocks()->column('ID');
+		$includeDisabled = false
+	){
 
 		////// DataList rewrite ///////
 
@@ -223,43 +228,30 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 		
 		
 		// get blocks inherited from SiteConfig
-		if($includeGlobal){
-			if($this->owner->InheritGlobalBlocks){
-				$inheritedBlocks = $this->getInheritedGlobalBlocks($area, $includeDisabled);
-
-				if(!$includeDisabled){
-					$inheritedBlocks = $inheritedBlocks->exclude('ID', $disabledBlockIDs);
+		if($includeGlobal
+			&& $this->owner->InheritGlobalBlocks
+			&& ($inheritedBlocks = $this->getInheritedGlobalBlocks($area, $includeDisabled))
+		){
+			// merge inherited sources
+			foreach ($inheritedBlocks as $block) {
+				if(!$blocks->find('ID', $block->ID)) {
+					$block->InheritedFrom = 'Global Blocks';
+					$blocks->unshift($block);
 				}
-		
-				if($area) {
-					$inheritedBlocks = $inheritedBlocks->filter('Area', $area);
-				}
-
-				$inheritedBlocks = ArrayList::create($inheritedBlocks->toArray());
-
-				// merge inherited sources
-				foreach ($inheritedBlocks as $block) {
-					if(!$blocks->find('ID', $block->ID)) {
-						$block->InheritedFrom = 'Global Blocks';
-						$blocks->unshift($block);
-					}
-				}
-			}	
+			}
 		}
 		
 		// get blocks from BlockSets
-		if($includeSets){
-			if($this->owner->InheritBlockSets){
-				if($blocksFromSets = $this->getBlocksFromAppliedBlockSets($area, $includeDisabled)){
-
-					// merge set sources
-					foreach ($blocksFromSets as $block) {
-						if(!$blocks->find('ID', $block->ID)) {
-							$block->InheritedFrom = 'Block Set';
-							$blocks->unshift($block);
-						}
-					}
-				}	
+		if($includeSets
+			&& $this->owner->InheritBlockSets
+			&& ($blocksFromSets = $this->getBlocksFromAppliedBlockSets($area, $includeDisabled))
+		) {
+			// merge set sources
+			foreach ($blocksFromSets as $block) {
+				if(!$blocks->find('ID', $block->ID)) {
+					$block->InheritedFrom = 'Block Set';
+					$blocks->unshift($block);
+				}
 			}
 		}
 		
@@ -297,7 +289,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 		if(!$includeDisabled){
 			$disabledIDs = $this->owner->DisabledBlocks()->column('ID');
 			if(count($disabledIDs)){
-				$blocks = $blocks->filter('ID', $disabledIDs);	
+				$blocks = $blocks->exclude('ID', $disabledIDs);	
 			}
 		}
 
