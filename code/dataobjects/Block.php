@@ -221,4 +221,26 @@ class Block extends DataObject implements PermissionProvider{
 		return FormField::name_to_label($this->Area);
 	}
 
+
+	public function onAfterWrite(){
+		parent::onAfterWrite();
+		if($this->hasExtension('FilesystemPublisher')){
+			$this->republish($this);
+		}
+	}
+
+
+	/**
+     * Get a list of URL's to republish when this block changes
+     * if using StaticPublisher module
+     */
+    public function pagesAffectedByChanges() {
+        $pages = $this->Pages();
+        $urls = array();
+        foreach ($pages as $page) {
+        	$urls[] = $page->Link();
+        }
+        return $urls;
+    }
+
 }
