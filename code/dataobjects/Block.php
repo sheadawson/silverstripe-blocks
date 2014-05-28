@@ -39,8 +39,13 @@ class Block extends DataObject implements PermissionProvider{
     public $blockManager;
 
 	public function getCMSFields(){
+		// this line is a temporary patch until I can work out why this dependency isn't being
+		// loaded in some cases...
+		if(!$this->blockManager) $this->blockManager = singleton('BlockManager');
+
 		if(Controller::curr()->class == 'CMSPageEditController'){
 			$currentPage = Controller::curr()->currentPage();
+
 			$areasFieldSource = $this->blockManager->getAreasForPageType($currentPage->ClassName);	
 			$areasPreviewButton = LiteralField::create('PreviewLink', $currentPage->areasPreviewButton());
 		}else{
