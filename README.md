@@ -98,7 +98,19 @@ There is some markup required in your BlockArea templates to facilitate this: Th
 </div>
 ```
 
+### Screenshots
 
+![](docs/images/overview.png)
+Overview
+
+![](docs/images/preview.png)
+Preview of block locations
+
+![](docs/images/edit.png)
+Edit a block
+
+![](docs/images/existing.png)
+Add an existing block
 
 ## TODO
 
