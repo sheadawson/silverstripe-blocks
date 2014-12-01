@@ -1,5 +1,3 @@
-# Under Development.
-
 ## Requirements
 
 * SilverStripe CMS 3.1
