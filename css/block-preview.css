@@ -1,9 +1,9 @@
-.block-area{
+.block_area{
 	position: relative;
 	min-height: 100px;
 }
 
-.block-preview-overlay, .block-preview-label{
+.block_preview-overlay, .block_preview_label{
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -11,19 +11,19 @@
 	left: 0;
 }
 
-.block-preview-overlay{
+.block_preview_overlay{
 	background: #fff;
 	opacity: 0.8;
 	z-index: 20;
 }
 
-.block-preview-label{
+.block_preview_label{
 	border: 2px dashed #ff4444;
 	z-index: 21;
 	text-align: center;
 }
 
-.block-preview-label span{
+.block_preview_label span{
 	display: inline-block;
 	background: #ff4444;
 	color: #fff;

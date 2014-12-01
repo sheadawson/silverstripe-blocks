@@ -248,4 +248,15 @@ class Block extends DataObject implements PermissionProvider{
         return $urls;
     }
 
+
+    /**
+     * CSS Classes to apply to block element in template
+     * @return string $classes
+     */
+    public function CSSClasses($stopAtClass = 'DataObject') {
+		$classes = strtolower(parent::CSSClasses($stopAtClass));
+		$classes = $this->ExtraCSSClasses ? $classes . " $this->ExtraCSSClasses" : $classes;
+		return $classes;
+	}
+
 }
