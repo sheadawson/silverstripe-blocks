@@ -45,7 +45,12 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 				->addBulkEditing();
 
 			//$gridSource = $this->getBlockList(null, false);
-			$gridSource = $this->owner->Blocks();
+			$gridSource = $this->owner->Blocks()
+				// sort by FIELD Area to force the same order as areas are declared in config
+				->sort(array(
+					"FIELD(Area, '".implode("','",array_keys($areas))."')" => '', 
+					'Weight'=>'ASC', 'Title' => 'ASC'
+				));
 			$fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
 			
 			// Blocks inherited from SiteConfig and BlockSets
