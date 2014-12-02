@@ -13,7 +13,18 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		$editable->setDisplayFields(array(
 			'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
 			'Title'        	=> array('title' => 'Title', 'field' => 'ReadonlyField'),
-			'AreaNice' 		=> array('title' => 'Block Area', 'field' => 'ReadonlyField'),
+			//'AreaNice' 		=> array('title' => 'Block Area', 'field' => 'ReadonlyField'),
+			'Area'	=> array(
+				'title' => 'Block Area', 
+				'callback' => function(){ 
+					return new DropdownField(
+						'Area', 
+						'Block Area', 
+						// Here we use AreasForPageType since this should just return all Areas on SiteConfig
+						$this->blockManager->getAreasForPageType($record->ClassName)
+					);
+				} 
+			),
 			'InheritedFrom' => array('title' => 'Inherited From', 'field' => 'ReadonlyField'),
 			'Weight'    	=> array('title' => 'Weight', 'field' => 'NumericField'),
 			//'PagesCount'  	=> array('title' => 'Number of Pages', 'field' => 'ReadonlyField'),
