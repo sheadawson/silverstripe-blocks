@@ -16,7 +16,7 @@
 		"composer/installers": "*",
 		"silverstripe/framework": "3.1.*",
 		"silverstripe/cms": "3.1.*",
-		"ajshort/silverstripe-gridfieldextensions": "dev-master",
+		"silverstripe-australia/gridfieldextensions": "dev-master",
 		"silverstripe/multivaluefield": "dev-master"
 	},
 	"extra": {
