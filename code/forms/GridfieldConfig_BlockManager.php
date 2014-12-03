@@ -2,18 +2,30 @@
 
 class GridFieldConfig_BlockManager extends GridFieldConfig{
 
-    public $blockManager;
+	public $blockManager;
 
 	public function __construct($canAdd = true, $canEdit = true, $canDelete = true) {
 		parent::__construct();
 
 		$this->blockManager = Injector::inst()->get('BlockManager');
 		
+		// Get available Areas (for page) or all in case of SiteConfig/ModelAdmin
+		if(Controller::curr()->class == 'CMSPageEditController'){
+			$currentPage = Controller::curr()->currentPage();
+			$areasFieldSource = $this->blockManager->getAreasForPageType($currentPage->ClassName);
+		} else {
+			$areasFieldSource = $this->blockManager->getAreasForTheme();
+		}
+		
 		$this->addComponent($editable = new GridFieldEditableColumns());
 		$editable->setDisplayFields(array(
 			'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
 			'Title'        	=> array('title' => 'Title', 'field' => 'ReadonlyField'),
-			'AreaNice' 		=> array('title' => 'Block Area', 'field' => 'ReadonlyField'),
+			'Area'	=> array(
+				'title' => 'Block Area', 
+				'callback' => function() use ($areasFieldSource){
+					return new DropdownField('Area', 'Block Area', $areasFieldSource);
+				} ),
 			'InheritedFrom' => array('title' => 'Inherited From', 'field' => 'ReadonlyField'),
 			'Weight'    	=> array('title' => 'Weight', 'field' => 'NumericField'),
 			//'PagesCount'  	=> array('title' => 'Number of Pages', 'field' => 'ReadonlyField'),
