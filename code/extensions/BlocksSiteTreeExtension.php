@@ -74,8 +74,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension{
 				$fields->addFieldToTab('Root.Blocks', ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks', 'This page has no inherited blocks to disable.'));
 			}
 
-		}else{
-			$fields->addFieldToTab('Root.Blocks', LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
 		}
 	}
 
