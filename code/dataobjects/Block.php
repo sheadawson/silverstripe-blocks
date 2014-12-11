@@ -55,7 +55,7 @@ class Block extends DataObject implements PermissionProvider{
 			$areasPreviewButton = false;	
 		}
 		
-		$areasField = DropdownField::create('Area', 'Area', $areasFieldSource);
+		//$areasField = DropdownField::create('Area', 'Area', $areasFieldSource);
 		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
 		unset($classes['Block']);
 		$classField = DropdownField::create('ClassName', 'Block Type', $classes);
@@ -64,7 +64,7 @@ class Block extends DataObject implements PermissionProvider{
 			$fields = array(
 				TextField::create('Title', 'Title'),
 				$classField,
-				$areasField->setRightTitle($areasPreviewButton),
+				//$areasField->setRightTitle($areasPreviewButton),
 			);
 			
 			return FieldList::create($fields);
@@ -73,15 +73,24 @@ class Block extends DataObject implements PermissionProvider{
 			$fields = parent::getCMSFields();
 			$pageClass = null;
 			$controller = Controller::curr();		
-			$fields->replaceField('Area', $areasField->setRightTitle($areasPreviewButton));
-
+			//$fields->replaceField('Area', $areasField->setRightTitle($areasPreviewButton));
 
 			$fields->removeFieldFromTab('Root', 'SiteConfigs');
 			$fields->removeFieldFromTab('Root', 'BlockSets');
 			//$fields->removeFieldFromTab('Root', 'Pages'); // Used for a simple list
-			$fields->dataFieldByName('Weight')->setRightTitle('Controls block ordering. A small weight value will float, a large will sink.');
-			$fields->addFieldToTab('Root.Main', TextField::create('ExtraCSSClasses', 'Extra CSS Classes'));
-			$fields->addFieldToTab('Root.Main', $classField, 'Area');
+//			$fields->dataFieldByName('Weight')->setRightTitle('Controls block ordering. A small weight value will float, a large will sink.');
+			
+			// Sort Fields: Type, Name, Published, Exta Classes
+			$fields->addFieldToTab('Root.Main', $classField, 'Name');
+			$fields->addFieldToTab('Root.Main', 
+					$fields->dataFieldByName('Published'), 'Name');
+			$fields->addFieldToTab('Root.Main', 
+					$fields->dataFieldByName('ExtraCSSClasses'), 'Name');
+			$fields->addFieldToTab('Root.Main', 
+					$fields->dataFieldByName('Name'), 'Published');
+			
+			$fields->removeByName('Area');
+			$fields->removeByName('Weight');
 
 			// Viewer groups
 			$fields->removeFieldFromTab('Root', 'ViewerGroups');
