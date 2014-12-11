@@ -5,6 +5,13 @@ class BlocksSiteConfigExtension extends DataExtension {
 	private static $many_many = array(
 		'Blocks' => 'Block'
 	);
+	
+	public static $many_many_extraFields = array(
+		'Blocks' => array(
+			'Sort' => 'Int',
+			'Area' => 'Varchar'
+		)
+	);
 
 	private static $dependencies = array(
         'blockManager' => '%$blockManager',

@@ -17,8 +17,12 @@
 		"silverstripe/framework": "3.1.*",
 		"silverstripe/cms": "3.1.*",
 		"silverstripe-australia/gridfieldextensions": "1.0.*",
-		"silverstripe/multivaluefield": "dev-master"
+		"silverstripe/multivaluefield": "dev-master",
+		"unisolutions/silverstripe-copybutton": "dev-master"
 	},
+	"suggest": {
+        "unclecheese/betterbuttons": "User friendly buttons, later versions of Blocks may require this module"
+    },
 	"extra": {
 		"installer-name": "blocks"
 	}

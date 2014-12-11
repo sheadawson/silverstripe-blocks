@@ -6,10 +6,12 @@
 class Block extends DataObject implements PermissionProvider{
 
 	private static $db = array(
-		'Title' => 'Varchar',
-		'Area' => 'Varchar',
-		'Published' => 'Boolean',
-		'Weight' => 'Int',
+		// Descriptive (meta) name of this block, Title field may be removed in future releases(?)
+		'Name' => 'Varchar(255)', 
+		'Title' => 'Varchar(255)', // Title is content, content should be in the implementing model
+		'Area' => 'Varchar', // will be removed in future versions (moved to m_m_extrafields on page/siteconfig)
+		'Published' => 'Boolean', // may be replaced by versioned in future versions
+		'Weight' => 'Int', // will be removed in future versions (moved to m_m_extrafields on page/siteconfig)
 		"CanViewType" => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
 		'ExtraCSSClasses' => 'Varchar'
 	);
@@ -25,12 +27,12 @@ class Block extends DataObject implements PermissionProvider{
 	);
 
 	// private static $summary_fields = array(
-	// 	'Title' => 'Title', 
+	// 	'Name' => 'Name', 
 	// 	'Area' => 'Area',
 	// 	'Published' => 'Published',
 	// );
 
-	private static $default_sort = array('Area'=>'ASC', 'Weight'=>'ASC', 'Title' => 'ASC');
+	private static $default_sort = array('Area'=>'ASC', 'Weight'=>'ASC', 'Name' => 'ASC');
 
 	private static $dependencies = array(
         'blockManager' => '%$blockManager',
@@ -116,11 +118,22 @@ class Block extends DataObject implements PermissionProvider{
 	public function validate() {
 		$result = parent::validate();
 
-		if(!$this->Title){
-			$result->error('Block Title is required');
+		if(!$this->Name){
+			$result->error('Block Name is required');
 		}
 		return $result;
 	}
+	
+	
+	/**
+	 * Copybutton extra cleanup: Duplicate for use in ModelAdmin
+	 * mainly removing all links to pages and blocksets that may have been duplicated
+	 */
+	public function onAfterDuplicate() {
+		// remove relations to pages & blocksets duplicated from the original item
+        $this->Pages()->removeAll();
+		$this->BlockSets()->removeAll();
+    }
 
 
 	/**
@@ -151,14 +164,20 @@ class Block extends DataObject implements PermissionProvider{
 		return $this->Pages()->count();
 	}
 
-
+	
+	/* 
+	 * Deleting can be done from BlockAdmin 
+	 */
 	public function onBeforeDelete(){
 		parent::onBeforeDelete();
 		$this->Pages()->removeAll();
 		$this->BlockSets()->removeAll();
 	}
 
-
+	
+	/* 
+	 * Base permissions
+	 */
 	public function canView($member = null){
 		if(!$member || !(is_a($member, 'Member')) || is_numeric($member)) {
 			$member = Member::currentUserID();

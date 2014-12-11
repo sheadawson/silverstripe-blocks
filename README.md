@@ -1,8 +1,29 @@
+# Dev version ()
+
+## Todo/Features development
+
+* ~~Duplication of Blocks in BlockAdmin~~
+* ~~Sorting primarily by Area (in order of declaration in config), on Pages~~
+* ~~Allow deletion of blocks from BlockAdmin~~
+* Replacing Title as standard field with Name, as Title will often be used for actual content, Name can function as a description for finding the block later
+* Block->Area managed on many_many_extraFields (on relations Page, SiteConfig, Blocksets)
+* Block->Weight managed on many_many_extraFields (on relations Page, SiteConfig, Blocksets)
+* Ability to specify Above or Below on global/blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
+* Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)
+* Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
+* Show 'used on pages' in BlockAdmin
+* Forms (userforms/flexiforms) integration or at least some documentation/samples
+* Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
+
 ## Requirements
 
 * SilverStripe CMS 3.1
 * [GridFieldExtensions](https://github.com/ajshort/silverstripe-gridfieldextensions)
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
+
+### New requirements
+* [GridField Copybutton](https://github.com/unisolutions/silverstripe-copybutton) (duplication of blocks)
+* [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons) (recommended)
 
 
 ## Installation

@@ -6,13 +6,21 @@
 class BlockSet extends DataObject implements PermissionProvider{
 	
 	static $db = array(
-		'Title' => 'Varchar',
+		'Name' => 'Varchar(255)',
+//		'Title' => 'Varchar(255)', // Title is content, content should be in the implementing model
 		'PageTypes' => 'MultiValueField'
 	);
 
 	static $many_many = array(
 		'Blocks' => 'Block',
 		'PageParents' => 'SiteTree'
+	);
+	
+	public static $many_many_extraFields = array(
+		'Blocks' => array(
+			'Weight' => 'Int',
+			'Area' => 'Varchar'
+		)
 	);
 
 	public function getCMSFields(){
