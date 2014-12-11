@@ -8,11 +8,9 @@ class BlockAdmin extends ModelAdmin {
     	'Block',
     	'BlockSet'
     );
-
 	static $url_segment = 'block-admin';
-
 	static $menu_title = "Blocks";
-
+	public $showImportForm = false;
 
 	public function getEditForm($id = null, $fields = null) {
 		$form = parent::getEditForm($id, $fields);

@@ -78,7 +78,7 @@ class Block extends DataObject implements PermissionProvider{
 
 			$fields->removeFieldFromTab('Root', 'SiteConfigs');
 			$fields->removeFieldFromTab('Root', 'BlockSets');
-			$fields->removeFieldFromTab('Root', 'Pages');
+			//$fields->removeFieldFromTab('Root', 'Pages'); // Used for a simple list
 			$fields->dataFieldByName('Weight')->setRightTitle('Controls block ordering. A small weight value will float, a large will sink.');
 			$fields->addFieldToTab('Root.Main', TextField::create('ExtraCSSClasses', 'Extra CSS Classes'));
 			$fields->addFieldToTab('Root.Main', $classField, 'Area');
@@ -108,15 +108,42 @@ class Block extends DataObject implements PermissionProvider{
 				$viewersOptionsField,
 				$viewerGroupsField,
 			));
+			
+			// Show a GridField (list only) with pages which this block is used on
+			$fields->removeFieldFromTab('Root.Pages', 'Pages');
+			$fields->addFieldsToTab('Root.Pages', 
+					new GridField(
+							'Pages', 
+							'Used on pages', 
+							$this->Pages(), 
+							$gconf = GridFieldConfig_Base::create()));
+			// enhance gridfield with edit links to pages if GFEditSiteTreeItemButtons is available
+			// a GFRecordEditor (default) combined with BetterButtons already gives the possibility to 
+			// edit versioned records (Pages), but STbutton loads them in their own interface instead 
+			// of GFdetailform
+			if(class_exists('GridFieldEditSiteTreeItemButton')){
+				$gconf->addComponent(new GridFieldEditSiteTreeItemButton());
+			}
 
 			return $fields;
 		}
 		
 	}
-
+	
+	/*
+	 * Provide a fallback mechanism for replacing Title with Name
+	 */
+	public function Name(){
+		return ( $this->Name ? $this->Name : $this->Title );
+	}
 
 	public function validate() {
 		$result = parent::validate();
+		
+		// Migration/fallback copy Title to Name if no name set (Name is required, earlier Title was instead)
+		if(!$this->Name && $this->Title){
+			$this->Name = $this->Title;
+		}
 
 		if(!$this->Name){
 			$result->error('Block Name is required');
@@ -244,7 +271,10 @@ class Block extends DataObject implements PermissionProvider{
 	public function AreaNice(){
 		return FormField::name_to_label($this->Area);
 	}
-
+	
+	public function onBeforeWrite(){
+		parent::onBeforeWrite();
+	}
 
 	public function onAfterWrite(){
 		parent::onAfterWrite();
@@ -266,6 +296,22 @@ class Block extends DataObject implements PermissionProvider{
         }
         return $urls;
     }
+	
+	/*
+	 * Get a list of Page titles this block is used on
+	 * Default URLSegment because it's often short & every page has one (serves only as an indication anyway)
+	 */
+	public function PageListAsString($field = 'URLSegment') {
+		return implode(", ", $this->Pages()->column($field));
+	}
+	
+	/*
+	 * Get a list of Page titles this block is used on
+	 * Default URLSegment because it's often short & every page has one (serves only as an indication anyway)
+	 */
+	public function PublishedString() {
+		return ($this->Published ? "Published" : "-");
+	}
 
 
     /**

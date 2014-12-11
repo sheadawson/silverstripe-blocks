@@ -44,7 +44,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 			// Set sort -> moved to 
 			$sortfields = array(
-				"FIELD(Area, '" . implode("','", array_keys($areas)) . "')" => '',
+//				"FIELD(Area, '" . implode("','", array_keys($areas)) . "')" => '',
 				'Weight' => 'ASC', 'Title' => 'ASC');
 
 			// Blocks related directly to this Page 

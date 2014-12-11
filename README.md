@@ -3,7 +3,7 @@
 ## Todo/Features development
 
 * ~~Duplication of Blocks in BlockAdmin~~
-* ~~Sorting primarily by Area (in order of declaration in config), on Pages~~
+* Re-add: Sorting primarily by Area (in order of declaration in config), on Pages (removed in favor of dr'ndr sorting)
 * ~~Allow deletion of blocks from BlockAdmin~~
 * Replacing Title as standard field with Name, as Title will often be used for actual content, Name can function as a description for finding the block later
 * Block->Area managed on many_many_extraFields (on relations Page, SiteConfig, Blocksets)
@@ -11,7 +11,9 @@
 * Ability to specify Above or Below on global/blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
 * Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)
 * Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
-* Show 'used on pages' in BlockAdmin
+* ~~Show 'used on pages' in BlockAdmin~~
+* ~~Allow editing of related pages from Block (requires gridfieldsitetreebuttons)~~
+* ~~Remove editablecolumns from BlockAdmin (no use, cannot be saved)~~
 * Forms (userforms/flexiforms) integration or at least some documentation/samples
 * Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
 

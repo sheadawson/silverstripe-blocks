@@ -21,7 +21,8 @@
 		"unisolutions/silverstripe-copybutton": "dev-master"
 	},
 	"suggest": {
-        "unclecheese/betterbuttons": "User friendly buttons, later versions of Blocks may require this module"
+        "unclecheese/betterbuttons": "User friendly buttons, later versions of Blocks may require this module",
+		"micschk/silverstripe-gridfieldsitetreebuttons": "Edit pages directly from a Block's 'used on page' list"
     },
 	"extra": {
 		"installer-name": "blocks"

@@ -17,21 +17,38 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$areasFieldSource = $this->blockManager->getAreasForTheme();
 		}
 		
-		$this->addComponent($editable = new GridFieldEditableColumns());
-		$editable->setDisplayFields(array(
-			'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
-			'Title'        	=> array('title' => 'Title', 'field' => 'ReadonlyField'),
-			'Area'	=> array(
-				'title' => 'Block Area', 
-				'callback' => function() use ($areasFieldSource){
-					return new DropdownField('Area', 'Block Area', $areasFieldSource);
-				} ),
-			'InheritedFrom' => array('title' => 'Inherited From', 'field' => 'ReadonlyField'),
-			'Weight'    	=> array('title' => 'Weight', 'field' => 'NumericField'),
-			//'PagesCount'  	=> array('title' => 'Number of Pages', 'field' => 'ReadonlyField'),
-			'Published' 	=> array('title' => 'Published (global)', 'field' => 'CheckboxField'),
-			//'PublishedOnThisPage' => array('title' => 'Published (just for this page)', 'callback' => $this->getPublishedOnThisPageField()),
-		));
+		// EditableColumns only makes sense on Saveable parenst (eg Page), or inline changes won't be saved
+		if(Controller::curr()->class != 'BlockAdmin'){
+			$this->addComponent($editable = new GridFieldEditableColumns());
+			$displayfields = array(
+				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
+				'Name'        	=> array('title' => 'Name', 'field' => 'ReadonlyField'),
+				'Area'	=> array(	
+					'title' => 'Block Area
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+						// &nbsp;s prevent wrapping of dropdowns
+					'callback' => function() use ($areasFieldSource){
+							return new DropdownField('Area', 'Block Area', $areasFieldSource);
+						} 
+				),
+				'Published'		=> array('title' => 'Published (global)', 'field' => 'CheckboxField'),
+				'PageListAsString' => array('title' => 'Used on pages', 'field' => 'ReadonlyField'),
+				//'InheritedFrom' => array('title' => 'Inherited From', 'field' => 'ReadonlyField'),
+				//'Weight'    	=> array('title' => 'Weight', 'field' => 'NumericField'),
+				//'PagesCount'  	=> array('title' => 'Number of Pages', 'field' => 'ReadonlyField'),
+			);
+			$editable->setDisplayFields($displayfields);
+		} else {
+			$this->addComponent($dcols = new GridFieldDataColumns());
+			$displayfields = array(
+				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
+				'Name'        	=> array('title' => 'Name', 'field' => 'ReadonlyField'),
+				'Area'			=> array('title' => 'Block area', 'field' => 'ReadonlyField'),
+				'PublishedString' => array('title' => 'Published (global)', 'field' => 'ReadonlyField'),
+				'PageListAsString' => array('title' => 'Used on pages', 'field' => 'ReadonlyField'),
+			);
+			$dcols->setDisplayFields($displayfields);
+		}
 
 		$this->addComponent(new GridFieldButtonRow('before'));
 		$this->addComponent(new GridFieldToolbarHeader());
