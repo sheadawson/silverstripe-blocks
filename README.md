@@ -82,6 +82,38 @@ You can limit a block area to a maximum number of blocks using the second limit 
 
 You will now be able to add Blocks to Pages and "Global Blocks" to SiteConfig (or Sites if using [Multisites](https://github.com/sheadawson/silverstripe-multisites)). You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
 
+#### ContentBlock Example
+```php
+class ContentBlock extends Block{
+
+	private static $singular_name = 'Content Block';
+	private static $plural_name = 'Content Blocks';
+
+	private static $db = array(
+		'Title' => 'Varchar(255)',
+		'Content' => 'HTMLText'
+	);
+
+
+	public function getCMSFields(){
+		$fields = parent::getCMSFields();
+		
+		$fields->addFieldToTab("Root.Main", new HeaderField('ContentStart', 'Block content'),'Title');
+
+		return $fields;
+	}
+
+}
+```
+
+templates/includes/ContentBlock.ss
+
+```html
+<div class='$CSSClasses'>
+	<div class='block_title'><h3>$Title</h3></div>
+	<div class='block_content'>$Content</div>
+</div>
+```
 
 #### Restrict Blocks to viewer groups or logged in users
 

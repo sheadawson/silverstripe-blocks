@@ -16,7 +16,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	);
 	public static $many_many_extraFields = array(
 		'Blocks' => array(
-			'Weight' => 'Int',
+			'Sort' => 'Int',
 			'Area' => 'Varchar'
 		)
 	);
@@ -43,21 +43,21 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			$fields->addFieldToTab('Root.Blocks', LiteralField::create('PreviewLink', $this->areasPreviewButton()));
 
 			// Set sort -> moved to 
-			$sortfields = array(
-//				"FIELD(Area, '" . implode("','", array_keys($areas)) . "')" => '',
-				'Weight' => 'ASC', 'Title' => 'ASC');
+//			$sortfields = array(
+////				"FIELD(Area, '" . implode("','", array_keys($areas)) . "')" => '',
+//				'Weight' => 'ASC', 'Title' => 'ASC');
 
 			// Blocks related directly to this Page 
 			$gridConfig = GridFieldConfig_BlockManager::create()
 					->addExisting($this->owner->class)
 					->addBulkEditing()
-//				->addComponent($orderablerows = new GridFieldOrderableRows()) // Leave this at default 'Sort'
+				->addComponent($orderablerows = new GridFieldOrderableRows()) // Leave this at default 'Sort'
 			;
 
 			//$gridSource = $this->getBlockList(null, false);
-			$gridSource = $this->owner->Blocks()
+			$gridSource = $this->owner->Blocks();
 				// sort by FIELD Area to force the same order as areas are declared in config
-				->sort($sortfields);
+//				->sort($sortfields);
 
 			$fields->addFieldToTab('Root.Blocks', 
 					GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
@@ -87,18 +87,26 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			
 		}
 	}
+	
+	/**
+	 * Fallback/migration from Weight to Sort (Alas, doesn't work)
+	 */
+//	public function Sort(){
+//		if($this->owner->Sort) return $this->owner->Sort;
+//		return $this->owner->Weight;
+//	}
 
 	/**
 	 * Override Blocks to use sort 
 	 */
-//	public function SortedBlocks(){
-//		Debug::dump('test');
-//		return $this->owner->getManyManyComponents('Blocks')
-//			// sort by FIELD Area to force the same order as areas are declared in config
+	public function Blocks(){
+		Debug::dump('test');
+		return $this->owner->getManyManyComponents('Blocks')->sort('Sort');
+			// sort by FIELD Area to force the same order as areas are declared in config
 //			->sort(array(
 //				"FIELD(Area, 'Header','BeforeContent','InsideContent','AfterContent')" => '',
 //				'Sort'=>'ASC', 'Title' => 'ASC'));
-//	}
+	}
 
 	/**
 	 * Block manager for Sites (multisites module)
