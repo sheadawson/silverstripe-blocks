@@ -9,7 +9,8 @@
 * Block->Area managed on many_many_extraFields (on relations Page, SiteConfig, Blocksets)
 * Block->Weight managed on many_many_extraFields (on relations Page, SiteConfig, Blocksets)
 * Ability to specify Above or Below on global/blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
-* Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)
+* ~~Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)~~
+* TODO: combine merges with Sort from OrderableRows in BlocksSiteTreeExtension::getBlockList()
 * Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
 * ~~Show 'used on pages' in BlockAdmin~~
 * ~~Allow editing of related pages from Block (requires gridfieldsitetreebuttons)~~

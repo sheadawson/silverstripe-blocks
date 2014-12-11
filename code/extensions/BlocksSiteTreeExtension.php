@@ -99,14 +99,14 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	/**
 	 * Override Blocks to use sort 
 	 */
-	public function Blocks(){
-		Debug::dump('test');
-		return $this->owner->getManyManyComponents('Blocks')->sort('Sort');
-			// sort by FIELD Area to force the same order as areas are declared in config
-//			->sort(array(
-//				"FIELD(Area, 'Header','BeforeContent','InsideContent','AfterContent')" => '',
-//				'Sort'=>'ASC', 'Title' => 'ASC'));
-	}
+//	public function Blocks(){
+//		Debug::dump('test');
+//		return $this->owner->getManyManyComponents('Blocks')->sort('Sort');
+//			// sort by FIELD Area to force the same order as areas are declared in config
+////			->sort(array(
+////				"FIELD(Area, 'Header','BeforeContent','InsideContent','AfterContent')" => '',
+////				'Sort'=>'ASC', 'Title' => 'ASC'));
+//	}
 
 	/**
 	 * Block manager for Sites (multisites module)
@@ -165,8 +165,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * @return ArrayList
 	 * */
 	public function getBlockList(
-	$area = null, $publishedOnly = true, $includeNative = true, $includeGlobal = true, $includeSets = true, $includeDisabled = false
-	) {
+			$area = null, $publishedOnly = true, $includeNative = true, 
+			$includeGlobal = true, $includeSets = true, $includeDisabled = false ) {
 
 		////// DataList rewrite ///////
 		// $blocks = DataList::create('Block');
@@ -223,10 +223,11 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 		// get blocks directly linked to this page
 		if ($includeNative) {
-			$nativeBlocks = $this->owner->Blocks();
+			// Gridfieldsortablerows (Sort) - instead of default_sort (Weight)
+			//$nativeBlocks = $this->owner->Blocks();
+			$nativeBlocks = $this->owner->getManyManyComponents('Blocks')->sort('Sort');
 			if ($area)
 				$nativeBlocks = $nativeBlocks->filter('Area', $area);
-
 			if ($nativeBlocks->count()) {
 				foreach ($nativeBlocks as $block) {
 					$block->InheritedFrom = '-';
@@ -237,7 +238,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 
 		// get blocks inherited from SiteConfig
-		if ($includeGlobal && $this->owner->InheritGlobalBlocks && ($inheritedBlocks = $this->getInheritedGlobalBlocks($area, $includeDisabled))
+		if ($includeGlobal && $this->owner->InheritGlobalBlocks 
+				&& ($inheritedBlocks = $this->getInheritedGlobalBlocks($area, $includeDisabled))
 		) {
 			// merge inherited sources
 			foreach ($inheritedBlocks as $block) {
@@ -249,7 +251,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		}
 
 		// get blocks from BlockSets
-		if ($includeSets && $this->owner->InheritBlockSets && ($blocksFromSets = $this->getBlocksFromAppliedBlockSets($area, $includeDisabled))
+		if ($includeSets && $this->owner->InheritBlockSets 
+				&& ($blocksFromSets = $this->getBlocksFromAppliedBlockSets($area, $includeDisabled))
 		) {
 			// merge set sources
 			foreach ($blocksFromSets as $block) {
@@ -263,7 +266,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		// filter out unpublished blocks?
 		$blocks = $publishedOnly ? $blocks->filter('Published', 1) : $blocks;
 
-		$blocks = $blocks->sort(Config::inst()->get('Block', 'default_sort'));
+		// TODO: combine merges with Sort from OrderableRows
+		//$blocks = $blocks->sort(Config::inst()->get('Block', 'default_sort'));
 		//$blocks = $blocks->sort(array('Sort'=>'ASC', 'Title' => 'ASC'));
 
 		return $blocks;

@@ -55,6 +55,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		$this->addComponent(new GridFieldDetailForm());
 		$this->addComponent($sort = new GridFieldSortableHeader());
 		$this->addComponent($filter = new GridFieldFilterHeader());
+		//$this->addComponent(new GridFieldCopyButton());
 
 		$filter->setThrowExceptionOnBadDataType(false);
 		$sort->setThrowExceptionOnBadDataType(false);
