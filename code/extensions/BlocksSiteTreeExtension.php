@@ -64,35 +64,57 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 					GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
 
 			// Blocks inherited from SiteConfig and BlockSets
-			$fields->addFieldToTab('Root.Blocks', 
-					HeaderField::create('InheritedBlocksHeader', 'Inherited Blocks'));
-			$fields->addFieldToTab('Root.Blocks', 
-					CheckboxField::create('InheritGlobalBlocks', 
-							'Inherit Global Blocks from Site Configuration'));
-			$fields->addFieldToTab('Root.Blocks', 
-					CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
-
-			$allInherited = $this->getBlockList(null, false, false, true, true, true, true);
-			if ($allInherited->count()) {
+			if( $this->blockManager->getUseBlockSets() || $this->blockManager->getUseGlobalBlocks() ){
+				
 				$fields->addFieldToTab('Root.Blocks', 
-						ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks', 
-								$allInherited->map('ID', 'Title'), null, null, true)
-							->setDescription('Select any inherited blocks that you would not like displayed on this page.')
-				);
-
-				$activeInherited = $this->getBlockList(null, false, false, true, true, false);
-				//var_dump($activeInherited->count());
-				if ($activeInherited->count()) {
-
+						HeaderField::create('InheritedBlocksHeader', 'Inherited Blocks'));
+				
+				if( $this->blockManager->getUseGlobalBlocks() ) {
 					$fields->addFieldToTab('Root.Blocks', 
-							GridField::create('InheritedBlockList', 'Inherited Blocks', $activeInherited, 
-									GridFieldConfig_BlockManager::create(false, false, false)));
+						CheckboxField::create('InheritGlobalBlocks', 
+								'Inherit Global Blocks from Site Configuration'));
 				}
-			} else {
-				$fields->addFieldToTab('Root.Blocks', 
-						ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks', 
-								'This page has no inherited blocks to disable.'));
+				if( $this->blockManager->getUseBlockSets() ) {
+					$fields->addFieldToTab('Root.Blocks', 
+						CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
+				}
+				
+				//getBlockList(
+				//$area = null, $publishedOnly = true, $includeNative = true, 
+				//$includeGlobal = true, $includeSets = true, $includeDisabled = false )
+				$blocksetsactive = $this->blockManager->getUseBlockSets();
+				$globalactive = $this->blockManager->getUseGlobalBlocks();
+				
+				$allInherited = $this->getBlockList(
+						$area = null, $publishedOnly = false, 
+						$includeNative = false, $includeGlobal = $globalactive, 
+						$includeSets = $blocksetsactive, $includeDisabled = true );
+			
+				if ($allInherited->count()) {
+					$fields->addFieldToTab('Root.Blocks', 
+							ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks', 
+									$allInherited->map('ID', 'Title'), null, null, true)
+								->setDescription('Select any inherited blocks that you would not like displayed on this page.')
+					);
+					
+					$activeInherited = $this->getBlockList(
+							$area = null, $publishedOnly = false, 
+							$includeNative = false, $includeGlobal = $globalactive, 
+							$includeSets = $blocksetsactive, $includeDisabled = false );
+					//var_dump($activeInherited->count());
+					if ($activeInherited->count()) {
+
+						$fields->addFieldToTab('Root.Blocks', 
+								GridField::create('InheritedBlockList', 'Inherited Blocks', $activeInherited, 
+										GridFieldConfig_BlockManager::create(false, false, false)));
+					}
+				} else {
+					$fields->addFieldToTab('Root.Blocks', 
+							ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks', 
+									'This page has no inherited blocks to disable.'));
+				}
 			}
+			
 		} else {
 			$fields->addFieldToTab('Root.Blocks', 
 					LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
@@ -180,7 +202,11 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * */
 	public function getBlockList(
 			$area = null, $publishedOnly = true, $includeNative = true, 
-			$includeGlobal = true, $includeSets = true, $includeDisabled = false ) {
+			$includeGlobal = null, $includeSets = null, $includeDisabled = false ) {
+		
+		// make inclusion of global & sets configurable
+		if($includeSets===null) $includeSets = $this->blockManager->getUseBlockSets();
+		if($includeGlobal===null) $includeGlobal = $this->blockManager->getUseGlobalBlocks();
 
 		////// DataList rewrite ///////
 		// $blocks = DataList::create('Block');

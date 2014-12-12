@@ -20,6 +20,8 @@
 * ~~Remove editablecolumns from BlockAdmin (no use, cannot be saved)~~
 * Forms (userforms/flexiforms) integration or at least some documentation/samples
 * Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
+* ~~Make block Blocksets & global blocks functionality & interfaces optional via config~~
+* TODO: check sets & blocks optional functionality on page-output if old relations are still in place
 
 ## Requirements
 
@@ -58,6 +60,10 @@ BlockManager:
         AfterContent:
           except: HomePage # a AfterContent area will be available on all page types except HomePage in simple theme
         Footer: true # a Footer area will be available on all page types in simple theme
+
+      use_global_blocks: false # Whether to use SiteConfig Blocks functionality (default if undeclared: true)
+      use_blocksets: false # Whether to use BlockSet functionality (default if undeclared: true)
+
 ```
 
 Remember to run ?flush=1 after modifying your .yml config to make sure it gets applied.

@@ -7,7 +7,6 @@ class BlockManager extends Object{
 
 	private static $themes = array();
 
-
 	public function __construct(){
 		parent::__construct();
 	}
@@ -104,6 +103,36 @@ class BlockManager extends Object{
 		}else{
 			return Config::inst()->get('SSViewer', 'theme');
 		}
+	}
+	
+	/*
+	 * Usage of GlobalBlocks configurable from yaml
+	 */
+	public function getUseGlobalBlocks(){
+		//return false;
+		$theme = $this->getTheme();
+		if(!$theme){ return true; }
+		$config = $this->config()->get('themes');
+		
+		if(!isset($config[$theme]['use_global_blocks'])){
+			return true;
+		}
+		return $config[$theme]['use_global_blocks'];
+	}
+	
+	/*
+	 * Usage of BlockSets configurable from yaml
+	 */
+	public function getUseBlockSets(){
+		//return false;
+		$theme = $this->getTheme();
+		if(!$theme){ return true; }
+		$config = $this->config()->get('themes');
+		
+		if(!isset($config[$theme]['use_blocksets'])){
+			return true;
+		}
+		return $config[$theme]['use_blocksets'];
 	}
 
 }
