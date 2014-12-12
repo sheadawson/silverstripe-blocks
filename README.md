@@ -24,15 +24,15 @@
 ## Requirements
 
 * SilverStripe CMS 3.1
-* [GridFieldExtensions](https://github.com/ajshort/silverstripe-gridfieldextensions)
+* [GridFieldExtensions](https://github.com/silverstripe-australia/silverstripe-gridfieldextensions)
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
 
 ### New requirements
 
 ### Recommended
-* [GridField Copybutton](https://github.com/unisolutions/silverstripe-copybutton) (duplication of blocks)
-* [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons) (recommended)
-* [GridField SitetreeButtons](https://github.com/micschk/silverstripe-gridfieldsitetreebuttons) (recommended)
+* [GridField Copybutton](https://github.com/unisolutions/silverstripe-copybutton) (duplication of blocks, from BlockAdmin)
+* [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons) (user friendly buttons & simple versioning (todo))
+* [GridField SitetreeButtons](https://github.com/micschk/silverstripe-gridfieldsitetreebuttons) (edit related pages directly from block)
 
 
 ## Installation
