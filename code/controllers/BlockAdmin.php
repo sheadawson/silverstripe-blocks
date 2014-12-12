@@ -23,7 +23,7 @@ class BlockAdmin extends ModelAdmin {
 				->removeComponentsByType('GridFieldDeleteAction')
 				->removeComponentsByType('GridFieldDetailForm')
 				->addComponent(new GridFieldDetailFormCustom())
-				->addComponent(new GridFieldCopyButton())
+				//->addComponent(new GridFieldCopyButton())
 				->addComponent(new GridFieldEditButton())
 				->addComponent(new GridFieldDeleteAction())
 			);

@@ -19,7 +19,7 @@ class BlockSet extends DataObject implements PermissionProvider{
 	public static $many_many_extraFields = array(
 		'Blocks' => array(
 			'Weight' => 'Int',
-			'Area' => 'Varchar'
+			'BlockArea' => 'Varchar'
 		)
 	);
 

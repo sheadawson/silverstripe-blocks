@@ -17,7 +17,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	public static $many_many_extraFields = array(
 		'Blocks' => array(
 			'Sort' => 'Int',
-			'Area' => 'Varchar'
+			'BlockArea' => 'Varchar'
 		)
 	);
 	private static $defaults = array(
@@ -40,7 +40,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		$areas = $this->blockManager->getAreasForPageType($this->owner->ClassName);
 
 		if ($areas && count($areas)) {
-			$fields->addFieldToTab('Root.Blocks', LiteralField::create('PreviewLink', $this->areasPreviewButton()));
+			$fields->addFieldToTab('Root.Blocks', 
+					LiteralField::create('PreviewLink', $this->areasPreviewButton()));
 
 			// Set sort -> moved to 
 //			$sortfields = array(
@@ -49,10 +50,10 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 			// Blocks related directly to this Page 
 			$gridConfig = GridFieldConfig_BlockManager::create()
-					->addExisting($this->owner->class)
-					->addBulkEditing()
+				->addExisting($this->owner->class)
+				->addBulkEditing()
 				->addComponent($orderablerows = new GridFieldOrderableRows()) // Leave this at default 'Sort'
-			;
+				;
 
 			//$gridSource = $this->getBlockList(null, false);
 			$gridSource = $this->owner->Blocks();
@@ -63,27 +64,38 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 					GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
 
 			// Blocks inherited from SiteConfig and BlockSets
-			$fields->addFieldToTab('Root.Blocks', HeaderField::create('InheritedBlocksHeader', 'Inherited Blocks'));
-			$fields->addFieldToTab('Root.Blocks', CheckboxField::create('InheritGlobalBlocks', 'Inherit Global Blocks from Site Configuration'));
-			$fields->addFieldToTab('Root.Blocks', CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
+			$fields->addFieldToTab('Root.Blocks', 
+					HeaderField::create('InheritedBlocksHeader', 'Inherited Blocks'));
+			$fields->addFieldToTab('Root.Blocks', 
+					CheckboxField::create('InheritGlobalBlocks', 
+							'Inherit Global Blocks from Site Configuration'));
+			$fields->addFieldToTab('Root.Blocks', 
+					CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
 
 			$allInherited = $this->getBlockList(null, false, false, true, true, true, true);
 			if ($allInherited->count()) {
-				$fields->addFieldToTab('Root.Blocks', ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks', $allInherited->map('ID', 'Title'), null, null, true)
-								->setDescription('Select any inherited blocks that you would not like displayed on this page.')
+				$fields->addFieldToTab('Root.Blocks', 
+						ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks', 
+								$allInherited->map('ID', 'Title'), null, null, true)
+							->setDescription('Select any inherited blocks that you would not like displayed on this page.')
 				);
 
 				$activeInherited = $this->getBlockList(null, false, false, true, true, false);
 				//var_dump($activeInherited->count());
 				if ($activeInherited->count()) {
 
-					$fields->addFieldToTab('Root.Blocks', GridField::create('InheritedBlockList', 'Inherited Blocks', $activeInherited, GridFieldConfig_BlockManager::create(false, false, false)));
+					$fields->addFieldToTab('Root.Blocks', 
+							GridField::create('InheritedBlockList', 'Inherited Blocks', $activeInherited, 
+									GridFieldConfig_BlockManager::create(false, false, false)));
 				}
 			} else {
-				$fields->addFieldToTab('Root.Blocks', ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks', 'This page has no inherited blocks to disable.'));
+				$fields->addFieldToTab('Root.Blocks', 
+						ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks', 
+								'This page has no inherited blocks to disable.'));
 			}
 		} else {
-			$fields->addFieldToTab('Root.Blocks', LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
+			$fields->addFieldToTab('Root.Blocks', 
+					LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
 			
 		}
 	}
@@ -112,7 +124,9 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * Block manager for Sites (multisites module)
 	 * */
 	public function updateSiteCMSFields(FieldList $fields) {
-		$fields->addFieldToTab('Root.GlobalBlocks', GridField::create('Blocks', 'Blocks', $this->owner->Blocks(), GridFieldConfig_BlockManager::create()));
+		$fields->addFieldToTab('Root.GlobalBlocks', 
+				GridField::create('Blocks', 'Blocks', $this->owner->Blocks(), 
+						GridFieldConfig_BlockManager::create()));
 	}
 
 	/**
@@ -227,7 +241,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			//$nativeBlocks = $this->owner->Blocks();
 			$nativeBlocks = $this->owner->getManyManyComponents('Blocks')->sort('Sort');
 			if ($area)
-				$nativeBlocks = $nativeBlocks->filter('Area', $area);
+				$nativeBlocks = $nativeBlocks->filter('BlockArea', $area);
 			if ($nativeBlocks->count()) {
 				foreach ($nativeBlocks as $block) {
 					$block->InheritedFrom = '-';
@@ -235,7 +249,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 				}
 			}
 		}
-
 
 		// get blocks inherited from SiteConfig
 		if ($includeGlobal && $this->owner->InheritGlobalBlocks 
@@ -291,7 +304,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		$blocks = $this->getGloablBlockSource()->Blocks();
 
 		if ($area) {
-			$blocks = $blocks->filter('Area', $area);
+			$blocks = $blocks->filter('BlockArea', $area);
 		}
 
 		if (!$includeDisabled) {
@@ -361,7 +374,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			}
 
 			if ($area) {
-				$setBlocks = $setBlocks->filter('Area', $area);
+				$setBlocks = $setBlocks->filter('BlockArea', $area);
 			}
 			$blocks->merge($setBlocks);
 		}

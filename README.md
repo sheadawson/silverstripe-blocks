@@ -5,9 +5,12 @@
 * ~~Duplication of Blocks in BlockAdmin~~
 * Re-add: Sorting primarily by Area (in order of declaration in config), on Pages (removed in favor of dr'ndr sorting)
 * ~~Allow deletion of blocks from BlockAdmin~~
-* Replacing Title as standard field with Name, as Title will often be used for actual content, Name can function as a description for finding the block later
-* Block->Area managed on many_many_extraFields (on relations Page, SiteConfig, Blocksets)
-* Block->Weight managed on many_many_extraFields (on relations Page, SiteConfig, Blocksets)
+* ~~Replacing Title as standard field with Name, as Title will often be used for actual content~~
+* ~~Name can function as a description for finding/selecting the block later~~
+* ~~Block->Area (->BlockArea) managed on many_many_extraFields (on relations Page)~~
+* Block->Area (->BlockArea) managed on many_many_extraFields (on relations SiteConfig, Blocksets)
+* ~~Block->Weight (->Sort) managed on many_many_extraFields (on relations Page)~~
+* Block->Weight (->Sort) managed on many_many_extraFields (on relations SiteConfig, Blocksets)
 * Ability to specify Above or Below on global/blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
 * ~~Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)~~
 * TODO: combine merges with Sort from OrderableRows in BlocksSiteTreeExtension::getBlockList()
@@ -25,8 +28,11 @@
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
 
 ### New requirements
+
+### Recommended
 * [GridField Copybutton](https://github.com/unisolutions/silverstripe-copybutton) (duplication of blocks)
 * [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons) (recommended)
+* [GridField SitetreeButtons](https://github.com/micschk/silverstripe-gridfieldsitetreebuttons) (recommended)
 
 
 ## Installation

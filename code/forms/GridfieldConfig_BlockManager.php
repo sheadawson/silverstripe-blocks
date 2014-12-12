@@ -23,15 +23,15 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$displayfields = array(
 				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
 				'Name'        	=> array('title' => 'Name', 'field' => 'ReadonlyField'),
-				'Area'	=> array(	
+				'BlockArea'	=> array(	
 					'title' => 'Block Area
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
-						// &nbsp;s prevent wrapping of dropdowns
+						// the &nbsp;s prevent wrapping of dropdowns
 					'callback' => function() use ($areasFieldSource){
-							return new DropdownField('Area', 'Block Area', $areasFieldSource);
-						} 
+							return new DropdownField('BlockArea', 'Block Area', $areasFieldSource);
+						}
 				),
-				'Published'		=> array('title' => 'Published (global)', 'field' => 'CheckboxField'),
+				'Published'		=> array('title' => 'Published<br />(global)', 'field' => 'CheckboxField'),
 				'PageListAsString' => array('title' => 'Used on pages', 'field' => 'ReadonlyField'),
 				//'InheritedFrom' => array('title' => 'Inherited From', 'field' => 'ReadonlyField'),
 				//'Weight'    	=> array('title' => 'Weight', 'field' => 'NumericField'),
@@ -40,11 +40,16 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$editable->setDisplayFields($displayfields);
 		} else {
 			$this->addComponent($dcols = new GridFieldDataColumns());
+			// Optional copybutton, sadly works only on BlockAdmin
+			if(class_exists('GridFieldCopyButton')){
+				//$this->addComponent(new GridFieldCopyButton());
+			}
 			$displayfields = array(
 				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
 				'Name'        	=> array('title' => 'Name', 'field' => 'ReadonlyField'),
-				'Area'			=> array('title' => 'Block area', 'field' => 'ReadonlyField'),
-				'PublishedString' => array('title' => 'Published (global)', 'field' => 'ReadonlyField'),
+				// (Block)Area has moved to many_many_extrafields, so not available on the record
+				//'Area'			=> array('title' => 'Block area', 'field' => 'ReadonlyField'),
+				'PublishedString' => array('title' => 'Published<br />(global)', 'field' => 'ReadonlyField'),
 				'PageListAsString' => array('title' => 'Used on pages', 'field' => 'ReadonlyField'),
 			);
 			$dcols->setDisplayFields($displayfields);
@@ -55,7 +60,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		$this->addComponent(new GridFieldDetailForm());
 		$this->addComponent($sort = new GridFieldSortableHeader());
 		$this->addComponent($filter = new GridFieldFilterHeader());
-		//$this->addComponent(new GridFieldCopyButton());
+		
 
 		$filter->setThrowExceptionOnBadDataType(false);
 		$sort->setThrowExceptionOnBadDataType(false);

@@ -9,7 +9,7 @@ class BlocksSiteConfigExtension extends DataExtension {
 	public static $many_many_extraFields = array(
 		'Blocks' => array(
 			'Sort' => 'Int',
-			'Area' => 'Varchar'
+			'BlockArea' => 'Varchar'
 		)
 	);
 
@@ -29,7 +29,8 @@ class BlocksSiteConfigExtension extends DataExtension {
 			// Blocks related directly to this Page 
 			$gridConfig = GridFieldConfig_BlockManager::create()
 				->addExisting($this->owner->class)
-				->addBulkEditing();
+				->addBulkEditing()
+				;
 
 			$gridSource = $this->owner->Blocks();
 			$fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));

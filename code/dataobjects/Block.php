@@ -145,6 +145,13 @@ class Block extends DataObject implements PermissionProvider{
 	public function Name(){
 		return ( $this->Name ? $this->Name : $this->Title );
 	}
+	
+	/*
+	 * Provide a fallback mechanism for replacing Area (global) with BlockArea (on n:n relation)
+	 */
+	public function BlockArea(){
+		return ( $this->BlockArea ? $this->BlockArea : $this->Area );
+	}
 
 	public function validate() {
 		$result = parent::validate();
