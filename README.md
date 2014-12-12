@@ -2,26 +2,26 @@
 
 ## Todo/Features development
 
-* ~~Duplication of Blocks in BlockAdmin~~
-* Re-add: Sorting primarily by Area (in order of declaration in config), on Pages (removed in favor of dr'ndr sorting)
-* ~~Allow deletion of blocks from BlockAdmin~~
-* ~~Replacing Title as standard field with Name, as Title will often be used for actual content~~
-* ~~Name can function as a description for finding/selecting the block later~~
-* ~~Block->Area (->BlockArea) managed on many_many_extraFields (on relations Page)~~
-* Block->Area (->BlockArea) managed on many_many_extraFields (on relations SiteConfig, Blocksets)
-* ~~Block->Weight (->Sort) managed on many_many_extraFields (on relations Page)~~
-* Block->Weight (->Sort) managed on many_many_extraFields (on relations SiteConfig, Blocksets)
-* Ability to specify Above or Below on global/blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
-* ~~Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)~~
-* TODO: combine merges with Sort from OrderableRows in BlocksSiteTreeExtension::getBlockList()
-* Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
-* ~~Show 'used on pages' in BlockAdmin~~
-* ~~Allow editing of related pages from Block (requires gridfieldsitetreebuttons)~~
-* ~~Remove editablecolumns from BlockAdmin (no use, cannot be saved)~~
-* Forms (userforms/flexiforms) integration or at least some documentation/samples
-* Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
-* ~~Make block Blocksets & global blocks functionality & interfaces optional via config~~
-* TODO: check sets & blocks optional functionality on page-output if old relations are still in place
+- [x] Duplication of Blocks in BlockAdmin
+- [ ] Re-add: Sorting primarily by Area (in order of declaration in config), on Pages (removed in favor of dr'ndr sorting)
+- [x] Allow deletion of blocks from BlockAdmin
+- [x] Replacing Title as standard field with Name, as Title will often be used for actual content
+- [x] Name can function as a description for finding/selecting the block later
+- [x] Block->Area (->BlockArea) managed on many_many_extraFields (on relations Page)
+- [ ] Block->Area (->BlockArea) managed on many_many_extraFields (on relations SiteConfig, Blocksets)
+- [x] Block->Weight (->Sort) managed on many_many_extraFields (on relations Page)
+- [ ] Block->Weight (->Sort) managed on many_many_extraFields (on relations SiteConfig, Blocksets)
+- [ ] Ability to specify Above or Below on global/blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
+- [x] Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)
+- [ ] TODO: combine merges with Sort from OrderableRows in BlocksSiteTreeExtension::getBlockList()
+- [ ] Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
+- [x] Show 'used on pages' in BlockAdmin
+- [x] Allow editing of related pages from Block (requires gridfieldsitetreebuttons)
+- [x] Remove editablecolumns from BlockAdmin (no use, cannot be saved)
+- [ ] Forms (userforms/flexiforms) integration or at least some documentation/samples
+- [ ] Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
+- [x] Make block Blocksets & global blocks functionality & interfaces optional via config
+- [ ] TODO: check sets & blocks optional functionality on page-output if old relations are still in place
 
 ## Requirements
 
