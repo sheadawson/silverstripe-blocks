@@ -97,42 +97,44 @@ class BlockManager extends Object{
 	}
 
 
+	/*
+	 * Get the current/active theme
+	 */
 	private function getTheme(){
-		if(class_exists('Multisites')){
-			return Multisites::inst()->getActiveSite()->Theme;
-		}else{
-			return Config::inst()->get('SSViewer', 'theme');
-		}
+		return Config::inst()->get('SSViewer', 'theme');
+	}
+
+	/*
+	 * Get the block config for the current theme
+	 */
+	private function getThemeConfig(){
+		$theme = $this->getTheme();
+		$config = $this->config()->get('themes');
+		return $theme && isset($config[$theme]) ? $config[$theme] : null;
 	}
 	
 	/*
 	 * Usage of GlobalBlocks configurable from yaml
 	 */
 	public function getUseGlobalBlocks(){
-		//return false;
-		$theme = $this->getTheme();
-		if(!$theme){ return true; }
-		$config = $this->config()->get('themes');
-		
-		if(!isset($config[$theme]['use_global_blocks'])){
-			return true;
-		}
-		return $config[$theme]['use_global_blocks'];
+		$config = $this->getThemeConfig();
+		return isset($config['use_global_blocks']) ? $config['use_global_blocks'] : true;
 	}
 	
 	/*
 	 * Usage of BlockSets configurable from yaml
 	 */
 	public function getUseBlockSets(){
-		//return false;
-		$theme = $this->getTheme();
-		if(!$theme){ return true; }
-		$config = $this->config()->get('themes');
-		
-		if(!isset($config[$theme]['use_blocksets'])){
-			return true;
-		}
-		return $config[$theme]['use_blocksets'];
+		$config = $this->getThemeConfig();
+		return isset($config['use_blocksets']) ? $config['use_blocksets'] : true;
+	}
+
+	/*
+	 * Exclusion of blocks from page types defined in yaml
+	 */
+	public function getExcludeFromPageTypes(){
+		$config = $this->getThemeConfig();
+		return isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : array();
 	}
 
 }
