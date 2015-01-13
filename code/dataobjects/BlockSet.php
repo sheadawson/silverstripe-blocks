@@ -42,7 +42,7 @@ class BlockSet extends DataObject implements PermissionProvider{
 		$gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true)
 			->addExisting()
 			->addComponent(new GridFieldOrderableRows());
-		$gridSource = $this->Blocks();
+		$gridSource = $this->Blocks()->Sort('Sort');
 		$fields->addFieldToTab('Root.Main', HeaderField::create('BlocksHeading', 'Blocks'));
 		$fields->addFieldToTab('Root.Main', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
 

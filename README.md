@@ -10,10 +10,10 @@
 - [x] Block->Area (->BlockArea) managed on many_many_extraFields (on relations Page)
 - [ ] Block->Area (->BlockArea) managed on many_many_extraFields (on relations Blocksets)
 - [x] Block->Weight (->Sort) managed on many_many_extraFields (on relations Page)
-- [ ] Block->Weight (->Sort) managed on many_many_extraFields (on relations Blocksets)
+- [x] Block->Weight (->Sort) managed on many_many_extraFields (on relations Blocksets)
 - [ ] Ability to specify Above or Below on blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
 - [x] Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)
-- [ ] TODO: combine merges with Sort from OrderableRows in BlocksSiteTreeExtension::getBlockList()
+- [x] TODO: combine merges with Sort from OrderableRows in BlocksSiteTreeExtension::getBlockList()
 - [ ] Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
 - [x] Show 'used on pages' in BlockAdmin
 - [x] Allow editing of related pages from Block (requires gridfieldsitetreebuttons)
@@ -22,6 +22,10 @@
 - [ ] Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
 - [x] Make block Blocksets functionality & interfaces optional via config
 - [ ] TODO: check sets & blocks optional functionality on page-output if old relations are still in place
+- [x] Remove global blocks (block sets can be used to achieve the same thing)
+- [x] Allow exclusion of any page types from using blocks
+- [ ] How to allow the user to select block area in the same step as creating a block from site tree/block gridfield?
+- [ ] PageListAsString - list block sets too? 
 
 ## Requirements
 

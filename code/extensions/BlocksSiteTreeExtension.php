@@ -207,14 +207,14 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 		// get blocks directly linked to this page
 		if ($includeNative) {
-			// Gridfieldsortablerows (Sort) - instead of default_sort (Weight)
-			//$nativeBlocks = $this->owner->Blocks();
-			$nativeBlocks = $this->owner->getManyManyComponents('Blocks')->sort('Sort');
-			if ($area)
+			$nativeBlocks = $this->owner->Blocks()->sort('Sort');
+			
+			if ($area){
 				$nativeBlocks = $nativeBlocks->filter('BlockArea', $area);
+			}
+
 			if ($nativeBlocks->count()) {
 				foreach ($nativeBlocks as $block) {
-					$block->InheritedFrom = '-';
 					$blocks->add($block);
 				}
 			}
@@ -227,8 +227,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			// merge set sources
 			foreach ($blocksFromSets as $block) {
 				if (!$blocks->find('ID', $block->ID)) {
-					$block->InheritedFrom = 'Block Set';
-					$blocks->unshift($block);
+					$blocks->push($block);
 				}
 			}
 		}
@@ -284,7 +283,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 		$blocks = ArrayList::create();
 		foreach ($sets as $set) {
-			$setBlocks = $set->Blocks();
+			$setBlocks = $set->Blocks()->sort('Sort');
+
 			if ($includeDisabled) {
 				$setBlocks = $setBlocks->exclude('ID', $this->owner->DisabledBlocks()->column('ID'));
 			}
