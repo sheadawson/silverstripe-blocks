@@ -30,7 +30,7 @@ class Block extends DataObject implements PermissionProvider{
 	// 	'Published' => 'Published',
 	// );
 
-	private static $default_sort = array('Area'=>'ASC', 'Weight'=>'ASC', 'Name' => 'ASC');
+	private static $default_sort = array('Name' => 'ASC');
 
 	private static $dependencies = array(
         'blockManager' => '%$blockManager',

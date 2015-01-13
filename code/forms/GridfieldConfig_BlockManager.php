@@ -34,9 +34,6 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 				),
 				'Published'		=> array('title' => 'Published<br />(global)', 'field' => 'CheckboxField'),
 				'PageListAsString' => array('title' => 'Used on pages', 'field' => 'ReadonlyField'),
-				//'InheritedFrom' => array('title' => 'Inherited From', 'field' => 'ReadonlyField'),
-				//'Weight'    	=> array('title' => 'Weight', 'field' => 'NumericField'),
-				//'PagesCount'  	=> array('title' => 'Number of Pages', 'field' => 'ReadonlyField'),
 			);
 			$editable->setDisplayFields($displayfields);
 		} else {

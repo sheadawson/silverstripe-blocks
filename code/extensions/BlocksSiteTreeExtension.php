@@ -43,11 +43,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			$fields->addFieldToTab('Root.Blocks', 
 					LiteralField::create('PreviewLink', $this->areasPreviewButton()));
 
-			// Set sort -> moved to 
-//			$sortfields = array(
-////				"FIELD(Area, '" . implode("','", array_keys($areas)) . "')" => '',
-//				'Weight' => 'ASC', 'Title' => 'ASC');
-
 			// Blocks related directly to this Page 
 			$gridConfig = GridFieldConfig_BlockManager::create()
 				->addExisting($this->owner->class)
@@ -55,13 +50,17 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 				->addComponent($orderablerows = new GridFieldOrderableRows()) // Leave this at default 'Sort'
 				;
 
-			//$gridSource = $this->getBlockList(null, false);
-			$gridSource = $this->owner->Blocks();
-				// sort by FIELD Area to force the same order as areas are declared in config
-//				->sort($sortfields);
+			// TODO it seems this sort is not being applied...
+			$gridSource = $this->owner->Blocks()
+				->sort(array(
+					"FIELD(SiteTree_Blocks.BlockArea, '" . implode("','", array_keys($areas)) . "')" => '',
+					'SiteTree_Blocks.Sort' => 'ASC', 
+					'Name' => 'ASC'
+				));
 
 			$fields->addFieldToTab('Root.Blocks', 
 					GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
+
 
 			// Blocks inherited from SiteConfig and BlockSets
 			if( $this->blockManager->getUseBlockSets() || $this->blockManager->getUseGlobalBlocks() ){
@@ -79,9 +78,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 						CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
 				}
 				
-				//getBlockList(
-				//$area = null, $publishedOnly = true, $includeNative = true, 
-				//$includeGlobal = true, $includeSets = true, $includeDisabled = false )
+				// inherited blocks interface
 				$blocksetsactive = $this->blockManager->getUseBlockSets();
 				$globalactive = $this->blockManager->getUseGlobalBlocks();
 				
@@ -101,9 +98,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 							$area = null, $publishedOnly = false, 
 							$includeNative = false, $includeGlobal = $globalactive, 
 							$includeSets = $blocksetsactive, $includeDisabled = false );
-					//var_dump($activeInherited->count());
-					if ($activeInherited->count()) {
 
+					if ($activeInherited->count()) {
 						$fields->addFieldToTab('Root.Blocks', 
 								GridField::create('InheritedBlockList', 'Inherited Blocks', $activeInherited, 
 										GridFieldConfig_BlockManager::create(false, false, false)));
@@ -118,7 +114,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		} else {
 			$fields->addFieldToTab('Root.Blocks', 
 					LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
-			
 		}
 	}
 	
