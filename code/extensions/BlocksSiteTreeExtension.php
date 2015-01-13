@@ -7,7 +7,6 @@
 class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 	private static $db = array(
-		'InheritGlobalBlocks' => 'Boolean',
 		'InheritBlockSets' => 'Boolean'
 	);
 	private static $many_many = array(
@@ -21,7 +20,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		)
 	);
 	private static $defaults = array(
-		'InheritGlobalBlocks' => 1,
 		'InheritBlockSets' => 1
 	);
 	private static $dependencies = array(
@@ -44,10 +42,10 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 					LiteralField::create('PreviewLink', $this->areasPreviewButton()));
 
 			// Blocks related directly to this Page 
-			$gridConfig = GridFieldConfig_BlockManager::create()
+			$gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true)
 				->addExisting($this->owner->class)
 				->addBulkEditing()
-				->addComponent($orderablerows = new GridFieldOrderableRows()) // Leave this at default 'Sort'
+				->addComponent(new GridFieldOrderableRows())
 				;
 
 			// TODO it seems this sort is not being applied...
@@ -62,30 +60,20 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 					GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
 
 
-			// Blocks inherited from SiteConfig and BlockSets
-			if( $this->blockManager->getUseBlockSets() || $this->blockManager->getUseGlobalBlocks() ){
+			// Blocks inherited from BlockSets
+			$blocksetsactive = $this->blockManager->getUseBlockSets();
+			if($blocksetsactive){
 				
 				$fields->addFieldToTab('Root.Blocks', 
-						HeaderField::create('InheritedBlocksHeader', 'Inherited Blocks'));
+						HeaderField::create('InheritedBlocksHeader', 'Blocks inherited from Block Sets'));
 				
-				if( $this->blockManager->getUseGlobalBlocks() ) {
-					$fields->addFieldToTab('Root.Blocks', 
-						CheckboxField::create('InheritGlobalBlocks', 
-								'Inherit Global Blocks from Site Configuration'));
-				}
-				if( $this->blockManager->getUseBlockSets() ) {
-					$fields->addFieldToTab('Root.Blocks', 
-						CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
-				}
-				
-				// inherited blocks interface
-				$blocksetsactive = $this->blockManager->getUseBlockSets();
-				$globalactive = $this->blockManager->getUseGlobalBlocks();
+				$fields->addFieldToTab('Root.Blocks', 
+					CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
 				
 				$allInherited = $this->getBlockList(
 						$area = null, $publishedOnly = false, 
-						$includeNative = false, $includeGlobal = $globalactive, 
-						$includeSets = $blocksetsactive, $includeDisabled = true );
+						$includeNative = false, $includeSets = true, 
+						$includeDisabled = true );
 			
 				if ($allInherited->count()) {
 					$fields->addFieldToTab('Root.Blocks', 
@@ -96,8 +84,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 					
 					$activeInherited = $this->getBlockList(
 							$area = null, $publishedOnly = false, 
-							$includeNative = false, $includeGlobal = $globalactive, 
-							$includeSets = $blocksetsactive, $includeDisabled = false );
+							$includeNative = false, $includeSets = $blocksetsactive,
+							$includeDisabled = false );
 
 					if ($activeInherited->count()) {
 						$fields->addFieldToTab('Root.Blocks', 
@@ -116,27 +104,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 					LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
 		}
 	}
-	
-	/**
-	 * Fallback/migration from Weight to Sort (Alas, doesn't work)
-	 */
-//	public function Sort(){
-//		if($this->owner->Sort) return $this->owner->Sort;
-//		return $this->owner->Weight;
-//	}
-
-	/**
-	 * Override Blocks to use sort 
-	 */
-//	public function Blocks(){
-//		Debug::dump('test');
-//		return $this->owner->getManyManyComponents('Blocks')->sort('Sort');
-//			// sort by FIELD Area to force the same order as areas are declared in config
-////			->sort(array(
-////				"FIELD(Area, 'Header','BeforeContent','InsideContent','AfterContent')" => '',
-////				'Sort'=>'ASC', 'Title' => 'ASC'));
-//	}
-
 
 	/**
 	 * Called from templates to get rendered blocks for the given area
@@ -144,8 +111,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * @param integer $limit Limit the items to this number, or null for no limit
 	 */
 	public function BlockArea($area, $limit = null) {
-		if ($this->owner->ID <= 0)
-			return; // blocks break on fake pages ie Security/login
+		if ($this->owner->ID <= 0) return; // blocks break on fake pages ie Security/login
 
 		$publishedOnly = Versioned::current_stage() == 'Stage' ? false : true;
 		$list = $this->getBlockList($area, $publishedOnly);
@@ -171,40 +137,31 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		} else {
 			return $data->renderWith('BlockArea');
 		}
-
-		//return $data->renderWith(array("BlockArea_$area", "BlockArea"));
 	}
 
 	/**
-	 * Get a merged list of all blocks on this page and ones inherited from SiteConfig, BlockSets etc 
+	 * Get a merged list of all blocks on this page and ones inherited from BlockSets 
 	 * 
 	 * @param string|null $area filter by block area
 	 * @param boolean $publishedOnly only return published blocks
 	 * @param boolean $includeNative Include blocks directly assigned to this page
-	 * @param boolean $includeGlobal Include global blocks
 	 * @param boolean $includeSets Include block sets
 	 * @param boolean $includeDisabled Include blocks that have been explicitly excluded from this page
-	 * i.e. global blocks added to the "disable inherited blocks" list
+	 * i.e. blocks from block sets added to the "disable inherited blocks" list
 	 * @return ArrayList
 	 * */
 	public function getBlockList(
 			$area = null, $publishedOnly = true, $includeNative = true, 
-			$includeGlobal = null, $includeSets = null, $includeDisabled = false ) {
+			$includeSets = null, $includeDisabled = false ) {
 		
-		// make inclusion of global & sets configurable
+		// make inclusion of sets configurable
 		if($includeSets===null) $includeSets = $this->blockManager->getUseBlockSets();
-		if($includeGlobal===null) $includeGlobal = $this->blockManager->getUseGlobalBlocks();
 
 		////// DataList rewrite ///////
 		// $blocks = DataList::create('Block');
 		// $filter = array();
 		// if($includeNative){
 		// 	$siteTreeIDs[] = $this->owner->ID;
-		// }
-		// if($includeGlobal){
-		// 	if($this->owner->InheritGlobalBlocks){
-		// 		$siteTreeIDs[] = $this->owner->SiteID;
-		// 	}
 		// }
 		// if(isset($siteTreeIDs)){
 		// 	$blocks->innerJoin(
@@ -263,19 +220,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			}
 		}
 
-		// get blocks inherited from SiteConfig
-		if ($includeGlobal && $this->owner->InheritGlobalBlocks 
-				&& ($inheritedBlocks = $this->getInheritedGlobalBlocks($area, $includeDisabled))
-		) {
-			// merge inherited sources
-			foreach ($inheritedBlocks as $block) {
-				if (!$blocks->find('ID', $block->ID)) {
-					$block->InheritedFrom = 'Global Blocks';
-					$blocks->unshift($block);
-				}
-			}
-		}
-
 		// get blocks from BlockSets
 		if ($includeSets && $this->owner->InheritBlockSets 
 				&& ($blocksFromSets = $this->getBlocksFromAppliedBlockSets($area, $includeDisabled))
@@ -292,10 +236,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		// filter out unpublished blocks?
 		$blocks = $publishedOnly ? $blocks->filter('Published', 1) : $blocks;
 
-		// TODO: combine merges with Sort from OrderableRows
-		//$blocks = $blocks->sort(Config::inst()->get('Block', 'default_sort'));
-		//$blocks = $blocks->sort(array('Sort'=>'ASC', 'Title' => 'ASC'));
-
 		return $blocks;
 	}
 
@@ -308,36 +248,13 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	}
 
 	/**
-	 * Get Global Blocks that are inherited from SiteConfig
-	 * @param string $area block area to filter by
-	 * @param boolean $includeDisabled global blocks disabled on this page are not included by default 
-	 * @return DataList
-	 * */
-	public function getInheritedGlobalBlocks($area = null, $includeDisabled = false) {
-		$blocks = SiteConfig::current_site_config()->Blocks();
-
-		if ($area) {
-			$blocks = $blocks->filter('BlockArea', $area);
-		}
-
-		if (!$includeDisabled) {
-			$disabledIDs = $this->owner->DisabledBlocks()->column('ID');
-			if (count($disabledIDs)) {
-				$blocks = $blocks->exclude('ID', $disabledIDs);
-			}
-		}
-
-		return $blocks;
-	}
-
-	/**
 	 * Get Any BlockSets that apply to this page 
 	 * @todo could be more efficient
 	 * @return ArrayList
 	 * */
 	public function getAppliedSets() {
+		$sets = BlockSet::get()->where("(PageTypesValue IS NULL) OR (PageTypesValue LIKE '%:\"{$this->owner->ClassName}%')");
 
-		$sets = BlockSet::get()->filter('PageTypesValue:partialMatch', sprintf(':"%s"', $this->owner->ClassName));
 		$list = ArrayList::create();
 		$ancestors = $this->owner->getAncestors()->column('ID');
 
@@ -363,9 +280,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * */
 	public function getBlocksFromAppliedBlockSets($area = null, $includeDisabled = false) {
 		$sets = $this->getAppliedSets();
-
-		if (!$sets)
-			return;
+		if (!$sets) return;
 
 		$blocks = ArrayList::create();
 		foreach ($sets as $set) {

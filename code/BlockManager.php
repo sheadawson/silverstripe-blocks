@@ -114,14 +114,6 @@ class BlockManager extends Object{
 	}
 	
 	/*
-	 * Usage of GlobalBlocks configurable from yaml
-	 */
-	public function getUseGlobalBlocks(){
-		$config = $this->getThemeConfig();
-		return isset($config['use_global_blocks']) ? $config['use_global_blocks'] : true;
-	}
-	
-	/*
 	 * Usage of BlockSets configurable from yaml
 	 */
 	public function getUseBlockSets(){

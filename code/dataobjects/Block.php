@@ -7,9 +7,9 @@ class Block extends DataObject implements PermissionProvider{
 
 	private static $db = array(
 		'Name' => 'Varchar(255)', // Descriptive (meta) name of this block
-		'Area' => 'Varchar', // will be removed in future versions (moved to m_m_extrafields on page/siteconfig)
+		'Area' => 'Varchar', // will be removed in future versions (moved to m_m_extrafields on page)
 		'Published' => 'Boolean', // may be replaced by versioned in future versions
-		'Weight' => 'Int', // will be removed in future versions (moved to m_m_extrafields on page/siteconfig)
+		'Weight' => 'Int', // will be removed in future versions (moved to m_m_extrafields on page)
 		"CanViewType" => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
 		'ExtraCSSClasses' => 'Varchar'
 	);
@@ -20,7 +20,6 @@ class Block extends DataObject implements PermissionProvider{
 
 	private static $belongs_many_many = array(
 		'Pages' => 'SiteTree',
-		'SiteConfigs' => 'SiteConfig',
 		'BlockSets' => 'BlockSet'
 	);
 
@@ -49,7 +48,6 @@ class Block extends DataObject implements PermissionProvider{
 		unset($classes['Block']);
 		$classField = DropdownField::create('ClassName', 'Block Type', $classes);
 
-		$fields->removeFieldFromTab('Root', 'SiteConfigs');
 		$fields->removeFieldFromTab('Root', 'BlockSets');
 		$fields->removeByName('Area'); // legacy
 		$fields->removeByName('Weight'); // legacy

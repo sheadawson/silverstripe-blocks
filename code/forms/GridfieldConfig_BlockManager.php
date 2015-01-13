@@ -4,12 +4,12 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 
 	public $blockManager;
 
-	public function __construct($canAdd = true, $canEdit = true, $canDelete = true) {
+	public function __construct($canAdd = true, $canEdit = true, $canDelete = true, $editableRows = false) {
 		parent::__construct();
 
 		$this->blockManager = Injector::inst()->get('BlockManager');
 		
-		// Get available Areas (for page) or all in case of SiteConfig/ModelAdmin
+		// Get available Areas (for page) or all in case of ModelAdmin
 		if(Controller::curr()->class == 'CMSPageEditController'){
 			$currentPage = Controller::curr()->currentPage();
 			$areasFieldSource = $this->blockManager->getAreasForPageType($currentPage->ClassName);
@@ -18,7 +18,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		}
 		
 		// EditableColumns only makes sense on Saveable parenst (eg Page), or inline changes won't be saved
-		if(Controller::curr()->class != 'BlockAdmin'){
+		if($editableRows){
 			$this->addComponent($editable = new GridFieldEditableColumns());
 			$displayfields = array(
 				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
@@ -86,28 +86,9 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		
 	}
 
-	public function addExisting($pageClass = null){
-		if($pageClass){
-			$areas = $this->blockManager->getAreasForPageType($pageClass);	
-		}else{
-			$areas = $this->blockManager->getAreasForTheme();	
-		}
-
-		if(!is_array($areas)){
-			return $this;
-		}
-
+	public function addExisting(){
 		$this->addComponent($add = new GridFieldAddExistingSearchButton());
-		
-		$list = Block::get()->filter('Area', array_keys($areas));
-
-		// TODO find a more appropriate way of doing this
-		if(Block::has_extension('MultisitesAware')){
-			$list = $list->filter('SiteID', Multisites::inst()->getActiveSite()->ID);
-		}
-
-		$add->setSearchList($list);
-
+		$add->setSearchList(Block::get());
 		return $this;
 	}
 

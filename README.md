@@ -8,10 +8,10 @@
 - [x] Replacing Title as standard field with Name, as Title will often be used for actual content
 - [x] Name can function as a description for finding/selecting the block later
 - [x] Block->Area (->BlockArea) managed on many_many_extraFields (on relations Page)
-- [ ] Block->Area (->BlockArea) managed on many_many_extraFields (on relations SiteConfig, Blocksets)
+- [ ] Block->Area (->BlockArea) managed on many_many_extraFields (on relations Blocksets)
 - [x] Block->Weight (->Sort) managed on many_many_extraFields (on relations Page)
-- [ ] Block->Weight (->Sort) managed on many_many_extraFields (on relations SiteConfig, Blocksets)
-- [ ] Ability to specify Above or Below on global/blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
+- [ ] Block->Weight (->Sort) managed on many_many_extraFields (on relations Blocksets)
+- [ ] Ability to specify Above or Below on blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
 - [x] Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)
 - [ ] TODO: combine merges with Sort from OrderableRows in BlocksSiteTreeExtension::getBlockList()
 - [ ] Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
@@ -20,7 +20,7 @@
 - [x] Remove editablecolumns from BlockAdmin (no use, cannot be saved)
 - [ ] Forms (userforms/flexiforms) integration or at least some documentation/samples
 - [ ] Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
-- [x] Make block Blocksets & global blocks functionality & interfaces optional via config
+- [x] Make block Blocksets functionality & interfaces optional via config
 - [ ] TODO: check sets & blocks optional functionality on page-output if old relations are still in place
 
 ## Requirements
@@ -61,7 +61,6 @@ BlockManager:
           except: HomePage # a AfterContent area will be available on all page types except HomePage in simple theme
         Footer: true # a Footer area will be available on all page types in simple theme
 
-      use_global_blocks: false # Whether to use SiteConfig Blocks functionality (default if undeclared: true)
       use_blocksets: false # Whether to use BlockSet functionality (default if undeclared: true)
       use_extra_css_classes: true # Whether to allow cms users to add extra css classes to blocks (default if undeclared: false)
       exclude_from_page_types # Disable the Blocks tab completely on these pages of these types 
@@ -95,7 +94,7 @@ You can limit a block area to a maximum number of blocks using the second limit 
 
 ### Add Blocks to a page in the CMS
 
-You will now be able to add Blocks to Pages and "Global Blocks" to SiteConfig (or Sites if using [Multisites](https://github.com/sheadawson/silverstripe-multisites)). You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
+You will now be able to add Blocks to Pages. You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
 
 #### ContentBlock Example
 ```php

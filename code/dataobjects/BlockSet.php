@@ -18,7 +18,7 @@ class BlockSet extends DataObject implements PermissionProvider{
 	
 	public static $many_many_extraFields = array(
 		'Blocks' => array(
-			'Weight' => 'Int',
+			'Sort' => 'Int',
 			'BlockArea' => 'Varchar'
 		)
 	);
@@ -29,7 +29,8 @@ class BlockSet extends DataObject implements PermissionProvider{
 		$fields->removeFieldFromTab('Root', 'PageParents');
 
 		$fields->addFieldToTab('Root.Main', HeaderField::create('SettingsHeading', 'Settings'), 'Title');
-		$fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', 'Only apply to these Page Types:', $this->pageTypeOptions())->setDescription('Selected Page Types will inherit this Block Set automatically'));
+		$fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', 'Only apply to these Page Types:', $this->pageTypeOptions())
+				->setDescription('Selected Page Types will inherit this Block Set automatically. Leave all unchecked to apply to all page types.'));
 		$fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', 'Only apply to children of these Pages:', 'SiteTree'));
 
 		if(!$this->ID){
@@ -38,7 +39,9 @@ class BlockSet extends DataObject implements PermissionProvider{
 		}
 
 		$fields->removeFieldFromTab('Root', 'Blocks');
-		$gridConfig = GridFieldConfig_BlockManager::create(true);
+		$gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true)
+			->addExisting()
+			->addComponent(new GridFieldOrderableRows());
 		$gridSource = $this->Blocks();
 		$fields->addFieldToTab('Root.Main', HeaderField::create('BlocksHeading', 'Blocks'));
 		$fields->addFieldToTab('Root.Main', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
@@ -54,7 +57,11 @@ class BlockSet extends DataObject implements PermissionProvider{
 	 */
 	protected function pageTypeOptions() {
 		$pageTypes = array();
-		foreach(SiteTree::page_type_classes() as $pageTypeClass) {
+		$classes = ArrayLib::valueKey(SiteTree::page_type_classes());
+		unset($classes['VirtualPage']);
+		unset($classes['ErrorPage']);
+		unset($classes['RedirectorPage']);
+		foreach($classes as $pageTypeClass) {
 			$pageTypes[$pageTypeClass] = singleton($pageTypeClass)->i18n_singular_name();
 		}
 		asort($pageTypes);

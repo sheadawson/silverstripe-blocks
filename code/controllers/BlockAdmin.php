@@ -4,22 +4,19 @@
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
 class BlockAdmin extends ModelAdmin {
-    static $managed_models = array(
+    private static $managed_models = array(
     	'Block',
     	'BlockSet'
     );
-	static $url_segment = 'block-admin';
-	static $menu_title = "Blocks";
+	private static $url_segment = 'block-admin';
+	private static $menu_title = "Blocks";
+	
 	public $showImportForm = false;
 	
-	public $blockManager = false;
-	
-	public function __construct() {
-		parent::__construct();
-
-		$this->blockManager = Injector::inst()->get('BlockManager');
-		
-	}
+	private static $dependencies = array(
+		'blockManager' => '%$blockManager',
+	);
+	public $blockManager;
 	
 	public function getManagedModels() {
 		$models = parent::getManagedModels();
@@ -33,13 +30,7 @@ class BlockAdmin extends ModelAdmin {
 	}
 
 	public function getEditForm($id = null, $fields = null) {
-		$form = parent::getEditForm($id, $fields);
-		
-		// instantiate blockManager only once
-//		if( ! $this->blockManager ) { 
-//			$this->blockManager = Injector::inst()->get('BlockManager');
-//		}
-		
+		$form = parent::getEditForm($id, $fields);	
 
 		if($blockGridField = $form->Fields()->fieldByName('Block')){
 			$blockGridField->setConfig(GridFieldConfig_BlockManager::create()
@@ -48,7 +39,7 @@ class BlockAdmin extends ModelAdmin {
 				->removeComponentsByType('GridFieldEditButton')
 				->removeComponentsByType('GridFieldDeleteAction')
 				->removeComponentsByType('GridFieldDetailForm')
-				->addComponent(new GridFieldDetailFormCustom())
+				->addComponent(new GridFieldDetailForm())
 				//->addComponent(new GridFieldCopyButton())
 				->addComponent(new GridFieldEditButton())
 				->addComponent(new GridFieldDeleteAction())
