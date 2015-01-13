@@ -6,9 +6,7 @@
 class Block extends DataObject implements PermissionProvider{
 
 	private static $db = array(
-		// Descriptive (meta) name of this block, Title field may be removed in future releases(?)
-		'Name' => 'Varchar(255)', 
-		'Title' => 'Varchar(255)', // Title is content, content should be in the implementing model
+		'Name' => 'Varchar(255)', // Descriptive (meta) name of this block
 		'Area' => 'Varchar', // will be removed in future versions (moved to m_m_extrafields on page/siteconfig)
 		'Published' => 'Boolean', // may be replaced by versioned in future versions
 		'Weight' => 'Int', // will be removed in future versions (moved to m_m_extrafields on page/siteconfig)
@@ -45,97 +43,74 @@ class Block extends DataObject implements PermissionProvider{
 		// loaded in some cases...
 		if(!$this->blockManager) $this->blockManager = singleton('BlockManager');
 
-		if(Controller::curr()->class == 'CMSPageEditController'){
-			$currentPage = Controller::curr()->currentPage();
-
-			$areasFieldSource = $this->blockManager->getAreasForPageType($currentPage->ClassName);	
-			$areasPreviewButton = LiteralField::create('PreviewLink', $currentPage->areasPreviewButton());
-		}else{
-			$areasFieldSource = $this->blockManager->getAreasForTheme();
-			$areasPreviewButton = false;	
-		}
+		$fields = parent::getCMSFields();
 		
-		//$areasField = DropdownField::create('Area', 'Area', $areasFieldSource);
 		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
 		unset($classes['Block']);
 		$classField = DropdownField::create('ClassName', 'Block Type', $classes);
 
-		if(!$this->ID){
-			$fields = array(
-				TextField::create('Title', 'Title'),
-				$classField,
-				//$areasField->setRightTitle($areasPreviewButton),
-			);
-			
-			return FieldList::create($fields);
-
+		$fields->removeFieldFromTab('Root', 'SiteConfigs');
+		$fields->removeFieldFromTab('Root', 'BlockSets');
+		$fields->removeByName('Area'); // legacy
+		$fields->removeByName('Weight'); // legacy
+		
+		// Sort Fields: Type, Name, Published, Exta Classes
+		$fields->addFieldToTab('Root.Main', $classField, 'Name');
+		$fields->addFieldToTab('Root.Main', 
+				$fields->dataFieldByName('Published'), 'Name');
+		
+		if($this->blockManager->getUseExtraCSSClasses()){
+			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Name');	
 		}else{
-			$fields = parent::getCMSFields();
-			$pageClass = null;
-			$controller = Controller::curr();		
-			//$fields->replaceField('Area', $areasField->setRightTitle($areasPreviewButton));
-
-			$fields->removeFieldFromTab('Root', 'SiteConfigs');
-			$fields->removeFieldFromTab('Root', 'BlockSets');
-			//$fields->removeFieldFromTab('Root', 'Pages'); // Used for a simple list
-//			$fields->dataFieldByName('Weight')->setRightTitle('Controls block ordering. A small weight value will float, a large will sink.');
-			
-			// Sort Fields: Type, Name, Published, Exta Classes
-			$fields->addFieldToTab('Root.Main', $classField, 'Name');
-			$fields->addFieldToTab('Root.Main', 
-					$fields->dataFieldByName('Published'), 'Name');
-			$fields->addFieldToTab('Root.Main', 
-					$fields->dataFieldByName('ExtraCSSClasses'), 'Name');
-			$fields->addFieldToTab('Root.Main', 
-					$fields->dataFieldByName('Name'), 'Published');
-			
-			$fields->removeByName('Area');
-			$fields->removeByName('Weight');
-
-			// Viewer groups
-			$fields->removeFieldFromTab('Root', 'ViewerGroups');
-			$groupsMap = Group::get()->map('ID', 'Breadcrumbs')->toArray();
-			asort($groupsMap);
-			$viewersOptionsField = new OptionsetField(
-				"CanViewType", 
-				_t('SiteTree.ACCESSHEADER', "Who can view this page?")
-			);
-			$viewerGroupsField = ListboxField::create("ViewerGroups", _t('SiteTree.VIEWERGROUPS', "Viewer Groups"))
-				->setMultiple(true)
-				->setSource($groupsMap)
-				->setAttribute(
-					'data-placeholder', 
-					_t('SiteTree.GroupPlaceholder', 'Click to select group')
-			);
-			$viewersOptionsSource = array();
-			$viewersOptionsSource["Anyone"] = _t('SiteTree.ACCESSANYONE', "Anyone");
-			$viewersOptionsSource["LoggedInUsers"] = _t('SiteTree.ACCESSLOGGEDIN', "Logged-in users");
-			$viewersOptionsSource["OnlyTheseUsers"] = _t('SiteTree.ACCESSONLYTHESE', "Only these people (choose from list)");
-			$viewersOptionsField->setSource($viewersOptionsSource);
-
-			$fields->addFieldsToTab('Root.ViewerGroups', array(
-				$viewersOptionsField,
-				$viewerGroupsField,
-			));
-			
-			// Show a GridField (list only) with pages which this block is used on
-			$fields->removeFieldFromTab('Root.Pages', 'Pages');
-			$fields->addFieldsToTab('Root.Pages', 
-					new GridField(
-							'Pages', 
-							'Used on pages', 
-							$this->Pages(), 
-							$gconf = GridFieldConfig_Base::create()));
-			// enhance gridfield with edit links to pages if GFEditSiteTreeItemButtons is available
-			// a GFRecordEditor (default) combined with BetterButtons already gives the possibility to 
-			// edit versioned records (Pages), but STbutton loads them in their own interface instead 
-			// of GFdetailform
-			if(class_exists('GridFieldEditSiteTreeItemButton')){
-				$gconf->addComponent(new GridFieldEditSiteTreeItemButton());
-			}
-
-			return $fields;
+			$fields->removeByName('ExtraCSSClasses');
 		}
+		
+		$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('Name'), 'Published');
+
+		// Viewer groups
+		$fields->removeFieldFromTab('Root', 'ViewerGroups');
+		$groupsMap = Group::get()->map('ID', 'Breadcrumbs')->toArray();
+		asort($groupsMap);
+		$viewersOptionsField = new OptionsetField(
+			"CanViewType", 
+			_t('SiteTree.ACCESSHEADER', "Who can view this page?")
+		);
+		$viewerGroupsField = ListboxField::create("ViewerGroups", _t('SiteTree.VIEWERGROUPS', "Viewer Groups"))
+			->setMultiple(true)
+			->setSource($groupsMap)
+			->setAttribute(
+				'data-placeholder', 
+				_t('SiteTree.GroupPlaceholder', 'Click to select group')
+		);
+		$viewersOptionsSource = array();
+		$viewersOptionsSource["Anyone"] = _t('SiteTree.ACCESSANYONE', "Anyone");
+		$viewersOptionsSource["LoggedInUsers"] = _t('SiteTree.ACCESSLOGGEDIN', "Logged-in users");
+		$viewersOptionsSource["OnlyTheseUsers"] = _t('SiteTree.ACCESSONLYTHESE', "Only these people (choose from list)");
+		$viewersOptionsField->setSource($viewersOptionsSource);
+
+		$fields->addFieldsToTab('Root.ViewerGroups', array(
+			$viewersOptionsField,
+			$viewerGroupsField,
+		));
+		
+		// Show a GridField (list only) with pages which this block is used on
+		$fields->removeFieldFromTab('Root.Pages', 'Pages');
+		$fields->addFieldsToTab('Root.Pages', 
+				new GridField(
+						'Pages', 
+						'Used on pages', 
+						$this->Pages(), 
+						$gconf = GridFieldConfig_Base::create()));
+		// enhance gridfield with edit links to pages if GFEditSiteTreeItemButtons is available
+		// a GFRecordEditor (default) combined with BetterButtons already gives the possibility to 
+		// edit versioned records (Pages), but STbutton loads them in their own interface instead 
+		// of GFdetailform
+		if(class_exists('GridFieldEditSiteTreeItemButton')){
+			$gconf->addComponent(new GridFieldEditSiteTreeItemButton());
+		}
+
+		return $fields;
+		
 		
 	}
 	
@@ -336,7 +311,9 @@ class Block extends DataObject implements PermissionProvider{
      */
     public function CSSClasses($stopAtClass = 'DataObject') {
 		$classes = strtolower(parent::CSSClasses($stopAtClass));
-		$classes = $this->ExtraCSSClasses ? $classes . " $this->ExtraCSSClasses" : $classes;
+		if($this->blockManager->getUseExtraCSSClasses()){
+			$classes = $this->ExtraCSSClasses ? $classes . " $this->ExtraCSSClasses" : $classes;	
+		}
 		return $classes;
 	}
 

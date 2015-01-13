@@ -137,4 +137,12 @@ class BlockManager extends Object{
 		return isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : array();
 	}
 
+	/*
+	 * Usage of extra css classes configurable from yaml
+	 */
+	public function getUseExtraCSSClasses(){
+		$config = $this->getThemeConfig();
+		return isset($config['use_extra_css_classes']) ? $config['use_extra_css_classes'] : false;
+	}
+
 }

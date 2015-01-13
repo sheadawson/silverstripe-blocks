@@ -47,7 +47,7 @@ Install via composer, run dev/build
 
 ## Quickstart
 
-### Define Block Areas for your theme in mysite/_config/config.yml
+### Define Block Areas and Settings for your theme in mysite/_config/config.yml
 
 ``` yml
 BlockManager:
@@ -63,7 +63,9 @@ BlockManager:
 
       use_global_blocks: false # Whether to use SiteConfig Blocks functionality (default if undeclared: true)
       use_blocksets: false # Whether to use BlockSet functionality (default if undeclared: true)
-
+      use_extra_css_classes: true # Whether to allow cms users to add extra css classes to blocks (default if undeclared: false)
+      exclude_from_page_types # Disable the Blocks tab completely on these pages of these types 
+        - ContactPage 
 ```
 
 Remember to run ?flush=1 after modifying your .yml config to make sure it gets applied.

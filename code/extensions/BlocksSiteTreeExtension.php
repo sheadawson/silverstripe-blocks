@@ -33,7 +33,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * Block manager for Pages
 	 * */
 	public function updateCMSFields(FieldList $fields) {
-		if ($fields->fieldByName('Root.Blocks')) {
+		if($fields->fieldByName('Root.Blocks') || in_array($this->owner->ClassName, $this->blockManager->getExcludeFromPageTypes())){
 			return;
 		}
 
@@ -142,14 +142,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 ////				'Sort'=>'ASC', 'Title' => 'ASC'));
 //	}
 
-	/**
-	 * Block manager for Sites (multisites module)
-	 * */
-	public function updateSiteCMSFields(FieldList $fields) {
-		$fields->addFieldToTab('Root.GlobalBlocks', 
-				GridField::create('Blocks', 'Blocks', $this->owner->Blocks(), 
-						GridFieldConfig_BlockManager::create()));
-	}
 
 	/**
 	 * Called from templates to get rendered blocks for the given area
@@ -327,7 +319,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * @return DataList
 	 * */
 	public function getInheritedGlobalBlocks($area = null, $includeDisabled = false) {
-		$blocks = $this->getGloablBlockSource()->Blocks();
+		$blocks = SiteConfig::current_site_config()->Blocks();
 
 		if ($area) {
 			$blocks = $blocks->filter('BlockArea', $area);
@@ -341,18 +333,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		}
 
 		return $blocks;
-	}
-
-	/**
-	 * The source of "Global" Blocks may be Site or SiteConfig
-	 * @return Site|SiteConfig
-	 * */
-	public function getGloablBlockSource() {
-		if (class_exists('Multisites')) {
-			return $this->owner->Site();
-		} else {
-			return SiteConfig::current_site_config();
-		}
 	}
 
 	/**
