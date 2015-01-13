@@ -28,7 +28,8 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
 						// the &nbsp;s prevent wrapping of dropdowns
 					'callback' => function() use ($areasFieldSource){
-							return new DropdownField('BlockArea', 'Block Area', $areasFieldSource);
+							return DropdownField::create('BlockArea', 'Block Area', $areasFieldSource)
+								->setHasEmptyDefault(true);
 						}
 				),
 				'Published'		=> array('title' => 'Published<br />(global)', 'field' => 'CheckboxField'),
@@ -66,7 +67,14 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		$sort->setThrowExceptionOnBadDataType(false);
 
 		if($canAdd){
-			$this->addComponent(new GridFieldAddNewButton('buttons-before-left'));	
+			$multiClass = new GridFieldAddNewMultiClass();
+			$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
+			array_shift($classes);
+			foreach ($classes as $k => $v) {
+				$classes[$k] = singleton($k)->singular_name();
+			}
+			$multiClass->setClasses($classes);
+			$this->addComponent($multiClass);	
 		}
 		
 		if($canEdit){
