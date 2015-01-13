@@ -157,52 +157,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		// make inclusion of sets configurable
 		if($includeSets===null) $includeSets = $this->blockManager->getUseBlockSets();
 
-		////// DataList rewrite ///////
-		// $blocks = DataList::create('Block');
-		// $filter = array();
-		// if($includeNative){
-		// 	$siteTreeIDs[] = $this->owner->ID;
-		// }
-		// if(isset($siteTreeIDs)){
-		// 	$blocks->innerJoin(
-		// 		"SiteTree_Blocks", 
-		// 		"SiteTree_Blocks.SiteTreeID = SiteTree.ID", 
-		// 		"Pages"
-		// 	);
-		// 	$filter["Pages.ID"] = $siteTreeIDs;
-		// }
-		// if($includeSets){
-		// 	if($this->owner->InheritBlockSets){
-		// 		if($blocksFromSets = $this->getAppliedSets($area, $includeDisabled)){
-		// 			$setIDsFilter = $blocksFromSets->column('ID');
-		// 		}
-		// 	}
-		// }
-		// if(isset($setIDsFilter)){
-		// 	$blocks->innerJoin(
-		// 		"BlockSet_Blocks", 
-		// 		"BlockSet_Blocks.BlockSetID = BlockSet.ID", 
-		// 		"BlockSets"
-		// 	);
-		// 	$filter["BlockSets.ID"] = $setIDsFilter;
-		// }
-		// PROBLEM 1 - $filter BREAKS gf when redirecting after adding new block - x page filters...
-		// this WORKS though
-		// $filter = array(
-		// 	'ID' => 4,
-		// 	'Area' => 'BeforeContent'
-		// );
-		// PROBLEM 2 - filterAny does not seem to work with x table filters either, it just behaves like filter...
-		// PROBLEM 3 - Cant use ArrayList instead of DataList because that also 
-		// Workaround? Use ArrayList for now for frontend
-		// in backend, display the different sources in their own gridfields 
-		// 
-		//$blocks = $blocks->filter($filter);	
-		//$ids = implode(',', $siteTreeIDs);
-		//$blocks = $blocks->where("(Pages.ID IN ($ids))");
-		//return $blocks;
-		/////// END REWRITE /////
-
 		$blocks = ArrayList::create();
 
 		// get blocks directly linked to this page
