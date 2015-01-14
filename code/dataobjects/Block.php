@@ -287,12 +287,16 @@ class Block extends DataObject implements PermissionProvider{
     }
 	
 	/*
-	 * Get a list of Page titles this block is used on
-	 * Default URLSegment because it's often short & every page has one (serves only as an indication anyway)
+	 * Get a list of Page and Blockset titles this block is used on
 	 */
-	public function PageListAsString($field = 'URLSegment') {
-		return implode(", ", $this->Pages()->column($field));
+	public function UsageListAsString() {
+		$pages = implode(", ", $this->Pages()->column('URLSegment'));
+		$sets = implode(", ", $this->BlockSets()->column('Name'));
+		if($pages && $sets) return "Pages: $pages<br />Block Sets: $sets";	
+		if($pages) return "Pages: $pages";
+		if($sets) return "Block Sets: $sets";
 	}
+
 	
 	/*
 	 * Get a list of Page titles this block is used on

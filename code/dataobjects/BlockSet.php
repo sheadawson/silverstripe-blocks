@@ -7,7 +7,6 @@ class BlockSet extends DataObject implements PermissionProvider{
 	
 	static $db = array(
 		'Name' => 'Varchar(255)',
-//		'Title' => 'Varchar(255)', // Title is content, content should be in the implementing model
 		'PageTypes' => 'MultiValueField'
 	);
 

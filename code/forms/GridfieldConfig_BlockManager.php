@@ -32,8 +32,8 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 								->setHasEmptyDefault(true);
 						}
 				),
-				'Published'		=> array('title' => 'Published<br />(global)', 'field' => 'CheckboxField'),
-				'PageListAsString' => array('title' => 'Used on pages', 'field' => 'ReadonlyField'),
+				'Published'	=> array('title' => 'Published<br />(global)', 'field' => 'CheckboxField'),
+				'UsageListAsString' => array('title' => 'Used on', 'field' => 'LiteralField'),
 			);
 			$editable->setDisplayFields($displayfields);
 		} else {
@@ -43,14 +43,13 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 				//$this->addComponent(new GridFieldCopyButton());
 			}
 			$displayfields = array(
-				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
-				'Name'        	=> array('title' => 'Name', 'field' => 'ReadonlyField'),
-				// (Block)Area has moved to many_many_extrafields, so not available on the record
-				//'Area'			=> array('title' => 'Block area', 'field' => 'ReadonlyField'),
-				'PublishedString' => array('title' => 'Published<br />(global)', 'field' => 'ReadonlyField'),
-				'PageListAsString' => array('title' => 'Used on pages', 'field' => 'ReadonlyField'),
+				'singular_name' => 'Block Type',
+				'Name' => 'Name',
+				'PublishedString' => 'Published<br />(global)',
+				'UsageListAsString' => 'Used on'
 			);
 			$dcols->setDisplayFields($displayfields);
+			$dcols->setFieldCasting(array("UsageListAsString"=>"HTMLText->Raw"));
 		}
 
 		$this->addComponent(new GridFieldButtonRow('before'));

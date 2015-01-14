@@ -25,7 +25,7 @@
 - [x] Remove global blocks (block sets can be used to achieve the same thing)
 - [x] Allow exclusion of any page types from using blocks
 - [ ] How to allow the user to select block area in the same step as creating a block from site tree/block gridfield?
-- [ ] PageListAsString - list block sets too? 
+- [x] UsageListAsString - list block sets too
 
 ## Requirements
 
