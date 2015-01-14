@@ -35,12 +35,8 @@ class BlockAdmin extends ModelAdmin {
 		if($blockGridField = $form->Fields()->fieldByName('Block')){
 			$blockGridField->setConfig(GridFieldConfig_BlockManager::create()
 				->addBulkEditing()
-//				->addComponent(new GridFieldDeleteAction())
 				->removeComponentsByType('GridFieldEditButton')
 				->removeComponentsByType('GridFieldDeleteAction')
-				->removeComponentsByType('GridFieldDetailForm')
-				->addComponent(new GridFieldDetailForm())
-				//->addComponent(new GridFieldCopyButton())
 				->addComponent(new GridFieldEditButton())
 				->addComponent(new GridFieldDeleteAction())
 			);

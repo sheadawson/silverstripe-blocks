@@ -8,9 +8,9 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		parent::__construct();
 
 		$this->blockManager = Injector::inst()->get('BlockManager');
-		
+		$controllerClass = Controller::curr()->class;
 		// Get available Areas (for page) or all in case of ModelAdmin
-		if(Controller::curr()->class == 'CMSPageEditController'){
+		if($controllerClass == 'CMSPageEditController'){
 			$currentPage = Controller::curr()->currentPage();
 			$areasFieldSource = $this->blockManager->getAreasForPageType($currentPage->ClassName);
 		} else {
@@ -38,10 +38,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$editable->setDisplayFields($displayfields);
 		} else {
 			$this->addComponent($dcols = new GridFieldDataColumns());
-			// Optional copybutton, sadly works only on BlockAdmin
-			if(class_exists('GridFieldCopyButton')){
-				//$this->addComponent(new GridFieldCopyButton());
-			}
+			
 			$displayfields = array(
 				'singular_name' => 'Block Type',
 				'Name' => 'Name',
@@ -51,13 +48,18 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$dcols->setDisplayFields($displayfields);
 			$dcols->setFieldCasting(array("UsageListAsString"=>"HTMLText->Raw"));
 		}
-
+		
 		$this->addComponent(new GridFieldButtonRow('before'));
 		$this->addComponent(new GridFieldToolbarHeader());
 		$this->addComponent(new GridFieldDetailForm());
 		$this->addComponent($sort = new GridFieldSortableHeader());
 		$this->addComponent($filter = new GridFieldFilterHeader());
-		
+		if($controllerClass == 'BlockAdmin' && class_exists('GridFieldCopyButton')){
+			$this->addComponent(new GridFieldDetailFormCustom());
+			$this->addComponent(new GridFieldCopyButton());
+		}else{
+			$this->addComponent(new GridFieldDetailForm());
+		}
 
 		$filter->setThrowExceptionOnBadDataType(false);
 		$sort->setThrowExceptionOnBadDataType(false);
