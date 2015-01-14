@@ -49,12 +49,12 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 				;
 
 			// TODO it seems this sort is not being applied...
-			$gridSource = $this->owner->Blocks()
-				->sort(array(
-					"FIELD(SiteTree_Blocks.BlockArea, '" . implode("','", array_keys($areas)) . "')" => '',
-					'SiteTree_Blocks.Sort' => 'ASC', 
-					'Name' => 'ASC'
-				));
+			$gridSource = $this->owner->Blocks();
+				// ->sort(array(
+				// 	"FIELD(SiteTree_Blocks.BlockArea, '" . implode("','", array_keys($areas)) . "')" => '',
+				// 	'SiteTree_Blocks.Sort' => 'ASC', 
+				// 	'Name' => 'ASC'
+				// ));
 
 			$fields->addFieldToTab('Root.Blocks', 
 					GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));

@@ -4,4 +4,6 @@ SiteTree:
 ContentController:
   extensions:
     - BlocksContentControllerExtension
+  url_handlers:
+    'block/$ID!': 'handleBlock'
 

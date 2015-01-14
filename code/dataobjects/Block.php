@@ -5,6 +5,9 @@
  */
 class Block extends DataObject implements PermissionProvider{
 
+	/**
+	 * @var array
+	 */
 	private static $db = array(
 		'Name' => 'Varchar(255)', // Descriptive (meta) name of this block
 		'Area' => 'Varchar', // will be removed in future versions (moved to m_m_extrafields on page)
@@ -14,28 +17,42 @@ class Block extends DataObject implements PermissionProvider{
 		'ExtraCSSClasses' => 'Varchar'
 	);
 
+	/**
+	 * @var array
+	 */
 	private static $many_many = array(
 		"ViewerGroups" => "Group"
 	);
 
+	/**
+	 * @var array
+	 */
 	private static $belongs_many_many = array(
 		'Pages' => 'SiteTree',
 		'BlockSets' => 'BlockSet'
 	);
 
-	// private static $summary_fields = array(
-	// 	'Name' => 'Name', 
-	// 	'Area' => 'Area',
-	// 	'Published' => 'Published',
-	// );
-
+	/**
+	 * @var array
+	 */
 	private static $default_sort = array('Name' => 'ASC');
 
+	/**
+	 * @var array
+	 */
 	private static $dependencies = array(
         'blockManager' => '%$blockManager',
     );
 
+	/**
+	 * @var BlockManager
+	 */
     public $blockManager;
+
+    /**
+	 * @var BlockController
+	 */
+    protected $controller;
 
 	public function getCMSFields(){
 		// this line is a temporary patch until I can work out why this dependency isn't being
@@ -158,8 +175,6 @@ class Block extends DataObject implements PermissionProvider{
 	 * falls back to BlockClassName
 	 **/
 	public function forTemplate(){
-		// TODO standard render with always seemed to default to $this->ClassName template
-		// so having to use SSViewer::hasTemplate() here
 		if($this->Area){
 			$template[] = $this->class . '_' . $this->Area;
 			if(SSViewer::hasTemplate($template)){
@@ -317,6 +332,26 @@ class Block extends DataObject implements PermissionProvider{
 			$classes = $this->ExtraCSSClasses ? $classes . " $this->ExtraCSSClasses" : $classes;	
 		}
 		return $classes;
+	}
+
+	/**
+	 * @throws Exception
+	 *
+	 * @return BlockController
+	 */
+	public function getController() {
+		if($this->controller) {
+			return $this->controller;
+		}
+		foreach(array_reverse(ClassInfo::ancestry($this->class)) as $blockClass) {
+			$controllerClass = "{$blockClass}_Controller";
+			if(class_exists($controllerClass)) break;
+		}
+		if(!class_exists($controllerClass)) {
+			throw new Exception("Could not find controller class for $this->classname");
+		}
+		$this->controller = Injector::inst()->create($controllerClass, $this);
+		return $this->controller;
 	}
 
 }

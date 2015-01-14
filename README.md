@@ -1,31 +1,35 @@
 # Dev version ()
 
-## Todo/Features development
+## Todo/Features development for release 1.0.0
 
+- [ ] How to allow the user to select block area in the same step as creating a block from site tree/block gridfield?
+- [x] Block_Controller to allow for Forms in Blocks
+- [ ] Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
+- [ ] TODO: check sets & blocks optional functionality on page-output if old relations are still in place
+- [ ] Update screenshots
 - [x] Duplication of Blocks in BlockAdmin
-- [ ] Re-add: Sorting primarily by Area (in order of declaration in config), on Pages (removed in favor of dr'ndr sorting)
 - [x] Allow deletion of blocks from BlockAdmin
 - [x] Replacing Title as standard field with Name, as Title will often be used for actual content
 - [x] Name can function as a description for finding/selecting the block later
 - [x] Block->Area (->BlockArea) managed on many_many_extraFields (on relations Page)
-- [ ] Block->Area (->BlockArea) managed on many_many_extraFields (on relations Blocksets)
+- [x] Block->Area (->BlockArea) managed on many_many_extraFields (on relations Blocksets)
 - [x] Block->Weight (->Sort) managed on many_many_extraFields (on relations Page)
 - [x] Block->Weight (->Sort) managed on many_many_extraFields (on relations Blocksets)
-- [ ] Ability to specify Above or Below on blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
 - [x] Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)
 - [x] TODO: combine merges with Sort from OrderableRows in BlocksSiteTreeExtension::getBlockList()
-- [ ] Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
 - [x] Show 'used on pages' in BlockAdmin
 - [x] Allow editing of related pages from Block (requires gridfieldsitetreebuttons)
 - [x] Remove editablecolumns from BlockAdmin (no use, cannot be saved)
-- [ ] Forms (userforms/flexiforms) integration or at least some documentation/samples
-- [ ] Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
 - [x] Make block Blocksets functionality & interfaces optional via config
-- [ ] TODO: check sets & blocks optional functionality on page-output if old relations are still in place
 - [x] Remove global blocks (block sets can be used to achieve the same thing)
 - [x] Allow exclusion of any page types from using blocks
-- [ ] How to allow the user to select block area in the same step as creating a block from site tree/block gridfield?
 - [x] UsageListAsString - list block sets too
+
+## Future Enhancements
+
+- [ ] Re-add: Sorting primarily by Area (in order of declaration in config), on Pages (removed in favor of dr'ndr sorting)
+- [ ] Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
+- [ ] Ability to specify Above or Below on blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
 
 ## Requirements
 
@@ -51,7 +55,7 @@ Install via composer, run dev/build
 
 ## Quickstart
 
-### Define Block Areas and Settings for your theme in mysite/_config/config.yml
+### 1. Define Block Areas and Settings for your theme in mysite/_config/config.yml
 
 ``` yml
 BlockManager:
@@ -73,7 +77,7 @@ BlockManager:
 
 Remember to run ?flush=1 after modifying your .yml config to make sure it gets applied.
 
-### Add Block Areas to your themes templates
+### 2. Add Block Areas to your themes templates
 
 Adding the BeforeContent and AfterContent blocks would look something like
 
@@ -96,42 +100,15 @@ You can limit a block area to a maximum number of blocks using the second limit 
 </article>
 ```
 
-### Add Blocks to a page in the CMS
+### 3. Create your custom Block Types
+
+* [Basic ContentBlock example](https://gist.github.com/sheadawson/8fba047a1f6f42e45697)
+* [Block with Form example](https://gist.github.com/sheadawson/e584b0771f6b124701b4)
+
+
+### 4. Add Blocks to a page in the CMS
 
 You will now be able to add Blocks to Pages. You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
-
-#### ContentBlock Example
-```php
-class ContentBlock extends Block{
-
-	private static $singular_name = 'Content Block';
-	private static $plural_name = 'Content Blocks';
-
-	private static $db = array(
-		'Title' => 'Varchar(255)',
-		'Content' => 'HTMLText'
-	);
-
-
-	public function getCMSFields(){
-		$fields = parent::getCMSFields();
-		
-		$fields->addFieldToTab("Root.Main", new HeaderField('ContentStart', 'Block content'),'Title');
-
-		return $fields;
-	}
-
-}
-```
-
-templates/includes/ContentBlock.ss
-
-```html
-<div class='$CSSClasses'>
-	<div class='block_title'><h3>$Title</h3></div>
-	<div class='block_content'>$Content</div>
-</div>
-```
 
 #### Restrict Blocks to viewer groups or logged in users
 
