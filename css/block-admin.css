@@ -1,0 +1,4 @@
+/* Fixes block model admin bug, possibly betterbuttons related */
+#Form_ItemEditForm{
+	overflow: scroll;
+}

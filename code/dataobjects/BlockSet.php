@@ -5,12 +5,12 @@
  */
 class BlockSet extends DataObject implements PermissionProvider{
 	
-	static $db = array(
-		'Name' => 'Varchar(255)',
+	private static $db = array(
+		'Title' => 'Varchar(255)',
 		'PageTypes' => 'MultiValueField'
 	);
 
-	static $many_many = array(
+	private static $many_many = array(
 		'Blocks' => 'Block',
 		'PageParents' => 'SiteTree'
 	);
@@ -41,7 +41,9 @@ class BlockSet extends DataObject implements PermissionProvider{
 		$gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true)
 			->addExisting()
 			->addComponent(new GridFieldOrderableRows());
+
 		$gridSource = $this->Blocks()->Sort('Sort');
+
 		$fields->addFieldToTab('Root.Main', HeaderField::create('BlocksHeading', 'Blocks'));
 		$fields->addFieldToTab('Root.Main', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
 

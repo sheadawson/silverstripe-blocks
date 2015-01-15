@@ -20,7 +20,7 @@ class BlockManager extends Object{
 	 **/	
 	public function getAreasForTheme($theme = null, $keyAsValue = true){
 		$theme 	= $theme ? $theme : $this->getTheme();
-
+		
 		if(!$theme){
 			return false;
 		}

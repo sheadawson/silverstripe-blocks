@@ -22,7 +22,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$this->addComponent($editable = new GridFieldEditableColumns());
 			$displayfields = array(
 				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
-				'Name'        	=> array('title' => 'Name', 'field' => 'ReadonlyField'),
+				'Title'        	=> array('title' => 'Title', 'field' => 'ReadonlyField'),
 				'BlockArea'	=> array(	
 					'title' => 'Block Area
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
@@ -32,7 +32,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 								->setHasEmptyDefault(true);
 						}
 				),
-				'Published'	=> array('title' => 'Published<br />(global)', 'field' => 'CheckboxField'),
+				'isPublishedField.Nice'	=> array('title' => 'Published', 'field' => 'LiteralField'),
 				'UsageListAsString' => array('title' => 'Used on', 'field' => 'LiteralField'),
 			);
 			$editable->setDisplayFields($displayfields);
@@ -41,8 +41,8 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			
 			$displayfields = array(
 				'singular_name' => 'Block Type',
-				'Name' => 'Name',
-				'PublishedString' => 'Published<br />(global)',
+				'Title' => 'Title',
+				'isPublishedField' => 'Published',
 				'UsageListAsString' => 'Used on'
 			);
 			$dcols->setDisplayFields($displayfields);
@@ -54,11 +54,9 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		$this->addComponent(new GridFieldDetailForm());
 		$this->addComponent($sort = new GridFieldSortableHeader());
 		$this->addComponent($filter = new GridFieldFilterHeader());
+		$this->addComponent(new GridFieldDetailForm());
 		if($controllerClass == 'BlockAdmin' && class_exists('GridFieldCopyButton')){
-			$this->addComponent(new GridFieldDetailFormCustom());
 			$this->addComponent(new GridFieldCopyButton());
-		}else{
-			$this->addComponent(new GridFieldDetailForm());
 		}
 
 		$filter->setThrowExceptionOnBadDataType(false);
@@ -73,6 +71,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			}
 			$multiClass->setClasses($classes);
 			$this->addComponent($multiClass);	
+			//$this->addComponent(new GridFieldAddNewButton());	
 		}
 		
 		if($canEdit){

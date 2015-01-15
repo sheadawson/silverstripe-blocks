@@ -9,9 +9,8 @@ class Block extends DataObject implements PermissionProvider{
 	 * @var array
 	 */
 	private static $db = array(
-		'Name' => 'Varchar(255)', // Descriptive (meta) name of this block
+		'Title' => 'Varchar(255)',
 		'Area' => 'Varchar', // will be removed in future versions (moved to m_m_extrafields on page)
-		'Published' => 'Boolean', // may be replaced by versioned in future versions
 		'Weight' => 'Int', // will be removed in future versions (moved to m_m_extrafields on page)
 		"CanViewType" => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
 		'ExtraCSSClasses' => 'Varchar'
@@ -32,10 +31,14 @@ class Block extends DataObject implements PermissionProvider{
 		'BlockSets' => 'BlockSet'
 	);
 
+	private static $extensions = array(
+		"Versioned('Stage', 'Live')"
+	);
+
 	/**
 	 * @var array
 	 */
-	private static $default_sort = array('Name' => 'ASC');
+	private static $default_sort = array('Title' => 'ASC');
 
 	/**
 	 * @var array
@@ -69,18 +72,14 @@ class Block extends DataObject implements PermissionProvider{
 		$fields->removeByName('Area'); // legacy
 		$fields->removeByName('Weight'); // legacy
 		
-		// Sort Fields: Type, Name, Published, Exta Classes
-		$fields->addFieldToTab('Root.Main', $classField, 'Name');
-		$fields->addFieldToTab('Root.Main', 
-				$fields->dataFieldByName('Published'), 'Name');
+		// Sort Fields: Type, Title, Published, Exta Classes
+		$fields->addFieldToTab('Root.Main', $classField, 'Title');
 		
 		if($this->blockManager->getUseExtraCSSClasses()){
-			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Name');	
+			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');	
 		}else{
 			$fields->removeByName('ExtraCSSClasses');
 		}
-		
-		$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('Name'), 'Published');
 
 		// Viewer groups
 		$fields->removeFieldFromTab('Root', 'ViewerGroups');
@@ -130,13 +129,6 @@ class Block extends DataObject implements PermissionProvider{
 	}
 	
 	/*
-	 * Provide a fallback mechanism for replacing Title with Name
-	 */
-	public function Name(){
-		return ( $this->Name ? $this->Name : $this->Title );
-	}
-	
-	/*
 	 * Provide a fallback mechanism for replacing Area (global) with BlockArea (on n:n relation)
 	 */
 	public function BlockArea(){
@@ -145,14 +137,9 @@ class Block extends DataObject implements PermissionProvider{
 
 	public function validate() {
 		$result = parent::validate();
-		
-		// Migration/fallback copy Title to Name if no name set (Name is required, earlier Title was instead)
-		if(!$this->Name && $this->Title){
-			$this->Name = $this->Title;
-		}
 
-		if(!$this->Name){
-			$result->error('Block Name is required');
+		if(!$this->Title){
+			$result->error('Block Title is required');
 		}
 		return $result;
 	}
@@ -250,6 +237,10 @@ class Block extends DataObject implements PermissionProvider{
 		return Permission::check('ADMIN') || Permission::check('BLOCK_CREATE');
 	}
 
+	public function canPublish($member = null) {
+		return Permission::check('ADMIN') || Permission::check('BLOCK_PUBLISH');
+	}
+
 	public function providePermissions() {
 		return array(
 			'BLOCK_EDIT' => array(
@@ -265,19 +256,6 @@ class Block extends DataObject implements PermissionProvider{
 				'category' => 'Blocks'
 			)
 		);
-	}
-
-
-	/**
-	 * Format this blocks area name into something nicer to read, cammel-case to spaces
-	 * @return string
-	 **/
-	public function AreaNice(){
-		return FormField::name_to_label($this->Area);
-	}
-	
-	public function onBeforeWrite(){
-		parent::onBeforeWrite();
 	}
 
 	public function onAfterWrite(){
@@ -306,19 +284,40 @@ class Block extends DataObject implements PermissionProvider{
 	 */
 	public function UsageListAsString() {
 		$pages = implode(", ", $this->Pages()->column('URLSegment'));
-		$sets = implode(", ", $this->BlockSets()->column('Name'));
+		$sets = implode(", ", $this->BlockSets()->column('Title'));
 		if($pages && $sets) return "Pages: $pages<br />Block Sets: $sets";	
 		if($pages) return "Pages: $pages";
 		if($sets) return "Block Sets: $sets";
 	}
 
-	
-	/*
-	 * Get a list of Page titles this block is used on
-	 * Default URLSegment because it's often short & every page has one (serves only as an indication anyway)
+	/**
+	 * Check if this block has been published.
+	 *
+	 * @return boolean True if this page has been published.
 	 */
-	public function PublishedString() {
-		return ($this->Published ? "Published" : "-");
+	public function isPublished() {
+		if(!$this->exists())
+			return false;
+		// var_dump($this->ID);
+
+		// $result = DB::query("SELECT \"ID\" FROM \"Block_Live\" WHERE \"ID\" = $this->ID")->value();
+		// return $result;
+
+		return (DB::query("SELECT \"ID\" FROM \"Block_Live\" WHERE \"ID\" = $this->ID")->value())
+			? 1
+			: 0;
+	}
+
+
+	/**
+	 * Check if this block has been published.
+	 *
+	 * @return boolean True if this page has been published.
+	 */
+	public function isPublishedField() {
+		$field = Boolean::create('isPublished');
+		$field->setValue($this->isPublished());
+		return $field;
 	}
 
 
