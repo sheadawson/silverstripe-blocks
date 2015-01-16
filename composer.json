@@ -17,11 +17,11 @@
 		"silverstripe/framework": "3.1.*",
 		"silverstripe/cms": "3.1.*",
 		"silverstripe-australia/gridfieldextensions": "1.0.*",
-		"silverstripe/multivaluefield": "dev-master",
-		"unisolutions/silverstripe-copybutton": "dev-master"
+		"silverstripe/multivaluefield": "2.0.*",
+		"unclecheese/betterbuttons": "1.2.*"
 	},
 	"suggest": {
-        "unclecheese/betterbuttons": "User friendly buttons, later versions of Blocks may require this module",
+		"unisolutions/silverstripe-copybutton": "Duplicate Blocks in Block Admin",
 		"micschk/silverstripe-gridfieldsitetreebuttons": "Edit pages directly from a Block's 'used on page' list"
     },
 	"extra": {

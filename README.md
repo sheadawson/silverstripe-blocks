@@ -5,7 +5,7 @@
 - [x] Allow the user to select block area in the same step as creating a block from site tree/block gridfield?
 - [x] Block_Controller to allow for Forms in Blocks
 - [x] Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
-- [ ] TODO: check sets & blocks optional functionality on page-output if old relations are still in place
+- [x] TODO: check sets & blocks optional functionality on page-output if old relations are still in place
 - [ ] Update screenshots
 - [x] Duplication of Blocks in BlockAdmin
 - [x] Allow deletion of blocks from BlockAdmin
