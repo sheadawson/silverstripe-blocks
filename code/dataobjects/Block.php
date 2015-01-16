@@ -9,7 +9,7 @@ class Block extends DataObject implements PermissionProvider{
 	 * @var array
 	 */
 	private static $db = array(
-		'Title' => 'Varchar(255)',
+		'Name' => 'Varchar(255)',
 		"CanViewType" => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
 		'ExtraCSSClasses' => 'Varchar'
 	);
@@ -31,7 +31,7 @@ class Block extends DataObject implements PermissionProvider{
 
 	private static $summary_fields = array(
 		'singular_name' => 'Block Type',
-		'Title' => 'Title',
+		'Name' => 'Name',
 		'isPublishedField' => 'Published',
 		'UsageListAsString' => 'Used on'
 	);
@@ -43,7 +43,7 @@ class Block extends DataObject implements PermissionProvider{
 	/**
 	 * @var array
 	 */
-	private static $default_sort = array('Title' => 'ASC');
+	private static $default_sort = array('Name' => 'ASC');
 
 	/**
 	 * @var array
@@ -72,7 +72,7 @@ class Block extends DataObject implements PermissionProvider{
 		// ClassNmae - block type/class field
 		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
 		unset($classes['Block']);
-		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes), 'Title');
+		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes), 'Name');
 
 		// BlockArea - display areas field if on page edit controller
 		if(Controller::curr()->class == 'CMSPageEditController'){
@@ -89,7 +89,7 @@ class Block extends DataObject implements PermissionProvider{
 		$fields->removeFieldFromTab('Root', 'BlockSets');
 	
 		if($this->blockManager->getUseExtraCSSClasses()){
-			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');	
+			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Name');	
 		}else{
 			$fields->removeByName('ExtraCSSClasses');
 		}
@@ -148,8 +148,8 @@ class Block extends DataObject implements PermissionProvider{
 	public function validate() {
 		$result = parent::validate();
 
-		if(!$this->Title){
-			$result->error('Block Title is required');
+		if(!$this->Name){
+			$result->error('Block Name is required');
 		}
 		return $result;
 	}
@@ -291,7 +291,7 @@ class Block extends DataObject implements PermissionProvider{
 	 */
 	public function UsageListAsString() {
 		$pages = implode(", ", $this->Pages()->column('URLSegment'));
-		$sets = implode(", ", $this->BlockSets()->column('Title'));
+		$sets = implode(", ", $this->BlockSets()->column('Name'));
 		if($pages && $sets) return "Pages: $pages<br />Block Sets: $sets";	
 		if($pages) return "Pages: $pages";
 		if($sets) return "Block Sets: $sets";

@@ -60,44 +60,36 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 
 			// Blocks inherited from BlockSets
-			$blocksetsactive = $this->blockManager->getUseBlockSets();
-			if($blocksetsactive){
+			if($this->blockManager->getUseBlockSets()){
 				
-				$fields->addFieldToTab('Root.Blocks', 
-						HeaderField::create('InheritedBlocksHeader', 'Blocks inherited from Block Sets'));
-				
-				$fields->addFieldToTab('Root.Blocks', 
-					CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
-				
-				$allInherited = $this->getBlockList(
-						$area = null, $publishedOnly = false, 
-						$includeNative = false, $includeSets = true, 
-						$includeDisabled = true );
+				$inheritedBlocks = $this->getBlocksFromAppliedBlockSets(null, true);
 			
-				if ($allInherited->count()) {
-					$fields->addFieldToTab('Root.Blocks', 
-							ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks', 
-									$allInherited->map('ID', 'Title'), null, null, true)
-								->setDescription('Select any inherited blocks that you would not like displayed on this page.')
-					);
-					
-					$activeInherited = $this->getBlocksFromAppliedBlockSets(null, false, false);
+				if ($inheritedBlocks->count()) {
+					$activeInherited = $this->getBlocksFromAppliedBlockSets(null, false);
 
 					if ($activeInherited->count()) {
 						$fields->addFieldToTab('Root.Blocks', 
-								GridField::create('InheritedBlockList', 'Inherited Blocks', $activeInherited, 
+								GridField::create('InheritedBlockList', 'Blocks Inherited from Block Sets', $activeInherited, 
 										GridFieldConfig_BlockManager::create(false, false, false)));
 					}
+
+					$fields->addFieldToTab('Root.Blocks', 
+							ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks', 
+									$inheritedBlocks->map('ID', 'Title'), null, null, true)
+									->setDescription('Select any inherited blocks that you would not like displayed on this page.')
+					);
 				} else {
 					$fields->addFieldToTab('Root.Blocks', 
 							ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks', 
 									'This page has no inherited blocks to disable.'));
 				}
+
+				$fields->addFieldToTab('Root.Blocks', 
+					CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
 			}
 			
 		} else {
-			$fields->addFieldToTab('Root.Blocks', 
-					LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
+			$fields->addFieldToTab('Root.Blocks', LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
 		}
 	}
 
@@ -184,9 +176,14 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * @return ArrayList
 	 * */
 	public function getAppliedSets() {
+		$list = ArrayList::create();
+		if(!$this->owner->InheritBlockSets){
+			return $list;
+		}
+
 		$sets = BlockSet::get()->where("(PageTypesValue IS NULL) OR (PageTypesValue LIKE '%:\"{$this->owner->ClassName}%')");
 
-		$list = ArrayList::create();
+		
 		$ancestors = $this->owner->getAncestors()->column('ID');
 
 		foreach ($sets as $set) {
@@ -210,9 +207,12 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * @return ArrayList
 	 * */
 	public function getBlocksFromAppliedBlockSets($area = null, $includeDisabled = false) {
-		$sets = $this->getAppliedSets();
-		if (!$sets) return false;
 		$blocks = ArrayList::create();
+		$sets = $this->getAppliedSets();
+		
+		if(!$sets->count()){
+			return $blocks;
+		}
 		
 		foreach ($sets as $set) {
 			$setBlocks = $set->Blocks()->sort('Sort');
