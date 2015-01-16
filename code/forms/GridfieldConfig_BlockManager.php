@@ -4,7 +4,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 
 	public $blockManager;
 
-	public function __construct($canAdd = true, $canEdit = true, $canDelete = true, $editableRows = false) {
+	public function __construct($canAdd = true, $canEdit = true, $canDelete = true, $editableRows = false, $aboveOrBelow = false) {
 		parent::__construct();
 
 		$this->blockManager = Injector::inst()->get('BlockManager');
@@ -35,6 +35,15 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 				'isPublishedField.Nice'	=> array('title' => 'Published', 'field' => 'LiteralField'),
 				'UsageListAsString' => array('title' => 'Used on', 'field' => 'LiteralField'),
 			);
+
+			if($aboveOrBelow){
+				$displayfields['AboveOrBelow'] = array(
+					'title' => 'Above or Below',
+					'callback' => function() {
+						return DropdownField::create('AboveOrBelow', 'Above or Below', BlockSet::config()->get('above_or_below_options'));
+					}
+				);
+			}
 			$editable->setDisplayFields($displayfields);
 		} else {
 			$this->addComponent($dcols = new GridFieldDataColumns());

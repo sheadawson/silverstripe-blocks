@@ -15,11 +15,17 @@ class BlockSet extends DataObject implements PermissionProvider{
 		'PageParents' => 'SiteTree'
 	);
 	
-	public static $many_many_extraFields = array(
+	private static $many_many_extraFields = array(
 		'Blocks' => array(
 			'Sort' => 'Int',
-			'BlockArea' => 'Varchar'
+			'BlockArea' => 'Varchar',
+			'AboveOrBelow' => 'Varchar'
 		)
+	);
+
+	private static $above_or_below_options = array(
+		'Above' => 'Above Page Blocks',
+		'Below' => 'Below Page Blocks'
 	);
 
 	public function getCMSFields(){
@@ -38,9 +44,10 @@ class BlockSet extends DataObject implements PermissionProvider{
 		}
 
 		$fields->removeFieldFromTab('Root', 'Blocks');
-		$gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true)
+		$gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true, true)
 			->addExisting()
 			->addComponent(new GridFieldOrderableRows());
+
 
 		$gridSource = $this->Blocks()->Sort('Sort');
 

@@ -60,8 +60,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 
 			// Blocks inherited from BlockSets
-			if($this->blockManager->getUseBlockSets()){
-				
+			if ($this->blockManager->getUseBlockSets()) {
 				$inheritedBlocks = $this->getBlocksFromAppliedBlockSets(null, true);
 			
 				if ($inheritedBlocks->count()) {
@@ -160,7 +159,12 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 				// merge set sources
 				foreach ($blocksFromSets as $block) {
 					if (!$blocks->find('ID', $block->ID)) {
-						$blocks->push($block);
+						if($block->AboveOrBelow == 'Above'){
+							$blocks->unshift($block);
+						}else{
+							$blocks->push($block);	
+						}
+						
 					}
 				}
 			}

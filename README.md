@@ -24,12 +24,12 @@
 - [x] Remove global blocks (block sets can be used to achieve the same thing)
 - [x] Allow exclusion of any page types from using blocks
 - [x] UsageListAsString - list block sets too
+- [x] Ability to specify Above or Below on blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
 
 ## Future Enhancements
 
 - [ ] Re-add: Sorting primarily by Area (in order of declaration in config), on Pages (removed in favor of dr'ndr sorting)
 - [ ] Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
-- [ ] Ability to specify Above or Below on blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
 
 ## Requirements
 
