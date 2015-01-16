@@ -33,15 +33,14 @@ class BlockAdmin extends ModelAdmin {
 		$form = parent::getEditForm($id, $fields);	
 
 		if($blockGridField = $form->Fields()->fieldByName('Block')){
-			$blockGridField->setConfig(GridFieldConfig_BlockManager::create()
-				->addBulkEditing()
-				->removeComponentsByType('GridFieldEditButton')
-				->removeComponentsByType('GridFieldDeleteAction')
-				->addComponent(new GridFieldEditButton())
-				// at this stage deletes have to be done through the edit form becuase 
-				// deleting published DataObjects causes issues with versioning
-				//->addComponent(new GridFieldDeleteAction())
-			);
+			$config = $blockGridField->getConfig();
+			// at this stage deletes have to be done through the edit form becuase 
+			// deleting published DataObjects causes issues with versioning
+			$config->removeComponentsByType('GridFieldDeleteAction');
+			
+			if(class_exists('GridFieldCopyButton')){
+				$config->addComponent(new GridFieldCopyButton());
+			}
 		}
 
 		return $form;

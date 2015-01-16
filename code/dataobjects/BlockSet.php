@@ -70,15 +70,6 @@ class BlockSet extends DataObject implements PermissionProvider{
 	}
 
 
-	/**
-	 * Get Blocks are published
-	 * @return DataList
-	 **/
-	public function getPublishedBlocks(){
-		return $this->Blocks()->filter('Published', 1);
-	}
-
-
 	public function canView($member = null){
 		return true;
 	}

@@ -56,8 +56,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 				// 	'Name' => 'ASC'
 				// ));
 
-			$fields->addFieldToTab('Root.Blocks', 
-					GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
+			$fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
 
 
 			// Blocks inherited from BlockSets
@@ -110,12 +109,12 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	public function BlockArea($area, $limit = null) {
 		if ($this->owner->ID <= 0) return; // blocks break on fake pages ie Security/login
 
-		$publishedOnly = Versioned::current_stage() == 'Stage' ? false : true;
-		$list = $this->getBlockList($area, $publishedOnly);
+		$list = $this->getBlockList($area);
 
 		foreach ($list as $block) {
-			if (!$block->canView())
+			if (!$block->canView()) {
 				$list->remove($block);
+			}
 		}
 
 		if ($limit !== null) {
@@ -126,7 +125,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		$data['AreaID'] = $area;
 
 		$data = $this->owner->customise($data);
-
 
 		$template[] = 'BlockArea_' . $area;
 		if (SSViewer::hasTemplate($template)) {
@@ -147,62 +145,38 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * i.e. blocks from block sets added to the "disable inherited blocks" list
 	 * @return ArrayList
 	 * */
-	public function getBlockList(
-			$area = null, $publishedOnly = true, $includeNative = true, 
-			$includeSets = null, $includeDisabled = false ) {
-
-		// make inclusion of sets configurable
-		if($includeSets===null) $includeSets = $this->blockManager->getUseBlockSets();
-
+	public function getBlockList($area = null, $includeDisabled = false) {
+		$includeSets = $this->blockManager->getUseBlockSets() && $this->owner->InheritBlockSets;
 		$blocks = ArrayList::create();
-		$stage = $publishedOnly ? 'Live' : 'Stage';
 
 		// get blocks directly linked to this page
-		if ($includeNative) {
-			if($publishedOnly)
-			$nativeBlocks = $this->owner->Blocks()
-				->sort('Sort')
-				->setDataQueryParam(array(
-					'Versioned.mode' => 'stage',
-					'Versioned.stage' => $stage
-				));
-			
-			if ($area){
-				$nativeBlocks = $nativeBlocks->filter('BlockArea', $area);
-			}
+		$nativeBlocks = $this->owner->Blocks()->sort('Sort');
+		if ($area) {
+			$nativeBlocks = $nativeBlocks->filter('BlockArea', $area);
+		}
 
-			if ($nativeBlocks->count()) {
-				foreach ($nativeBlocks as $block) {
-					$blocks->add($block);
-				}
+		if ($nativeBlocks->count()) {
+			foreach($nativeBlocks as $block){
+				$blocks->add($block);
 			}
 		}
 
 		// get blocks from BlockSets
-		if ($includeSets && $this->owner->InheritBlockSets 
-				&& ($blocksFromSets = $this->getBlocksFromAppliedBlockSets($area, $includeDisabled, $publishedOnly))
-		) {
-			// merge set sources
-			foreach ($blocksFromSets as $block) {
-				if (!$blocks->find('ID', $block->ID)) {
-					$blocks->push($block);
+		if ($includeSets) {
+			$blocksFromSets = $this->getBlocksFromAppliedBlockSets($area, $includeDisabled);
+			if($blocksFromSets){
+				// merge set sources
+				foreach ($blocksFromSets as $block) {
+					if (!$blocks->find('ID', $block->ID)) {
+						$blocks->push($block);
+					}
 				}
 			}
 		}
 
-		// filter out unpublished blocks?
-		$blocks = $publishedOnly ? $blocks->filter('Published', 1) : $blocks;
-
 		return $blocks;
 	}
 
-	/**
-	 * Get Blocks that are directly related to this page that are published
-	 * @return DataList
-	 * */
-	public function getPublishedBlocks() {
-		return $this->owner->Blocks()->filter('Published', 1);
-	}
 
 	/**
 	 * Get Any BlockSets that apply to this page 
@@ -235,24 +209,14 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * Get all Blocks from BlockSets that apply to this page 
 	 * @return ArrayList
 	 * */
-	public function getBlocksFromAppliedBlockSets($area = null, $includeDisabled = false, $publishedOnly = true) {
+	public function getBlocksFromAppliedBlockSets($area = null, $includeDisabled = false) {
 		$sets = $this->getAppliedSets();
-		if (!$sets) return;
-
+		if (!$sets) return false;
 		$blocks = ArrayList::create();
-		$stage = $publishedOnly ? 'Live' : 'Stage';
-
-
-		$oldMode = Versioned::get_reading_mode();
-		Versioned::reading_stage('Stage');
+		
 		foreach ($sets as $set) {
-			$setBlocks = $set->Blocks()
-				->sort('Sort')
-				->setDataQueryParam(array(
-					'Versioned.mode' => 'stage',
-					'Versioned.stage' => $stage
-				));
-
+			$setBlocks = $set->Blocks()->sort('Sort');
+				
 			if (!$includeDisabled) {
 				$setBlocks = $setBlocks->exclude('ID', $this->owner->DisabledBlocks()->column('ID'));
 			}
@@ -260,15 +224,12 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			if ($area) {
 				$setBlocks = $setBlocks->filter('BlockArea', $area);
 			}
+
 			$blocks->merge($setBlocks);
 		}
-		Versioned::set_reading_mode($oldMode);
 		
 		$blocks->removeDuplicates();
-
-		if ($blocks->count() == 0)
-			return;
-
+		if ($blocks->count() == 0) return false;
 		return $blocks;
 	}
 

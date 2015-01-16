@@ -10,8 +10,6 @@ class Block extends DataObject implements PermissionProvider{
 	 */
 	private static $db = array(
 		'Title' => 'Varchar(255)',
-		'Area' => 'Varchar', // will be removed in future versions (moved to m_m_extrafields on page)
-		'Weight' => 'Int', // will be removed in future versions (moved to m_m_extrafields on page)
 		"CanViewType" => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
 		'ExtraCSSClasses' => 'Varchar'
 	);
@@ -29,6 +27,13 @@ class Block extends DataObject implements PermissionProvider{
 	private static $belongs_many_many = array(
 		'Pages' => 'SiteTree',
 		'BlockSets' => 'BlockSet'
+	);
+
+	private static $summary_fields = array(
+		'singular_name' => 'Block Type',
+		'Title' => 'Title',
+		'isPublishedField' => 'Published',
+		'UsageListAsString' => 'Used on'
 	);
 
 	private static $extensions = array(
@@ -82,8 +87,6 @@ class Block extends DataObject implements PermissionProvider{
 		}
 
 		$fields->removeFieldFromTab('Root', 'BlockSets');
-		$fields->removeByName('Area'); // legacy
-		$fields->removeByName('Weight'); // legacy
 	
 		if($this->blockManager->getUseExtraCSSClasses()){
 			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');	
@@ -137,13 +140,6 @@ class Block extends DataObject implements PermissionProvider{
 		
 		
 	}
-	
-	/**
-	 * Provide a fallback mechanism for replacing Area (global) with BlockArea (on n:n relation)
-	 */
-	public function BlockArea(){
-		return ( $this->BlockArea ? $this->BlockArea : $this->Area );
-	}
 
 
 	/**
@@ -165,8 +161,8 @@ class Block extends DataObject implements PermissionProvider{
 	 * falls back to BlockClassName
 	 **/
 	public function forTemplate(){
-		if($this->Area){
-			$template[] = $this->class . '_' . $this->Area;
+		if($this->BlockArea){
+			$template[] = $this->class . '_' . $this->BlockArea;
 			if(SSViewer::hasTemplate($template)){
 				return $this->renderWith($template);
 			}

@@ -42,6 +42,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$displayfields = array(
 				'singular_name' => 'Block Type',
 				'Title' => 'Title',
+				'BlockArea' => 'Block Area',
 				'isPublishedField' => 'Published',
 				'UsageListAsString' => 'Used on'
 			);
