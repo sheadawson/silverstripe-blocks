@@ -128,13 +128,17 @@ class Block extends DataObject implements PermissionProvider{
 		
 	}
 	
-	/*
+	/**
 	 * Provide a fallback mechanism for replacing Area (global) with BlockArea (on n:n relation)
 	 */
 	public function BlockArea(){
 		return ( $this->BlockArea ? $this->BlockArea : $this->Area );
 	}
 
+
+	/**
+	 * @return ValidationResult
+	 */
 	public function validate() {
 		$result = parent::validate();
 
@@ -143,17 +147,6 @@ class Block extends DataObject implements PermissionProvider{
 		}
 		return $result;
 	}
-	
-	
-	/**
-	 * Copybutton extra cleanup: Duplicate for use in ModelAdmin
-	 * mainly removing all links to pages and blocksets that may have been duplicated
-	 */
-	public function onAfterDuplicate() {
-		// remove relations to pages & blocksets duplicated from the original item
-        $this->Pages()->removeAll();
-		$this->BlockSets()->removeAll();
-    }
 
 
 	/**
@@ -177,20 +170,28 @@ class Block extends DataObject implements PermissionProvider{
 		return $this->forTemplate();
 	}
 
-
-	public function PagesCount(){
-		return $this->Pages()->count();
-	}
-
 	
 	/* 
-	 * Deleting can be done from BlockAdmin 
+	 * Checks if deletion was an actual deletion, not just unpublish
+	 * If so, remove relations
 	 */
-	public function onBeforeDelete(){
-		parent::onBeforeDelete();
-		$this->Pages()->removeAll();
-		$this->BlockSets()->removeAll();
+	public function onAfterDelete(){
+		parent::onAfterDelete();
+		if (Versioned::current_stage() == 'Stage') {
+			$this->Pages()->removeAll();
+			$this->BlockSets()->removeAll();	
+		}
 	}
+
+
+	/**
+	 * Remove relations onAfterDuplicate
+	 */
+	public function onAfterDuplicate() {
+		// remove relations to pages & blocksets duplicated from the original item
+        $this->Pages()->removeAll();
+		$this->BlockSets()->removeAll();
+    }
 
 	
 	/* 

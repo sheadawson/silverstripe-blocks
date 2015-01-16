@@ -38,7 +38,9 @@ class BlockAdmin extends ModelAdmin {
 				->removeComponentsByType('GridFieldEditButton')
 				->removeComponentsByType('GridFieldDeleteAction')
 				->addComponent(new GridFieldEditButton())
-				->addComponent(new GridFieldDeleteAction())
+				// at this stage deletes have to be done through the edit form becuase 
+				// deleting published DataObjects causes issues with versioning
+				//->addComponent(new GridFieldDeleteAction())
 			);
 		}
 
