@@ -64,17 +64,27 @@ class Block extends DataObject implements PermissionProvider{
 
 		$fields = parent::getCMSFields();
 		
+		// ClassNmae - block type/class field
 		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
 		unset($classes['Block']);
-		$classField = DropdownField::create('ClassName', 'Block Type', $classes);
+		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes), 'Title');
+
+		// BlockArea - display areas field if on page edit controller
+		if(Controller::curr()->class == 'CMSPageEditController'){
+			$currentPage = Controller::curr()->currentPage();
+			$fields->addFieldToTab(
+				'Root.Main',
+				DropdownField::create('ManyMany[BlockArea]', 'BlockArea', $this->blockManager->getAreasForPageType($currentPage->ClassName))
+					->setHasEmptyDefault(true)
+					->setRightTitle($currentPage->areasPreviewButton()),
+				'ClassName'
+			);
+		}
 
 		$fields->removeFieldFromTab('Root', 'BlockSets');
 		$fields->removeByName('Area'); // legacy
 		$fields->removeByName('Weight'); // legacy
-		
-		// Sort Fields: Type, Title, Published, Exta Classes
-		$fields->addFieldToTab('Root.Main', $classField, 'Title');
-		
+	
 		if($this->blockManager->getUseExtraCSSClasses()){
 			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');	
 		}else{
