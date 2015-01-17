@@ -6,4 +6,7 @@ ContentController:
     - BlocksContentControllerExtension
   url_handlers:
     'block/$ID!': 'handleBlock'
+SiteConfig:
+  extensions:
+    - BlockSiteConfigExtension
 

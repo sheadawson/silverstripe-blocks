@@ -45,7 +45,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			// Blocks related directly to this Page 
 			$gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true)
 				->addExisting($this->owner->class)
-				->addBulkEditing()
+				//->addBulkEditing()
 				->addComponent(new GridFieldOrderableRows())
 				;
 

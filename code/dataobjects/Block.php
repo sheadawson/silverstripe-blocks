@@ -13,7 +13,12 @@ class Block extends DataObject implements PermissionProvider{
 	private static $db = array(
 		'Name' => 'Varchar(255)',
 		"CanViewType" => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
-		'ExtraCSSClasses' => 'Varchar'
+		'ExtraCSSClasses' => 'Varchar',
+		// these are legacy fields, in place to make migrations from old blocks version easier
+		'Title' => 'Varchar(255)',
+		'Weight' => 'Int',
+		'Area' => 'Varchar',
+		'Published' => 'Boolean',
 	);
 
 	/**
@@ -92,6 +97,12 @@ class Block extends DataObject implements PermissionProvider{
 
 		$fields->removeFieldFromTab('Root', 'BlockSets');
 		$fields->removeFieldFromTab('Root', 'Pages');
+
+		// legacy fields, will be removed in later release
+		$fields->removeByName('Title');
+		$fields->removeByName('Weight');
+		$fields->removeByName('Area');
+		$fields->removeByName('Published');
 	
 		if($this->blockManager->getUseExtraCSSClasses()){
 			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Name');	
