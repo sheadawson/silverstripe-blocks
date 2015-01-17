@@ -1,6 +1,6 @@
 <?php
-
 /**
+ * BlocksSiteTreeExtension
  * @package silverstipe blocks
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
@@ -26,6 +26,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		'blockManager' => '%$blockManager',
 	);
 	public $blockManager;
+	
 
 	/**
 	 * Block manager for Pages
@@ -92,6 +93,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		}
 	}
 
+
 	/**
 	 * Called from templates to get rendered blocks for the given area
 	 * @param string $area
@@ -125,13 +127,11 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		}
 	}
 
+
 	/**
 	 * Get a merged list of all blocks on this page and ones inherited from BlockSets 
 	 * 
 	 * @param string|null $area filter by block area
-	 * @param boolean $publishedOnly only return published blocks
-	 * @param boolean $includeNative Include blocks directly assigned to this page
-	 * @param boolean $includeSets Include block sets
 	 * @param boolean $includeDisabled Include blocks that have been explicitly excluded from this page
 	 * i.e. blocks from block sets added to the "disable inherited blocks" list
 	 * @return ArrayList
@@ -176,7 +176,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 	/**
 	 * Get Any BlockSets that apply to this page 
-	 * @todo could be more efficient
 	 * @return ArrayList
 	 * */
 	public function getAppliedSets() {
@@ -186,8 +185,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		}
 
 		$sets = BlockSet::get()->where("(PageTypesValue IS NULL) OR (PageTypesValue LIKE '%:\"{$this->owner->ClassName}%')");
-
-		
 		$ancestors = $this->owner->getAncestors()->column('ID');
 
 		foreach ($sets as $set) {
@@ -205,6 +202,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		}
 		return $list;
 	}
+
 
 	/**
 	 * Get all Blocks from BlockSets that apply to this page 
@@ -237,6 +235,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		return $blocks;
 	}
 
+
 	/**
 	 * Get's the link for a block area preview button
 	 * @return string
@@ -244,6 +243,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	public function areasPreviewLink() {
 		return Controller::join_links($this->owner->Link(), '?block_preview=1');
 	}
+
 
 	/**
 	 * Get's html for a block area preview button

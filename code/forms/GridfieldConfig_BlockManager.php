@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * GridFieldConfig_BlockManager
+ * Provides a reusable GridFieldConfig for managing Blocks
+ * @package silverstipe blocks
+ * @author Shea Dawson <shea@livesource.co.nz>
+ */
 class GridFieldConfig_BlockManager extends GridFieldConfig{
 
 	public $blockManager;
@@ -96,18 +101,25 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		
 	}
 
+
+	/**
+	 * Add the GridFieldAddExistingSearchButton component to this grid config
+	 * @return $this
+	 **/
 	public function addExisting(){
 		$this->addComponent($add = new GridFieldAddExistingSearchButton());
 		$add->setSearchList(Block::get());
 		return $this;
 	}
 
-
+	/**
+	 * Add the GridFieldBulkManager component to this grid config
+	 * @return $this
+	 **/
 	public function addBulkEditing(){
 		if(class_exists('GridFieldBulkManager')){
 			$this->addComponent(new GridFieldBulkManager());
 		}
 		return $this;
 	}
-
 }

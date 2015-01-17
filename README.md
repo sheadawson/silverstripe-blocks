@@ -1,49 +1,30 @@
-# Dev version ()
+# SilverStripe Blocks
 
-## Todo/Features development for release 1.0.0
+The Blocks modules aims to provide developers with a flexible foundation for defining reusable blocks of content or widgets that can be managed in the CMS.
 
-- [x] Allow the user to select block area in the same step as creating a block from site tree/block gridfield?
-- [x] Block_Controller to allow for Forms in Blocks
-- [x] Versioning (basic), maybe via betterbuttons (instead of versionedgridfield)
-- [x] TODO: check sets & blocks optional functionality on page-output if old relations are still in place
-- [ ] Update screenshots
-- [x] Duplication of Blocks in BlockAdmin
-- [x] Allow deletion of blocks from BlockAdmin
-- [x] Replacing Title as standard field with Name, as Title will often be used for actual content
-- [x] Name can function as a description for finding/selecting the block later
-- [x] Block->Area (->BlockArea) managed on many_many_extraFields (on relations Page)
-- [x] Block->Area (->BlockArea) managed on many_many_extraFields (on relations Blocksets)
-- [x] Block->Weight (->Sort) managed on many_many_extraFields (on relations Page)
-- [x] Block->Weight (->Sort) managed on many_many_extraFields (on relations Blocksets)
-- [x] Allow Sorting by drag & drop on a page (may interfere with primarily sorting by Area)
-- [x] TODO: combine merges with Sort from OrderableRows in BlocksSiteTreeExtension::getBlockList()
-- [x] Show 'used on pages' in BlockAdmin
-- [x] Allow editing of related pages from Block (requires gridfieldsitetreebuttons)
-- [x] Remove editablecolumns from BlockAdmin (no use, cannot be saved)
-- [x] Make block Blocksets functionality & interfaces optional via config
-- [x] Remove global blocks (block sets can be used to achieve the same thing)
-- [x] Allow exclusion of any page types from using blocks
-- [x] UsageListAsString - list block sets too
-- [x] Ability to specify Above or Below on blockset blocks many_many_extraFields to determine where they should sit with the page specific blocks.
+### New Features in 1.0
 
-## Future Enhancements
+* Blocks are now Versioned
+* Block_Controller added - Blocks with Forms now possible
+* BlockArea and Sort now managed on BlockSet_Blocks and SiteTree_Blocks many_many_ExtraFields
+* Drag and Drop re-ordering of Blocks added
+* Duplicate Block action now available in Block Admin
+* Global Blocks removed - use BlockSets applied to all pages instead
+* Block Title field changed to Name (separtion of CMS identifier and content Title)
+* BlockSets and Block ExtraCSSClasses can be disabled in yaml config
+* Block lists show "Used on" column, displaying Pages/Sets the Block is used on
+* Allow exclusion of any page types from using Blocks
+* CMS Interfaces generally tidied up
 
-- [ ] Re-add: Sorting primarily by Area (in order of declaration in config), on Pages (removed in favor of dr'ndr sorting)
-- [ ] Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
-
-## Requirements
+### Requirements
 
 * SilverStripe CMS 3.1
 * [GridFieldExtensions](https://github.com/silverstripe-australia/silverstripe-gridfieldextensions)
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
-
-### New requirements
+* [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons) (user friendly buttons & simple versioning (todo))
 
 ### Recommended
 * [GridField Copybutton](https://github.com/unisolutions/silverstripe-copybutton) (duplication of blocks, from BlockAdmin)
-* [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons) (user friendly buttons & simple versioning (todo))
-* [GridField SitetreeButtons](https://github.com/micschk/silverstripe-gridfieldsitetreebuttons) (edit related pages directly from block)
-
 
 ## Installation
 
@@ -105,7 +86,6 @@ You can limit a block area to a maximum number of blocks using the second limit 
 * [Basic ContentBlock example](https://gist.github.com/sheadawson/8fba047a1f6f42e45697)
 * [Block with Form example](https://gist.github.com/sheadawson/e584b0771f6b124701b4)
 
-
 ### 4. Add Blocks to a page in the CMS
 
 You will now be able to add Blocks to Pages. You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
@@ -113,10 +93,6 @@ You will now be able to add Blocks to Pages. You can also define "BlockSets" in 
 #### Restrict Blocks to viewer groups or logged in users
 
 When editing a block, you can restrict who can see it in the frontend by selecting "logged in users" or "users from these groups" under the Viewer Groups tab.
-
-#### Ordering blocks
-
-Each block has a "Weight" attribute. Set a big value to Sink or small value to float.
 
 ### Templates
 
@@ -162,5 +138,6 @@ Add an existing block
 
 ## TODO
 
-* Dev - Forms inside Blocks (BlockController?)
-* Write Tests
+- [ ] Add language/translation support
+- [ ] Re-add: Sorting primarily by Area (in order of declaration in config), on Pages (removed in favor of dr'ndr sorting)
+- [ ] Add icon/pic to base Block as method of recognition when dealing with lots of different blocks

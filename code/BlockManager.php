@@ -1,10 +1,15 @@
 <?php
 /**
+ * BlockManager
  * @package silverstipe blocks
- * @author Shea Dawson <shea@silverstripe.com.au>
+ * @author Shea Dawson <shea@livesource.co.nz>
  */
 class BlockManager extends Object{
 
+	/**
+	 * Define areas and config on a per theme basis
+	 * @var array
+	 **/
 	private static $themes = array();
 
 	public function __construct(){
@@ -15,10 +20,9 @@ class BlockManager extends Object{
 	/**
 	 * Gets an array of all areas defined for the current theme
 	 * @param string $theme
-	 * @param bool $keyAsValue
 	 * @return array $areas
 	 **/	
-	public function getAreasForTheme($theme = null, $keyAsValue = true){
+	public function getAreasForTheme($theme = null){
 		$theme 	= $theme ? $theme : $this->getTheme();
 		
 		if(!$theme){
@@ -32,12 +36,11 @@ class BlockManager extends Object{
 		}
 
 		$areas 	= $config[$theme]['areas'];
-
-		$areas = $keyAsValue ? ArrayLib::valuekey(array_keys($areas)) : $areas;
+		$areas = ArrayLib::valuekey(array_keys($areas));
 
 		if(count($areas)){
 			foreach ($areas as $k => $v) {
-				$areas[$k] = $keyAsValue ? FormField::name_to_label($k) : $v;
+				$areas[$k] = FormField::name_to_label($k);
 			}	
 		}
 		return $areas;
@@ -52,7 +55,7 @@ class BlockManager extends Object{
 	 * @return array $areas
 	 **/
 	public function getAreasForPageType($class){
-		$areas 	= $this->getAreasForTheme(null, false);
+		$areas = $this->getAreasForTheme(null, false);
 
 		if(!$areas){
 			return false;

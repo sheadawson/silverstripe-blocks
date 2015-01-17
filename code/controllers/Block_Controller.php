@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Block_Controller
+ * @package silverstipe blocks
+ * @author Shea Dawson <shea@silverstripe.com.au>
+ */
 class Block_Controller extends Controller{
 	
 	/**
@@ -57,6 +61,4 @@ class Block_Controller extends Controller{
 	public function getBlock() {
 		return $this->block;
 	}
-
-	
 }

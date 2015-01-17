@@ -1,5 +1,6 @@
 <?php
 /**
+ * BlockAdmin
  * @package silverstipe blocks
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
@@ -17,18 +18,34 @@ class BlockAdmin extends ModelAdmin {
 		'blockManager' => '%$blockManager',
 	);
 	public $blockManager;
+
+
+	/**
+	 * Set reading mode to Stage
+	 **/
+	public function onBeforeInit() {
+		Versioned::reading_stage('Stage');
+	}
+
 	
+	/**
+	 * @return array
+	 **/
 	public function getManagedModels() {
 		$models = parent::getManagedModels();
 		
 		// remove blocksets if not in use (set in config):
-		if( ! $this->blockManager->getUseBlockSets() ){
+		if(!$this->blockManager->getUseBlockSets()){
 			unset( $models['BlockSet'] );
 		}
 		
 		return $models;
 	}
 
+
+	/**
+	 * @return Form
+	 **/
 	public function getEditForm($id = null, $fields = null) {
 		$form = parent::getEditForm($id, $fields);	
 

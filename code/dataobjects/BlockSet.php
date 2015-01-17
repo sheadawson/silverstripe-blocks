@@ -1,20 +1,30 @@
 <?php
 /**
+ * BlockSet
  * @package silverstipe blocks
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
 class BlockSet extends DataObject implements PermissionProvider{
 	
+	/**
+	 * @var array
+	 **/
 	private static $db = array(
 		'Name' => 'Varchar(255)',
 		'PageTypes' => 'MultiValueField'
 	);
 
+	/**
+	 * @var array
+	 **/
 	private static $many_many = array(
 		'Blocks' => 'Block',
 		'PageParents' => 'SiteTree'
 	);
 	
+	/**
+	 * @var array
+	 **/
 	private static $many_many_extraFields = array(
 		'Blocks' => array(
 			'Sort' => 'Int',
@@ -23,10 +33,14 @@ class BlockSet extends DataObject implements PermissionProvider{
 		)
 	);
 
+	/**
+	 * @var array
+	 **/
 	private static $above_or_below_options = array(
 		'Above' => 'Above Page Blocks',
 		'Below' => 'Below Page Blocks'
 	);
+
 
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
@@ -60,7 +74,6 @@ class BlockSet extends DataObject implements PermissionProvider{
 
 	/**
 	 * Returns a sorted array suitable for a dropdown with pagetypes and their translated name
-	 * 
 	 * @return array
 	 */
 	protected function pageTypeOptions() {

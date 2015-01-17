@@ -1,5 +1,7 @@
 <?php
 /**
+ * Block
+ * Subclass this basic Block with your more interesting ones
  * @package silverstipe blocks
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
@@ -63,6 +65,8 @@ class Block extends DataObject implements PermissionProvider{
     protected $controller;
 
 	public function getCMSFields(){
+		Requirements::add_i18n_javascript(BLOCKS_DIR . '/javascript/lang');
+		
 		// this line is a temporary patch until I can work out why this dependency isn't being
 		// loaded in some cases...
 		if(!$this->blockManager) $this->blockManager = singleton('BlockManager');
@@ -72,7 +76,7 @@ class Block extends DataObject implements PermissionProvider{
 		// ClassNmae - block type/class field
 		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
 		unset($classes['Block']);
-		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes), 'Name');
+		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes)->addExtraClass('block-type'), 'Name');
 
 		// BlockArea - display areas field if on page edit controller
 		if(Controller::curr()->class == 'CMSPageEditController'){
@@ -87,6 +91,7 @@ class Block extends DataObject implements PermissionProvider{
 		}
 
 		$fields->removeFieldFromTab('Root', 'BlockSets');
+		$fields->removeFieldFromTab('Root', 'Pages');
 	
 		if($this->blockManager->getUseExtraCSSClasses()){
 			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Name');	
@@ -120,21 +125,23 @@ class Block extends DataObject implements PermissionProvider{
 			$viewerGroupsField,
 		));
 		
+		// Disabled for now, until we can list ALL pages this block is applied to (inc via sets)
+		// As otherwise it could be misleading
 		// Show a GridField (list only) with pages which this block is used on
-		$fields->removeFieldFromTab('Root.Pages', 'Pages');
-		$fields->addFieldsToTab('Root.Pages', 
-				new GridField(
-						'Pages', 
-						'Used on pages', 
-						$this->Pages(), 
-						$gconf = GridFieldConfig_Base::create()));
+		// $fields->removeFieldFromTab('Root.Pages', 'Pages');
+		// $fields->addFieldsToTab('Root.Pages', 
+		// 		new GridField(
+		// 				'Pages', 
+		// 				'Used on pages', 
+		// 				$this->Pages(), 
+		// 				$gconf = GridFieldConfig_Base::create()));
 		// enhance gridfield with edit links to pages if GFEditSiteTreeItemButtons is available
 		// a GFRecordEditor (default) combined with BetterButtons already gives the possibility to 
 		// edit versioned records (Pages), but STbutton loads them in their own interface instead 
 		// of GFdetailform
-		if(class_exists('GridFieldEditSiteTreeItemButton')){
-			$gconf->addComponent(new GridFieldEditSiteTreeItemButton());
-		}
+		// if(class_exists('GridFieldEditSiteTreeItemButton')){
+		// 	$gconf->addComponent(new GridFieldEditSiteTreeItemButton());
+		// }
 
 		return $fields;
 		
@@ -159,6 +166,7 @@ class Block extends DataObject implements PermissionProvider{
 	 * Renders this block with appropriate templates
 	 * looks for templates that match BlockClassName_AreaName 
 	 * falls back to BlockClassName
+	 * @return string
 	 **/
 	public function forTemplate(){
 		if($this->BlockArea){
@@ -172,6 +180,9 @@ class Block extends DataObject implements PermissionProvider{
 	}
 
 
+	/**
+	 * @return string
+	 */
 	public function BlockHTML(){
 		return $this->forTemplate();
 	}
@@ -299,16 +310,11 @@ class Block extends DataObject implements PermissionProvider{
 
 	/**
 	 * Check if this block has been published.
-	 *
 	 * @return boolean True if this page has been published.
 	 */
 	public function isPublished() {
 		if(!$this->exists())
 			return false;
-		// var_dump($this->ID);
-
-		// $result = DB::query("SELECT \"ID\" FROM \"Block_Live\" WHERE \"ID\" = $this->ID")->value();
-		// return $result;
 
 		return (DB::query("SELECT \"ID\" FROM \"Block_Live\" WHERE \"ID\" = $this->ID")->value())
 			? 1
@@ -318,7 +324,6 @@ class Block extends DataObject implements PermissionProvider{
 
 	/**
 	 * Check if this block has been published.
-	 *
 	 * @return boolean True if this page has been published.
 	 */
 	public function isPublishedField() {
@@ -342,7 +347,6 @@ class Block extends DataObject implements PermissionProvider{
 
 	/**
 	 * @throws Exception
-	 *
 	 * @return BlockController
 	 */
 	public function getController() {
