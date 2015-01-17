@@ -21,7 +21,7 @@ The Blocks modules aims to provide developers with a flexible foundation for def
 * SilverStripe CMS 3.1
 * [GridFieldExtensions](https://github.com/silverstripe-australia/silverstripe-gridfieldextensions)
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
-* [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons) (user friendly buttons & simple versioning (todo))
+* [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons)
 
 ### Recommended
 * [GridField Copybutton](https://github.com/unisolutions/silverstripe-copybutton) (duplication of blocks, from BlockAdmin)
@@ -124,16 +124,16 @@ There is some markup required in your BlockArea templates to facilitate this: Th
 
 ### Screenshots
 
-![](docs/images/overview.png)
+![](docs/images/overview-1.0.png)
 Overview
 
-![](docs/images/preview.png)
+![](docs/images/preview-1.0.png)
 Preview of block locations
 
-![](docs/images/edit.png)
+![](docs/images/edit-1.0.png)
 Edit a block
 
-![](docs/images/existing.png)
+![](docs/images/existing-1.0.png)
 Add an existing block
 
 ## TODO
