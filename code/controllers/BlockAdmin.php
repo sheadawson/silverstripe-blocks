@@ -5,11 +5,14 @@
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
 class BlockAdmin extends ModelAdmin {
+   
     private static $managed_models = array(
     	'Block',
     	'BlockSet'
     );
+	
 	private static $url_segment = 'block-admin';
+	
 	private static $menu_title = "Blocks";
 	
 	public $showImportForm = false;
@@ -17,6 +20,7 @@ class BlockAdmin extends ModelAdmin {
 	private static $dependencies = array(
 		'blockManager' => '%$blockManager',
 	);
+	
 	public $blockManager;
 
 
