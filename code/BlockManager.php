@@ -12,6 +12,14 @@ class BlockManager extends Object{
 	 **/
 	private static $themes = array();
 
+
+	/**
+	 * Use default ContentBlock class
+	 * @var Boolean
+	 **/
+	private static $use_default_blocks = true;
+
+
 	public function __construct(){
 		parent::__construct();
 	}

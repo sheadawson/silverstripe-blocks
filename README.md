@@ -14,6 +14,7 @@ The Blocks modules aims to provide developers with a flexible foundation for def
 * BlockSets and Block ExtraCSSClasses can be disabled in yaml config
 * Block lists show "Used on" column, displaying Pages/Sets the Block is used on
 * Allow exclusion of any page types from using Blocks
+* Allow disabling of default/example block type - ContentBlock
 * CMS Interfaces generally tidied up
 
 ### Upgrading from 0.x
@@ -60,6 +61,7 @@ BlockManager:
       use_extra_css_classes: true # Whether to allow cms users to add extra css classes to blocks (default if undeclared: false)
       exclude_from_page_types # Disable the Blocks tab completely on these pages of these types 
         - ContactPage 
+  use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)
 ```
 
 Remember to run ?flush=1 after modifying your .yml config to make sure it gets applied.
@@ -87,14 +89,11 @@ You can limit a block area to a maximum number of blocks using the second limit 
 </article>
 ```
 
-### 3. Create your custom Block Types
+### 3. Add Blocks to a page in the CMS
 
-* [Basic ContentBlock example](https://gist.github.com/sheadawson/8fba047a1f6f42e45697)
-* [Block with Form example](https://gist.github.com/sheadawson/e584b0771f6b124701b4)
+You will now be able to add Blocks to Pages via the CMS page edit view and in the Blocks model admin. You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
 
-### 4. Add Blocks to a page in the CMS
-
-You will now be able to add Blocks to Pages. You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
+This module ships with a basic "ContentBlock", but this can be disabled through the lockManager::use_default_blocks config. 
 
 #### Restrict Blocks to viewer groups or logged in users
 
@@ -127,6 +126,12 @@ There is some markup required in your BlockArea templates to facilitate this: Th
 	<% end_loop %>
 </div>
 ```
+
+### Form Blocks
+
+As of v1.0 Blocks can now handle forms. See this gist for as an example:
+
+* [Block with Form example](https://gist.github.com/sheadawson/e584b0771f6b124701b4)
 
 ### Screenshots
 
