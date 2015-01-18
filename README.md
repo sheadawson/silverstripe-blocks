@@ -93,7 +93,7 @@ You can limit a block area to a maximum number of blocks using the second limit 
 
 You will now be able to add Blocks to Pages via the CMS page edit view and in the Blocks model admin. You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
 
-This module ships with a basic "ContentBlock", but this can be disabled through the lockManager::use_default_blocks config. 
+This module ships with a basic "ContentBlock", but this can be disabled through the BlockManager::use_default_blocks config. 
 
 #### Restrict Blocks to viewer groups or logged in users
 
