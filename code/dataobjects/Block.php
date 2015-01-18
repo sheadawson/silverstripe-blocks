@@ -337,10 +337,10 @@ class Block extends DataObject implements PermissionProvider{
 	 * Check if this block has been published.
 	 * @return boolean True if this page has been published.
 	 */
-	public function isPublishedField() {
+	public function isPublishedNice() {
 		$field = Boolean::create('isPublished');
 		$field->setValue($this->isPublished());
-		return $field;
+		return $field->Nice();
 	}
 
 

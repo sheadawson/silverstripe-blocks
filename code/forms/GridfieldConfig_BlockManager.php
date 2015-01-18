@@ -37,8 +37,8 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 								->setHasEmptyDefault(true);
 						}
 				),
-				'isPublishedField.Nice'	=> array('title' => 'Published', 'field' => 'LiteralField'),
-				'UsageListAsString' => array('title' => 'Used on', 'field' => 'LiteralField'),
+				'isPublishedNice'	=> array('title' => 'Published', 'field' => 'ReadonlyField'),
+				'UsageListAsString' => array('title' => 'Used on', 'field' => 'ReadonlyField'),
 			);
 
 			if($aboveOrBelow){
@@ -57,7 +57,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 				'singular_name' => 'Block Type',
 				'Name' => 'Name',
 				'BlockArea' => 'Block Area',
-				'isPublishedField' => 'Published',
+				'isPublishedNice' => 'Published',
 				'UsageListAsString' => 'Used on'
 			);
 			$dcols->setDisplayFields($displayfields);
