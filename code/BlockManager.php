@@ -28,27 +28,23 @@ class BlockManager extends Object{
 	/**
 	 * Gets an array of all areas defined for the current theme
 	 * @param string $theme
+	 * @param bool $keyAsValue
 	 * @return array $areas
-	 **/	
-	public function getAreasForTheme($theme = null){
+	 **/
+	public function getAreasForTheme($theme = null, $keyAsValue = true){
 		$theme 	= $theme ? $theme : $this->getTheme();
-		
 		if(!$theme){
 			return false;
 		}
-
 		$config = $this->config()->get('themes');
-
 		if(!isset($config[$theme]['areas'])){
 			return false;
 		}
-
 		$areas 	= $config[$theme]['areas'];
-		$areas = ArrayLib::valuekey(array_keys($areas));
-
+		$areas = $keyAsValue ? ArrayLib::valuekey(array_keys($areas)) : $areas;
 		if(count($areas)){
 			foreach ($areas as $k => $v) {
-				$areas[$k] = FormField::name_to_label($k);
+				$areas[$k] = $keyAsValue ? FormField::name_to_label($k) : $v;
 			}	
 		}
 		return $areas;
