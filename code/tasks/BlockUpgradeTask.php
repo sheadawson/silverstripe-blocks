@@ -9,9 +9,9 @@ class BlockUpgradeTask extends BuildTask{
 	public function run($request){
 
 		// update block/set titles
-
-		DB::query("update Block set Name = Title");
-		DB::query("update BlockSet set Name = Title");
+		// Name field has been reverted back to Title
+		// DB::query("update Block set Name = Title");
+		// DB::query("update BlockSet set Name = Title");
 
 		// update block areas
 

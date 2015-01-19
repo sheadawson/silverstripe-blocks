@@ -10,7 +10,6 @@ The Blocks modules aims to provide developers with a flexible foundation for def
 * Drag and Drop re-ordering of Blocks added
 * Duplicate Block action now available in Block Admin
 * Global Blocks removed - use BlockSets applied to all pages instead
-* Block Title field changed to Name (separtion of CMS identifier and content Title)
 * BlockSets and Block ExtraCSSClasses can be disabled in yaml config
 * Block lists show "Used on" column, displaying Pages/Sets the Block is used on
 * Allow exclusion of any page types from using Blocks

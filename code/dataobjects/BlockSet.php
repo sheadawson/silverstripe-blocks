@@ -10,7 +10,7 @@ class BlockSet extends DataObject implements PermissionProvider{
 	 * @var array
 	 **/
 	private static $db = array(
-		'Name' => 'Varchar(255)',
+		'Title' => 'Varchar(255)',
 		'PageTypes' => 'MultiValueField'
 	);
 
@@ -47,7 +47,7 @@ class BlockSet extends DataObject implements PermissionProvider{
 
 		$fields->removeFieldFromTab('Root', 'PageParents');
 
-		$fields->addFieldToTab('Root.Main', HeaderField::create('SettingsHeading', 'Settings'), 'Name');
+		$fields->addFieldToTab('Root.Main', HeaderField::create('SettingsHeading', 'Settings'), 'Title');
 		$fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', 'Only apply to these Page Types:', $this->pageTypeOptions())
 				->setDescription('Selected Page Types will inherit this Block Set automatically. Leave all unchecked to apply to all page types.'));
 		$fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', 'Only apply to children of these Pages:', 'SiteTree'));
