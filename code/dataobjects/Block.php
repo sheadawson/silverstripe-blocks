@@ -11,7 +11,7 @@ class Block extends DataObject implements PermissionProvider{
 	 * @var array
 	 */
 	private static $db = array(
-		'Name' => 'Varchar(255)',
+		'Title' => 'Varchar(255)',
 		"CanViewType" => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
 		'ExtraCSSClasses' => 'Varchar',
 		// these are legacy fields, in place to make migrations from old blocks version easier
@@ -38,7 +38,7 @@ class Block extends DataObject implements PermissionProvider{
 
 	private static $summary_fields = array(
 		'singular_name' => 'Block Type',
-		'Name' => 'Name',
+		'Title' => 'Title',
 		'isPublishedField' => 'Published',
 		'UsageListAsString' => 'Used on'
 	);
@@ -50,7 +50,7 @@ class Block extends DataObject implements PermissionProvider{
 	/**
 	 * @var array
 	 */
-	private static $default_sort = array('Name' => 'ASC');
+	private static $default_sort = array('Title' => 'ASC');
 
 	/**
 	 * @var array
@@ -81,7 +81,7 @@ class Block extends DataObject implements PermissionProvider{
 		// ClassNmae - block type/class field
 		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
 		unset($classes['Block']);
-		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes)->addExtraClass('block-type'), 'Name');
+		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes)->addExtraClass('block-type'), 'Title');
 
 		// BlockArea - display areas field if on page edit controller
 		if(Controller::curr()->class == 'CMSPageEditController'){
@@ -99,13 +99,12 @@ class Block extends DataObject implements PermissionProvider{
 		$fields->removeFieldFromTab('Root', 'Pages');
 
 		// legacy fields, will be removed in later release
-		$fields->removeByName('Title');
 		$fields->removeByName('Weight');
 		$fields->removeByName('Area');
 		$fields->removeByName('Published');
 	
 		if($this->blockManager->getUseExtraCSSClasses()){
-			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Name');	
+			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');	
 		}else{
 			$fields->removeByName('ExtraCSSClasses');
 		}
@@ -166,8 +165,8 @@ class Block extends DataObject implements PermissionProvider{
 	public function validate() {
 		$result = parent::validate();
 
-		if(!$this->Name){
-			$result->error('Block Name is required');
+		if(!$this->Title){
+			$result->error('Block Title is required');
 		}
 		return $result;
 	}
@@ -313,7 +312,7 @@ class Block extends DataObject implements PermissionProvider{
 	 */
 	public function UsageListAsString() {
 		$pages = implode(", ", $this->Pages()->column('URLSegment'));
-		$sets = implode(", ", $this->BlockSets()->column('Name'));
+		$sets = implode(", ", $this->BlockSets()->column('Title'));
 		if($pages && $sets) return "Pages: $pages<br />Block Sets: $sets";	
 		if($pages) return "Pages: $pages";
 		if($sets) return "Block Sets: $sets";

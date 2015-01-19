@@ -27,7 +27,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$this->addComponent($editable = new GridFieldEditableColumns());
 			$displayfields = array(
 				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
-				'Name'        	=> array('title' => 'Name', 'field' => 'ReadonlyField'),
+				'Title'        	=> array('title' => 'Title', 'field' => 'ReadonlyField'),
 				'BlockArea'	=> array(	
 					'title' => 'Block Area
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
@@ -55,7 +55,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			
 			$displayfields = array(
 				'singular_name' => 'Block Type',
-				'Name' => 'Name',
+				'Title' => 'Title',
 				'BlockArea' => 'Block Area',
 				'isPublishedNice' => 'Published',
 				'UsageListAsString' => 'Used on'
