@@ -155,7 +155,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		// get blocks from BlockSets
 		if ($includeSets) {
 			$blocksFromSets = $this->getBlocksFromAppliedBlockSets($area, $includeDisabled);
-			if($blocksFromSets){
+			if($blocksFromSets->count()){
 				// merge set sources
 				foreach ($blocksFromSets as $block) {
 					if (!$blocks->find('ID', $block->ID)) {
@@ -231,7 +231,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		}
 		
 		$blocks->removeDuplicates();
-		if ($blocks->count() == 0) return false;
+
 		return $blocks;
 	}
 
