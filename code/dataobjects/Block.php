@@ -43,10 +43,6 @@ class Block extends DataObject implements PermissionProvider{
 		'UsageListAsString' => 'Used on'
 	);
 
-	private static $extensions = array(
-		"Versioned('Stage', 'Live')"
-	);
-
 	/**
 	 * @var array
 	 */

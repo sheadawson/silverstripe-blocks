@@ -10,3 +10,7 @@ SiteConfig:
   extensions:
     - BlockSiteConfigExtension
 
+Block:
+  extensions:
+    - Versioned('Stage','Live')
+
