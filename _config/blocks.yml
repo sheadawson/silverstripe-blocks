@@ -1,3 +1,9 @@
+---
+Name: 'blocks'
+After:
+  - 'framework/*'
+  - 'cms/*'
+---
 SiteTree:
   extensions:
     - BlocksSiteTreeExtension
