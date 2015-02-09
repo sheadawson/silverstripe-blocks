@@ -23,14 +23,6 @@ class BlockAdmin extends ModelAdmin {
 	
 	public $blockManager;
 
-
-	/**
-	 * Set reading mode to Stage
-	 **/
-	public function onBeforeInit() {
-		Versioned::reading_stage('Stage');
-	}
-
 	
 	/**
 	 * @return array
@@ -51,17 +43,16 @@ class BlockAdmin extends ModelAdmin {
 	 * @return Form
 	 **/
 	public function getEditForm($id = null, $fields = null) {
+		Versioned::reading_stage('Stage');
 		$form = parent::getEditForm($id, $fields);	
 
 		if($blockGridField = $form->Fields()->fieldByName('Block')){
+			$blockGridField->setConfig(GridFieldConfig_BlockManager::create(true, true, false));
 			$config = $blockGridField->getConfig();
-			// at this stage deletes have to be done through the edit form becuase 
-			// deleting published DataObjects causes issues with versioning
-			$config->removeComponentsByType('GridFieldDeleteAction');
-			
-			if(class_exists('GridFieldCopyButton')){
-				$config->addComponent(new GridFieldCopyButton());
-			}
+			$dcols = $config->getComponentByType('GridFieldDataColumns');
+			$dfields = $dcols->getDisplayFields($blockGridField);
+			unset($dfields['BlockArea']);
+			$dcols->setDisplayFields($dfields);
 		}
 
 		return $form;
