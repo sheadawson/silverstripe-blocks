@@ -31,16 +31,16 @@ class BlockUpgradeTask extends BuildTask{
 			where BlockID = Block.ID
 		");
 
-		echo "Block Names, BlockAreas, Sort updated<br />";
+		echo "BlockAreas, Sort updated<br />";
 
 		// migrate global blocks
 
 		$sc = SiteConfig::current_site_config();
 		if($sc->Blocks()->Count()){
-			$set = BlockSet::get()->filter('Name', 'Global')->first();
+			$set = BlockSet::get()->filter('Title', 'Global')->first();
 			if(!$set){
 				$set = BlockSet::create(array(
-					'Name' => 'Global'
+					'Title' => 'Global'
 				));
 				$set->write();
 			}
