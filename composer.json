@@ -18,7 +18,7 @@
 		"silverstripe/cms": "3.1.*",
 		"silverstripe-australia/gridfieldextensions": "1.0.*",
 		"silverstripe/multivaluefield": "2.0.*",
-		"unclecheese/betterbuttons": "1.2.6"
+		"unclecheese/betterbuttons": "~1.2.0"
 	},
 	"suggest": {
 		"unisolutions/silverstripe-copybutton": "Duplicate Blocks in Block Admin",
