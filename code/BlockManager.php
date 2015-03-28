@@ -104,6 +104,21 @@ class BlockManager extends Object{
 	}
 
 
+	public function getBlockClasses(){
+		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
+		array_shift($classes);
+		foreach ($classes as $k => $v) {
+			$classes[$k] = singleton($k)->singular_name();
+		}
+
+		if(!Config::inst()->get('BlockManager', 'use_default_blocks')){
+			unset($classes['ContentBlock']);
+		}
+
+		return $classes;
+	}
+
+
 	/*
 	 * Get the current/active theme
 	 */

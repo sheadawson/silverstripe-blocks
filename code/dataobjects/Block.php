@@ -75,8 +75,7 @@ class Block extends DataObject implements PermissionProvider{
 		$fields = parent::getCMSFields();
 		
 		// ClassNmae - block type/class field
-		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
-		unset($classes['Block']);
+		$classes = $this->blockManager->getBlockClasses();
 		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes)->addExtraClass('block-type'), 'Title');
 
 		// BlockArea - display areas field if on page edit controller

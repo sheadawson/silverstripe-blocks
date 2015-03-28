@@ -79,11 +79,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 
 		if($canAdd){
 			$multiClass = new GridFieldAddNewMultiClass();
-			$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
-			array_shift($classes);
-			foreach ($classes as $k => $v) {
-				$classes[$k] = singleton($k)->singular_name();
-			}
+			$classes = $this->blockManager->getBlockClasses();
 			$multiClass->setClasses($classes);
 			$this->addComponent($multiClass);	
 			//$this->addComponent(new GridFieldAddNewButton());	
