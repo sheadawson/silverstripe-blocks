@@ -88,7 +88,26 @@ class BlockSet extends DataObject implements PermissionProvider{
 		asort($pageTypes);
 		return $pageTypes;
 	}
+	
+	
+	/**
+	 * Returns a list of pages this BlockSet features on 
+	 * @return DataList
+	 */
+	public function Pages(){
+		$pages = SiteTree::get();
+		$types = $this->PageTypes->getValue();
+		if(count($types)){
+			$pages = $pages->filter('ClassName', $types);
+		}
 
+		$parents = $this->PageParents()->column('ID');
+		if(count($parents)){
+			$pages = $pages->filter('ParentID', $parents);
+		}
+
+		return $pages;
+	}
 
 	public function canView($member = null){
 		return true;
