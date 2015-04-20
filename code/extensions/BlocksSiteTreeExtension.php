@@ -35,6 +35,10 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		if($fields->fieldByName('Root.Blocks') || in_array($this->owner->ClassName, $this->blockManager->getExcludeFromPageTypes())){
 			return;
 		}
+		
+		if(!Permission::check('BLOCK_EDIT')) {
+			return;
+		}
 
 		$areas = $this->blockManager->getAreasForPageType($this->owner->ClassName);
 
