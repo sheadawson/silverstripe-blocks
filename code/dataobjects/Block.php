@@ -71,24 +71,61 @@ class Block extends DataObject implements PermissionProvider{
 		// this line is a temporary patch until I can work out why this dependency isn't being
 		// loaded in some cases...
 		if(!$this->blockManager) $this->blockManager = singleton('BlockManager');
+		
+		// called before updateCMSFields function
+		// any extension for Block will have all the fields in FieldList ready to be modified
+		$blockManager = $this->blockManager;
+		$this->beforeUpdateCMSFields(function($fields) use ($blockManager) {
+			// Include field which must be present when updateCMSFields is called on extensions
+			
+			// ClassNmae - block type/class field
+			$classes = $blockManager->getBlockClasses();
+			$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes)->addExtraClass('block-type'), 'Title');
+			
+			// BlockArea - display areas field if on page edit controller
+			if(Controller::curr()->class == 'CMSPageEditController'){
+				$currentPage = Controller::curr()->currentPage();
+				$fields->addFieldToTab(
+					'Root.Main',
+					DropdownField::create('ManyMany[BlockArea]', 'BlockArea', $blockManager->getAreasForPageType($currentPage->ClassName))
+						->setHasEmptyDefault(true)
+						->setRightTitle($currentPage->areasPreviewButton()),
+					'ClassName'
+				);
+			}
+			
+			if($blockManager->getUseExtraCSSClasses()){
+				$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');	
+			}
+
+			// Viewer groups
+			$fields->removeFieldFromTab('Root', 'ViewerGroups');
+			$groupsMap = Group::get()->map('ID', 'Breadcrumbs')->toArray();
+			asort($groupsMap);
+			$viewersOptionsField = new OptionsetField(
+				"CanViewType", 
+				_t('SiteTree.ACCESSHEADER', "Who can view this page?")
+			);
+			$viewerGroupsField = ListboxField::create("ViewerGroups", _t('SiteTree.VIEWERGROUPS', "Viewer Groups"))
+				->setMultiple(true)
+				->setSource($groupsMap)
+				->setAttribute(
+					'data-placeholder', 
+					_t('SiteTree.GroupPlaceholder', 'Click to select group')
+			);
+			$viewersOptionsSource = array();
+			$viewersOptionsSource["Anyone"] = _t('SiteTree.ACCESSANYONE', "Anyone");
+			$viewersOptionsSource["LoggedInUsers"] = _t('SiteTree.ACCESSLOGGEDIN', "Logged-in users");
+			$viewersOptionsSource["OnlyTheseUsers"] = _t('SiteTree.ACCESSONLYTHESE', "Only these people (choose from list)");
+			$viewersOptionsField->setSource($viewersOptionsSource);
+	
+			$fields->addFieldsToTab('Root.ViewerGroups', array(
+				$viewersOptionsField,
+				$viewerGroupsField,
+			));
+		});
 
 		$fields = parent::getCMSFields();
-		
-		// ClassNmae - block type/class field
-		$classes = $this->blockManager->getBlockClasses();
-		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes)->addExtraClass('block-type'), 'Title');
-
-		// BlockArea - display areas field if on page edit controller
-		if(Controller::curr()->class == 'CMSPageEditController'){
-			$currentPage = Controller::curr()->currentPage();
-			$fields->addFieldToTab(
-				'Root.Main',
-				DropdownField::create('ManyMany[BlockArea]', 'BlockArea', $this->blockManager->getAreasForPageType($currentPage->ClassName))
-					->setHasEmptyDefault(true)
-					->setRightTitle($currentPage->areasPreviewButton()),
-				'ClassName'
-			);
-		}
 
 		$fields->removeFieldFromTab('Root', 'BlockSets');
 		$fields->removeFieldFromTab('Root', 'Pages');
@@ -98,37 +135,9 @@ class Block extends DataObject implements PermissionProvider{
 		$fields->removeByName('Area');
 		$fields->removeByName('Published');
 	
-		if($this->blockManager->getUseExtraCSSClasses()){
-			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');	
-		}else{
+		if(!$this->blockManager->getUseExtraCSSClasses()){
 			$fields->removeByName('ExtraCSSClasses');
 		}
-
-		// Viewer groups
-		$fields->removeFieldFromTab('Root', 'ViewerGroups');
-		$groupsMap = Group::get()->map('ID', 'Breadcrumbs')->toArray();
-		asort($groupsMap);
-		$viewersOptionsField = new OptionsetField(
-			"CanViewType", 
-			_t('SiteTree.ACCESSHEADER', "Who can view this page?")
-		);
-		$viewerGroupsField = ListboxField::create("ViewerGroups", _t('SiteTree.VIEWERGROUPS', "Viewer Groups"))
-			->setMultiple(true)
-			->setSource($groupsMap)
-			->setAttribute(
-				'data-placeholder', 
-				_t('SiteTree.GroupPlaceholder', 'Click to select group')
-		);
-		$viewersOptionsSource = array();
-		$viewersOptionsSource["Anyone"] = _t('SiteTree.ACCESSANYONE', "Anyone");
-		$viewersOptionsSource["LoggedInUsers"] = _t('SiteTree.ACCESSLOGGEDIN', "Logged-in users");
-		$viewersOptionsSource["OnlyTheseUsers"] = _t('SiteTree.ACCESSONLYTHESE', "Only these people (choose from list)");
-		$viewersOptionsField->setSource($viewersOptionsSource);
-
-		$fields->addFieldsToTab('Root.ViewerGroups', array(
-			$viewersOptionsField,
-			$viewerGroupsField,
-		));
 		
 		// Disabled for now, until we can list ALL pages this block is applied to (inc via sets)
 		// As otherwise it could be misleading
@@ -149,8 +158,6 @@ class Block extends DataObject implements PermissionProvider{
 		// }
 
 		return $fields;
-		
-		
 	}
 
 
