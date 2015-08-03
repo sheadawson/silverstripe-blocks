@@ -118,13 +118,13 @@ class BlockManager extends Object{
 		return $classes;
 	}
 
-
 	/*
-	 * Get the current/active theme
-	 */
-	private function getTheme(){
-		return Config::inst()->get('SSViewer', 'theme');
-	}
+     * Get the current/active theme or 'default' to support theme-less sites
+     */
+    private function getTheme(){
+        $currentTheme = Config::inst()->get('SSViewer', 'theme');
+        return $currentTheme ? $currentTheme : 'default';
+    }
 
 	/*
 	 * Get the block config for the current theme

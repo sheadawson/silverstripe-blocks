@@ -132,6 +132,18 @@ As of v1.0 Blocks can now handle forms. See this gist for as an example:
 
 * [Block with Form example](https://gist.github.com/sheadawson/e584b0771f6b124701b4)
 
+### What if I'm not using a theme?
+
+If your running your SS instance "themeless", you can configure your blocks using the imaginary "default" theme.
+
+``` yml
+BlockManager:
+  themes:
+    default:
+      areas:
+      ...
+```
+
 ### Screenshots
 
 ![](docs/images/overview-1.0.png)
