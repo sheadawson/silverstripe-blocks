@@ -123,6 +123,13 @@ class BlockManager extends Object{
      */
     private function getTheme(){
         $currentTheme = Config::inst()->get('SSViewer', 'theme');
+
+        // check directly on SiteConfig incase ContentController hasn't set
+        // the theme yet in ContentController->init()
+        if(!$currentTheme && class_exists('SiteConfig')){
+    		$currentTheme = SiteConfig::current_site_config()->Theme;
+        }
+
         return $currentTheme ? $currentTheme : 'default';
     }
 
