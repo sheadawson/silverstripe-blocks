@@ -72,9 +72,11 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 					$activeInherited = $this->getBlocksFromAppliedBlockSets(null, false);
 
 					if ($activeInherited->count()) {
-						$fields->addFieldToTab('Root.Blocks', 
-								GridField::create('InheritedBlockList', 'Blocks Inherited from Block Sets', $activeInherited, 
-										GridFieldConfig_BlockManager::create(false, false, false)));
+						$fields->addFieldsToTab('Root.Blocks', array(
+							GridField::create('InheritedBlockList', 'Blocks Inherited from Block Sets', $activeInherited, 
+								GridFieldConfig_BlockManager::create(false, false, false)),
+							LiteralField::create('InheritedBlockListTip', "<p class='message'>Tip: Inherited blocks can be edited in the <a href='admin/block-admin'>Block Admin area</a><p>")
+						));
 					}
 
 					$fields->addFieldToTab('Root.Blocks', 
