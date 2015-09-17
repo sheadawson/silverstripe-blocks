@@ -11,7 +11,8 @@ class BlockSet extends DataObject implements PermissionProvider{
 	 **/
 	private static $db = array(
 		'Title' => 'Varchar(255)',
-		'PageTypes' => 'MultiValueField'
+		'PageTypes' => 'MultiValueField',
+		'IncludePageParent'	=> 'Boolean',
 	);
 
 	/**
@@ -51,6 +52,7 @@ class BlockSet extends DataObject implements PermissionProvider{
 		$fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', 'Only apply to these Page Types:', $this->pageTypeOptions())
 				->setDescription('Selected Page Types will inherit this Block Set automatically. Leave all unchecked to apply to all page types.'));
 		$fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', 'Only apply to children of these Pages:', 'SiteTree'));
+		$fields->addFieldToTab('Root.Main', CheckboxField::create('IncludePageParent', 'Apply block set to selected page parents as well as children'));
 
 		if(!$this->ID){
 			$fields->addFieldToTab('Root.Main', LiteralField::create('NotSaved', "<p class='message warning'>You can add Blocks to this set once you have saved it for the first time</p>"));
