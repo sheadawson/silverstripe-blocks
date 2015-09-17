@@ -195,11 +195,20 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 
 		foreach ($sets as $set) {
 			$restrictedToParerentIDs = $set->PageParents()->column('ID');
-			if (count($restrictedToParerentIDs) && count($ancestors)) {
-				foreach ($ancestors as $ancestor) {
-					if (in_array($ancestor, $restrictedToParerentIDs)) {
-						$list->add($set);
-						continue;
+			if (count($restrictedToParerentIDs)) {
+				// check whether the set should include selected parent, in which case check whether 
+				// it was in the restricted parents list. If it's not, or if include parentpage 
+				// wasn't selected, we check the ancestors of this page. 
+				if ($set->IncludePageParent && in_array($this->owner->ID, $restrictedToParerentIDs)) {
+					$list->add($set);
+				} else {
+					if (count($ancestors)) {
+						foreach ($ancestors as $ancestor) {
+							if (in_array($ancestor, $restrictedToParerentIDs)) {
+								$list->add($set);
+								continue;
+							}
+						}
 					}
 				}
 			} else {
