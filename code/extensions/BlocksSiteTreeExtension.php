@@ -120,12 +120,14 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			$list = $list->limit($limit);
 		}
 
+		$data = array();
 		$data['BlockArea'] = $list;
 		$data['AreaID'] = $area;
 
 		$data = $this->owner->customise($data);
 
-		$template[] = 'BlockArea_' . $area;
+		$template = array('BlockArea_' . $area);
+
 		if (SSViewer::hasTemplate($template)) {
 			return $data->renderWith($template);
 		} else {
@@ -133,6 +135,21 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		}
 	}
 
+	public function HasBlockArea($area) {
+		if (isset($_REQUEST['block_preview']) && $_REQUEST['block_preview']) {
+			return true;
+		}
+
+		$list = $this->getBlockList($area);
+
+		foreach ($list as $block) {
+			if (!$block->canView()) {
+				$list->remove($block);
+			}
+		}
+
+		return $list->Count() > 0;
+	}
 
 	/**
 	 * Get a merged list of all blocks on this page and ones inherited from BlockSets 
