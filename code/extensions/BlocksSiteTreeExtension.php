@@ -121,7 +121,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		}
 
 		$data = array();
-		$data['HasBlockArea'] = (isset($_REQUEST['block_preview']) && $_REQUEST['block_preview']) || $list->Count() > 0;
+		$data['HasBlockArea'] = ($this->owner->canEdit() && isset($_REQUEST['block_preview']) && $_REQUEST['block_preview']) || $list->Count() > 0;
 		$data['BlockArea'] = $list;
 		$data['AreaID'] = $area;
 
@@ -137,7 +137,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	}
 
 	public function HasBlockArea($area) {
-		if (isset($_REQUEST['block_preview']) && $_REQUEST['block_preview']) {
+		if ($this->owner->canEdit() && isset($_REQUEST['block_preview']) && $_REQUEST['block_preview']) {
 			return true;
 		}
 
