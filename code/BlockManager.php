@@ -23,7 +23,6 @@ class BlockManager extends Object{
 	public function __construct(){
 		parent::__construct();
 	}
-
 	
 	/**
 	 * Gets an array of all areas defined for the current theme
@@ -164,6 +163,65 @@ class BlockManager extends Object{
 	public function getUseExtraCSSClasses(){
 		$config = $this->getThemeConfig();
 		return isset($config['use_extra_css_classes']) ? $config['use_extra_css_classes'] : false;
+	}
+	
+
+	/**
+	 * Sets fields to be displayed in grid.
+	 * Standart set of fields, and can be extended/modified using the extension hook {@see updateGridDisplayFields}
+	 * Params set on {@link GridFieldConfig_BlockManager}, but in order to be extendable, needs to be moved here
+	 * @param string $currentPageClassName name of the current page, to filter block areas
+	 * @param boolean $editable fields to return are editable or not
+	 * @param boolean $aboveOrBelow only applicable if fields editable
+	 * @return array fields to be displayed on the grid
+	 *
+	 * @see GridFieldConfig_BlockManager
+	 */
+	public function getGridDisplayFields($currentPageClassName = null, $editable = false, $aboveOrBelow = false) {
+		if($currentPageClassName !== null) {
+			$areasFieldSource = $this->getAreasForPageType($currentPageClassName);
+		} else {
+			$areasFieldSource = $this->getAreasForTheme();
+		}
+		
+		$displayfields = array(
+			'singular_name' => 'Block Type',
+			'Title' => 'Title',
+			'BlockArea' => 'Block Area',
+			'isPublishedNice' => 'Published',
+			'UsageListAsString' => 'Used on'
+		);
+		
+		if($editable) {
+			$displayfields = array(
+				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
+				'Title'        	=> array('title' => 'Title', 'field' => 'ReadonlyField'),
+				'BlockArea'	=> array(	
+					'title' => 'Block Area
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+						// the &nbsp;s prevent wrapping of dropdowns
+					'callback' => function() use ($areasFieldSource){
+							return DropdownField::create('BlockArea', 'Block Area', $areasFieldSource)
+								->setHasEmptyDefault(true);
+						}
+				),
+				'isPublishedNice'	=> array('title' => 'Published', 'field' => 'ReadonlyField'),
+				'UsageListAsString' => array('title' => 'Used on', 'field' => 'ReadonlyField'),
+			);
+			
+			if($aboveOrBelow){
+				$displayfields['AboveOrBelow'] = array(
+					'title' => 'Above or Below',
+					'callback' => function() {
+						return DropdownField::create('AboveOrBelow', 'Above or Below', BlockSet::config()->get('above_or_below_options'));
+					}
+				);
+			}
+		}
+		
+		$this->extend('updateGridDisplayFields', $displayfields);
+		
+		return $displayfields;
 	}
 
 }

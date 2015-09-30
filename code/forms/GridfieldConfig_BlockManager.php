@@ -14,52 +14,24 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 
 		$this->blockManager = Injector::inst()->get('BlockManager');
 		$controllerClass = Controller::curr()->class;
-		// Get available Areas (for page) or all in case of ModelAdmin
-		if($controllerClass == 'CMSPageEditController'){
-			$currentPage = Controller::curr()->currentPage();
-			$areasFieldSource = $this->blockManager->getAreasForPageType($currentPage->ClassName);
-		} else {
-			$areasFieldSource = $this->blockManager->getAreasForTheme();
-		}
 		
-		// EditableColumns only makes sense on Saveable parenst (eg Page), or inline changes won't be saved
+		// EditableColumns only makes sense on Saveable parents (eg Page), or inline changes won't be saved
 		if($editableRows){
 			$this->addComponent($editable = new GridFieldEditableColumns());
-			$displayfields = array(
-				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
-				'Title'        	=> array('title' => 'Title', 'field' => 'ReadonlyField'),
-				'BlockArea'	=> array(	
-					'title' => 'Block Area
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
-						// the &nbsp;s prevent wrapping of dropdowns
-					'callback' => function() use ($areasFieldSource){
-							return DropdownField::create('BlockArea', 'Block Area', $areasFieldSource)
-								->setHasEmptyDefault(true);
-						}
-				),
-				'isPublishedNice'	=> array('title' => 'Published', 'field' => 'ReadonlyField'),
-				'UsageListAsString' => array('title' => 'Used on', 'field' => 'ReadonlyField'),
-			);
-
-			if($aboveOrBelow){
-				$displayfields['AboveOrBelow'] = array(
-					'title' => 'Above or Below',
-					'callback' => function() {
-						return DropdownField::create('AboveOrBelow', 'Above or Below', BlockSet::config()->get('above_or_below_options'));
-					}
-				);
+			
+			// Get available Areas (for page) or all in case of ModelAdmin
+			$currentPageName = null;
+			if($controllerClass == 'CMSPageEditController'){
+				$currentPage = Controller::curr()->currentPage();
+				$currentPageName = $currentPage->ClassName;
 			}
+			$displayfields = $this->blockManager->getGridDisplayFields($currentPageName, true, $aboveOrBelow);
+
 			$editable->setDisplayFields($displayfields);
 		} else {
 			$this->addComponent($dcols = new GridFieldDataColumns());
 			
-			$displayfields = array(
-				'singular_name' => 'Block Type',
-				'Title' => 'Title',
-				'BlockArea' => 'Block Area',
-				'isPublishedNice' => 'Published',
-				'UsageListAsString' => 'Used on'
-			);
+			$displayfields = $this->blockManager->getGridDisplayFields();
 			$dcols->setDisplayFields($displayfields);
 			$dcols->setFieldCasting(array("UsageListAsString"=>"HTMLText->Raw"));
 		}
