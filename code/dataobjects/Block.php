@@ -123,7 +123,7 @@ class Block extends DataObject implements PermissionProvider{
 		$viewersOptionsSource["Anyone"] = _t('SiteTree.ACCESSANYONE', "Anyone");
 		$viewersOptionsSource["LoggedInUsers"] = _t('SiteTree.ACCESSLOGGEDIN', "Logged-in users");
 		$viewersOptionsSource["OnlyTheseUsers"] = _t('SiteTree.ACCESSONLYTHESE', "Only these people (choose from list)");
-		$viewersOptionsField->setSource($viewersOptionsSource);
+		$viewersOptionsField->setSource($viewersOptionsSource)->setValue("Anyone");
 
 		$fields->addFieldsToTab('Root.ViewerGroups', array(
 			$viewersOptionsField,
