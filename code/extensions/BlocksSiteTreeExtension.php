@@ -32,7 +32,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * Block manager for Pages
 	 * */
 	public function updateCMSFields(FieldList $fields) {
-		if($fields->fieldByName('Root.Blocks') || !$this->owner->exists()){
+		if($fields->fieldByName('Root.Blocks') || in_array($this->owner->ClassName, $this->blockManager->getExcludeFromPageTypes()) || !$this->owner->exists()){
 			return;
 		}
 		
@@ -40,7 +40,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			return;
 		}
 
-        if (in_array($this->owner->ClassName, $this->blockManager->getIncludeFromPageTypes())){
+        if (!$this->blockManager->getIncludeFromPageTypes() || in_array($this->owner->ClassName, $this->blockManager->getIncludeFromPageTypes())){
 
             $areas = $this->blockManager->getAreasForPageType($this->owner->ClassName);
 
