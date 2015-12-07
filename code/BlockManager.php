@@ -151,11 +151,11 @@ class BlockManager extends Object{
 	}
 
 	/*
-	 * Exclusion of blocks from page types defined in yaml
+	 * Inclusion of blocks from page types defined in yaml
 	 */
-	public function getExcludeFromPageTypes(){
+	public function getIncludeFromPageTypes(){
 		$config = $this->getThemeConfig();
-		return isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : array();
+		return isset($config['include_from_page_types']) ? $config['include_from_page_types'] : array();
 	}
 
 	/*

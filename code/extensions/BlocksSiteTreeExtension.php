@@ -32,7 +32,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * Block manager for Pages
 	 * */
 	public function updateCMSFields(FieldList $fields) {
-		if($fields->fieldByName('Root.Blocks') || in_array($this->owner->ClassName, $this->blockManager->getExcludeFromPageTypes()) || !$this->owner->exists()){
+		if($fields->fieldByName('Root.Blocks') || !$this->owner->exists()){
 			return;
 		}
 		
@@ -40,63 +40,68 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 			return;
 		}
 
-		$areas = $this->blockManager->getAreasForPageType($this->owner->ClassName);
+        if (in_array($this->owner->ClassName, $this->blockManager->getIncludeFromPageTypes())){
 
-		if ($areas && count($areas)) {
-			$fields->addFieldToTab('Root.Blocks', 
-					LiteralField::create('PreviewLink', $this->areasPreviewButton()));
+            $areas = $this->blockManager->getAreasForPageType($this->owner->ClassName);
 
-			// Blocks related directly to this Page 
-			$gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true)
-				->addExisting($this->owner->class)
-				//->addBulkEditing()
-				->addComponent(new GridFieldOrderableRows())
-				;
+            if ($areas && count($areas)) {
+                $fields->addFieldToTab('Root.Blocks',
+                        LiteralField::create('PreviewLink', $this->areasPreviewButton()));
 
-			// TODO it seems this sort is not being applied...
-			$gridSource = $this->owner->Blocks();
-				// ->sort(array(
-				// 	"FIELD(SiteTree_Blocks.BlockArea, '" . implode("','", array_keys($areas)) . "')" => '',
-				// 	'SiteTree_Blocks.Sort' => 'ASC', 
-				// 	'Name' => 'ASC'
-				// ));
+                // Blocks related directly to this Page
+                $gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true)
+                    ->addExisting($this->owner->class)
+                    //->addBulkEditing()
+                    ->addComponent(new GridFieldOrderableRows())
+                    ;
 
-			$fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
+                // TODO it seems this sort is not being applied...
+                $gridSource = $this->owner->Blocks();
+                    // ->sort(array(
+                    // 	"FIELD(SiteTree_Blocks.BlockArea, '" . implode("','", array_keys($areas)) . "')" => '',
+                    // 	'SiteTree_Blocks.Sort' => 'ASC',
+                    // 	'Name' => 'ASC'
+                    // ));
+
+                $fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
 
 
-			// Blocks inherited from BlockSets
-			if ($this->blockManager->getUseBlockSets()) {
-				$inheritedBlocks = $this->getBlocksFromAppliedBlockSets(null, true);
-			
-				if ($inheritedBlocks->count()) {
-					$activeInherited = $this->getBlocksFromAppliedBlockSets(null, false);
+                // Blocks inherited from BlockSets
+                if ($this->blockManager->getUseBlockSets()) {
+                    $inheritedBlocks = $this->getBlocksFromAppliedBlockSets(null, true);
 
-					if ($activeInherited->count()) {
-						$fields->addFieldsToTab('Root.Blocks', array(
-							GridField::create('InheritedBlockList', 'Blocks Inherited from Block Sets', $activeInherited, 
-								GridFieldConfig_BlockManager::create(false, false, false)),
-							LiteralField::create('InheritedBlockListTip', "<p class='message'>Tip: Inherited blocks can be edited in the <a href='admin/block-admin'>Block Admin area</a><p>")
-						));
-					}
+                    if ($inheritedBlocks->count()) {
+                        $activeInherited = $this->getBlocksFromAppliedBlockSets(null, false);
 
-					$fields->addFieldToTab('Root.Blocks', 
-							ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks', 
-									$inheritedBlocks->map('ID', 'Title'), null, null, true)
-									->setDescription('Select any inherited blocks that you would not like displayed on this page.')
-					);
-				} else {
-					$fields->addFieldToTab('Root.Blocks', 
-							ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks', 
-									'This page has no inherited blocks to disable.'));
-				}
+                        if ($activeInherited->count()) {
+                            $fields->addFieldsToTab('Root.Blocks', array(
+                                GridField::create('InheritedBlockList', 'Blocks Inherited from Block Sets', $activeInherited,
+                                    GridFieldConfig_BlockManager::create(false, false, false)),
+                                LiteralField::create('InheritedBlockListTip', "<p class='message'>Tip: Inherited blocks can be edited in the <a href='admin/block-admin'>Block Admin area</a><p>")
+                            ));
+                        }
 
-				$fields->addFieldToTab('Root.Blocks', 
-					CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
-			}
-			
-		} else {
-			$fields->addFieldToTab('Root.Blocks', LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
-		}
+                        $fields->addFieldToTab('Root.Blocks',
+                                ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks',
+                                        $inheritedBlocks->map('ID', 'Title'), null, null, true)
+                                        ->setDescription('Select any inherited blocks that you would not like displayed on this page.')
+                        );
+                    } else {
+                        $fields->addFieldToTab('Root.Blocks',
+                                ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks',
+                                        'This page has no inherited blocks to disable.'));
+                    }
+
+                    $fields->addFieldToTab('Root.Blocks',
+                        CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
+                }
+
+            } else {
+                $fields->addFieldToTab('Root.Blocks', LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
+            }
+        }else{
+            return;
+        }
 	}
 
 
