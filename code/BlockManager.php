@@ -151,12 +151,20 @@ class BlockManager extends Object{
 	}
 
 	/*
+	 * Inclusion of blocks from page types defined in yaml
+	 */
+	public function getIncludeFromPageTypes(){
+		$config = $this->getThemeConfig();
+		return isset($config['include_from_page_types']) ? $config['include_from_page_types'] : array();
+	}
+
+    /*
 	 * Exclusion of blocks from page types defined in yaml
 	 */
-	public function getExcludeFromPageTypes(){
-		$config = $this->getThemeConfig();
-		return isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : array();
-	}
+    public function getExcludeFromPageTypes(){
+        $config = $this->getThemeConfig();
+        return isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : array();
+    }
 
 	/*
 	 * Usage of extra css classes configurable from yaml
