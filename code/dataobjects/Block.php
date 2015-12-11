@@ -15,7 +15,6 @@ class Block extends DataObject implements PermissionProvider{
 		"CanViewType" => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
 		'ExtraCSSClasses' => 'Varchar',
 		// these are legacy fields, in place to make migrations from old blocks version easier
-		'Title' => 'Varchar(255)',
 		'Weight' => 'Int',
 		'Area' => 'Varchar',
 		'Published' => 'Boolean',
