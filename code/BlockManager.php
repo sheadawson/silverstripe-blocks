@@ -24,7 +24,7 @@ class BlockManager extends Object{
 		parent::__construct();
 	}
 
-	
+
 	/**
 	 * Gets an array of all areas defined for the current theme
 	 * @param string $theme
@@ -45,10 +45,10 @@ class BlockManager extends Object{
 		if(count($areas)){
 			foreach ($areas as $k => $v) {
 				$areas[$k] = $keyAsValue ? FormField::name_to_label($k) : $v;
-			}	
+			}
 		}
 		return $areas;
-		
+
 	}
 
 
@@ -92,7 +92,7 @@ class BlockManager extends Object{
 				}
 			}
 		}
-		
+
 		if(count($areas)){
 			foreach ($areas as $k => $v) {
 				$areas[$k] = FormField::name_to_label($k);
@@ -141,7 +141,7 @@ class BlockManager extends Object{
 		$config = $this->config()->get('themes');
 		return $theme && isset($config[$theme]) ? $config[$theme] : null;
 	}
-	
+
 	/*
 	 * Usage of BlockSets configurable from yaml
 	 */
@@ -164,6 +164,14 @@ class BlockManager extends Object{
 	public function getUseExtraCSSClasses(){
 		$config = $this->getThemeConfig();
 		return isset($config['use_extra_css_classes']) ? $config['use_extra_css_classes'] : false;
+	}
+
+	/*
+	 * Prefix for the default CSSClasses
+	 */
+	public function getPrefixDefaultCSSClasses() {
+		$config = $this->getThemeConfig();
+		return isset($config['prefix_default_css_classes']) ? $config['prefix_default_css_classes'] : false;
 	}
 
 }

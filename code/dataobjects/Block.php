@@ -67,13 +67,13 @@ class Block extends DataObject implements PermissionProvider{
 
 	public function getCMSFields(){
 		Requirements::add_i18n_javascript(BLOCKS_DIR . '/javascript/lang');
-		
+
 		// this line is a temporary patch until I can work out why this dependency isn't being
 		// loaded in some cases...
 		if(!$this->blockManager) $this->blockManager = singleton('BlockManager');
 
 		$fields = parent::getCMSFields();
-		
+
 		// ClassNmae - block type/class field
 		$classes = $this->blockManager->getBlockClasses();
 		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes)->addExtraClass('block-type'), 'Title');
@@ -97,9 +97,9 @@ class Block extends DataObject implements PermissionProvider{
 		$fields->removeByName('Weight');
 		$fields->removeByName('Area');
 		$fields->removeByName('Published');
-	
+
 		if($this->blockManager->getUseExtraCSSClasses()){
-			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');	
+			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');
 		}else{
 			$fields->removeByName('ExtraCSSClasses');
 		}
@@ -109,14 +109,14 @@ class Block extends DataObject implements PermissionProvider{
 		$groupsMap = Group::get()->map('ID', 'Breadcrumbs')->toArray();
 		asort($groupsMap);
 		$viewersOptionsField = new OptionsetField(
-			"CanViewType", 
+			"CanViewType",
 			_t('SiteTree.ACCESSHEADER', "Who can view this page?")
 		);
 		$viewerGroupsField = ListboxField::create("ViewerGroups", _t('SiteTree.VIEWERGROUPS', "Viewer Groups"))
 			->setMultiple(true)
 			->setSource($groupsMap)
 			->setAttribute(
-				'data-placeholder', 
+				'data-placeholder',
 				_t('SiteTree.GroupPlaceholder', 'Click to select group')
 		);
 		$viewersOptionsSource = array();
@@ -129,28 +129,28 @@ class Block extends DataObject implements PermissionProvider{
 			$viewersOptionsField,
 			$viewerGroupsField,
 		));
-		
+
 		// Disabled for now, until we can list ALL pages this block is applied to (inc via sets)
 		// As otherwise it could be misleading
 		// Show a GridField (list only) with pages which this block is used on
 		// $fields->removeFieldFromTab('Root.Pages', 'Pages');
-		// $fields->addFieldsToTab('Root.Pages', 
+		// $fields->addFieldsToTab('Root.Pages',
 		// 		new GridField(
-		// 				'Pages', 
-		// 				'Used on pages', 
-		// 				$this->Pages(), 
+		// 				'Pages',
+		// 				'Used on pages',
+		// 				$this->Pages(),
 		// 				$gconf = GridFieldConfig_Base::create()));
 		// enhance gridfield with edit links to pages if GFEditSiteTreeItemButtons is available
-		// a GFRecordEditor (default) combined with BetterButtons already gives the possibility to 
-		// edit versioned records (Pages), but STbutton loads them in their own interface instead 
+		// a GFRecordEditor (default) combined with BetterButtons already gives the possibility to
+		// edit versioned records (Pages), but STbutton loads them in their own interface instead
 		// of GFdetailform
 		// if(class_exists('GridFieldEditSiteTreeItemButton')){
 		// 	$gconf->addComponent(new GridFieldEditSiteTreeItemButton());
 		// }
 
 		return $fields;
-		
-		
+
+
 	}
 
 
@@ -169,7 +169,7 @@ class Block extends DataObject implements PermissionProvider{
 
 	/**
 	 * Renders this block with appropriate templates
-	 * looks for templates that match BlockClassName_AreaName 
+	 * looks for templates that match BlockClassName_AreaName
 	 * falls back to BlockClassName
 	 * @return string
 	 **/
@@ -192,8 +192,8 @@ class Block extends DataObject implements PermissionProvider{
 		return $this->forTemplate();
 	}
 
-	
-	/* 
+
+	/*
 	 * Checks if deletion was an actual deletion, not just unpublish
 	 * If so, remove relations
 	 */
@@ -201,7 +201,7 @@ class Block extends DataObject implements PermissionProvider{
 		parent::onAfterDelete();
 		if (Versioned::current_stage() == 'Stage') {
 			$this->Pages()->removeAll();
-			$this->BlockSets()->removeAll();	
+			$this->BlockSets()->removeAll();
 		}
 	}
 
@@ -215,8 +215,8 @@ class Block extends DataObject implements PermissionProvider{
 		$this->BlockSets()->removeAll();
     }
 
-	
-	/* 
+
+	/*
 	 * Base permissions
 	 */
 	public function canView($member = null){
@@ -242,9 +242,9 @@ class Block extends DataObject implements PermissionProvider{
 		// check for specific groups
 		if($member && is_numeric($member)) $member = DataObject::get_by_id('Member', $member);
 		if($this->CanViewType == 'OnlyTheseUsers' && $member && $member->inGroups($this->ViewerGroups())){
-			return true;	
-		} 
-		
+			return true;
+		}
+
 		return false;
 	}
 
@@ -301,14 +301,14 @@ class Block extends DataObject implements PermissionProvider{
         }
         return $urls;
     }
-	
+
 	/*
 	 * Get a list of Page and Blockset titles this block is used on
 	 */
 	public function UsageListAsString() {
 		$pages = implode(", ", $this->Pages()->column('URLSegment'));
 		$sets = implode(", ", $this->BlockSets()->column('Title'));
-		if($pages && $sets) return "Pages: $pages<br />Block Sets: $sets";	
+		if($pages && $sets) return "Pages: $pages<br />Block Sets: $sets";
 		if($pages) return "Pages: $pages";
 		if($sets) return "Block Sets: $sets";
 	}
@@ -344,8 +344,13 @@ class Block extends DataObject implements PermissionProvider{
      */
     public function CSSClasses($stopAtClass = 'DataObject') {
 		$classes = strtolower(parent::CSSClasses($stopAtClass));
+
+		if( !empty($classes) && ($prefix = $this->blockManager->getPrefixDefaultCSSClasses())) {
+			$classes = $prefix . str_replace(" ", " {$prefix}", $classes);
+		}
+
 		if($this->blockManager->getUseExtraCSSClasses()){
-			$classes = $this->ExtraCSSClasses ? $classes . " $this->ExtraCSSClasses" : $classes;	
+			$classes = $this->ExtraCSSClasses ? $classes . " $this->ExtraCSSClasses" : $classes;
 		}
 		return $classes;
 	}
