@@ -24,7 +24,7 @@ The Blocks modules aims to provide developers with a flexible foundation for def
 
 ### Requirements
 
-* SilverStripe CMS 3.1
+* SilverStripe CMS ~3.1
 * [GridFieldExtensions](https://github.com/silverstripe-australia/silverstripe-gridfieldextensions)
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
 * [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons)
@@ -37,7 +37,7 @@ The Blocks modules aims to provide developers with a flexible foundation for def
 #### Composer
 
 	composer require sheadawson/silverstripe-blocks
-	
+
 Install via composer, run dev/build
 
 ## Quickstart
@@ -58,8 +58,9 @@ BlockManager:
 
       use_blocksets: false # Whether to use BlockSet functionality (default if undeclared: true)
       use_extra_css_classes: true # Whether to allow cms users to add extra css classes to blocks (default if undeclared: false)
-      exclude_from_page_types: # Disable the Blocks tab completely on these pages of these types 
-        - ContactPage 
+      prefix_default_css_classes: 'myprefix--' # prefix the automatically generated CSSClasses based on class name (default if undeclared: false)
+      exclude_from_page_types: # Disable the Blocks tab completely on these pages of these types
+        - ContactPage
   use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)
 ```
 
@@ -92,7 +93,7 @@ You can limit a block area to a maximum number of blocks using the second limit 
 
 You will now be able to add Blocks to Pages via the CMS page edit view and in the Blocks model admin. You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
 
-This module ships with a basic "ContentBlock", but this can be disabled through the BlockManager::use_default_blocks config. 
+This module ships with a basic "ContentBlock", but this can be disabled through the BlockManager::use_default_blocks config.
 
 #### Restrict Blocks to viewer groups or logged in users
 
@@ -100,13 +101,13 @@ When editing a block, you can restrict who can see it in the frontend by selecti
 
 ### Templates
 
-There are 2 types of templates you should be aware of. 
+There are 2 types of templates you should be aware of.
 
 #### BlockArea Template
 
-The BlockArea template is responsible for looping over and rendering all blocks in that area. You can override this by creating a copy of the default BlockArea.ss and placing it in your theme's templates/Includes folder. 
+The BlockArea template is responsible for looping over and rendering all blocks in that area. You can override this by creating a copy of the default BlockArea.ss and placing it in your theme's templates/Includes folder.
 
-It's likely that your block areas may require different templates. You can achieve this by creating a BlockArea_{AreaName}.ss template. 
+It's likely that your block areas may require different templates. You can achieve this by creating a BlockArea_{AreaName}.ss template.
 
 #### Block Template
 
@@ -114,7 +115,7 @@ Each subclass of Block requires it's own template with the same name as the clas
 
 ### Block Area Preview
 
-To aid website admins in identifying the areas they can apply blocks to, a "Preview Block Areas for this page" button is available in the cms. This opens the frontend view of the page in a new tab with ?block_preview=1. In Block Preview mode, Block Areas in the template are highlighted and labeled. 
+To aid website admins in identifying the areas they can apply blocks to, a "Preview Block Areas for this page" button is available in the cms. This opens the frontend view of the page in a new tab with ?block_preview=1. In Block Preview mode, Block Areas in the template are highlighted and labeled.
 
 There is some markup required in your BlockArea templates to facilitate this: The css class "block-area" and the data-areaid='$AreaID' attribute.
 
