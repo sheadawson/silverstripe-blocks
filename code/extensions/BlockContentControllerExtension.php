@@ -9,7 +9,7 @@ class BlocksContentControllerExtension extends Extension {
 	);
 
 	public function onAfterInit(){
-		if($this->owner->canEdit() && $this->owner->getRequest()->getVar('block_preview') == 1){
+		if($this->owner->canEdit(Member::currentUser()) && $this->owner->getRequest()->getVar('block_preview') == 1){
 			Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 			Requirements::javascript(BLOCKS_DIR . '/javascript/block-preview.js');
 			Requirements::css(BLOCKS_DIR . '/css/block-preview.css');
@@ -19,7 +19,7 @@ class BlocksContentControllerExtension extends Extension {
 	/**
 	 * Handles blocks attached to a page
 	 * Assumes URLs in the following format: <URLSegment>/block/<block-ID>.
-	 * 
+	 *
 	 * @return RequestHandler
 	 */
 	public function handleBlock() {
