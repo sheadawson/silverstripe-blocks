@@ -14,6 +14,7 @@ The Blocks modules aims to provide developers with a flexible foundation for def
 * Block lists show "Used on" column, displaying Pages/Sets the Block is used on
 * Allow exclusion of any page types from using Blocks
 * Allow disabling of default/example block type - ContentBlock
+* Allow disabling of specific blocks
 * CMS Interfaces generally tidied up
 
 ### Upgrading from 0.x
@@ -61,6 +62,8 @@ BlockManager:
       prefix_default_css_classes: 'myprefix--' # prefix the automatically generated CSSClasses based on class name (default if undeclared: false)
       exclude_from_page_types: # Disable the Blocks tab completely on these pages of these types
         - ContactPage
+      #disabled_blocks: #allows you to disable specific blocks
+      #  - ContentBlock
   use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)
 ```
 

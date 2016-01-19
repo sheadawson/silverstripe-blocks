@@ -115,6 +115,12 @@ class BlockManager extends Object{
 			unset($classes['ContentBlock']);
 		}
 
+        if($disabledArr = Config::inst()->get('BlockManager', 'disabled_blocks')){
+            foreach ($disabledArr as $k => $v) {
+                unset($classes[$v]);
+            }
+        }
+
 		return $classes;
 	}
 
