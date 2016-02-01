@@ -25,7 +25,7 @@ class Block_Controller extends Controller{
 	}
 
 
-	public function index(){
+	public function index() {
 		return;
 	}
 
@@ -49,7 +49,7 @@ class Block_Controller extends Controller{
 	/**
 	 * @return string - link to page this block is on
 	 */
-	public function pageLink(){
+	public function pageLink() {
     	$parts = explode('/block/', $this->Link());
     	return isset($parts[0]) ? $parts[0] : null;
     }

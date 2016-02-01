@@ -6,7 +6,7 @@
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
 class BlockUpgradeTask extends BuildTask{
-	public function run($request){
+	public function run($request) {
 
 		// update block/set titles
 		// Name field has been reverted back to Title
@@ -36,16 +36,16 @@ class BlockUpgradeTask extends BuildTask{
 		// migrate global blocks
 
 		$sc = SiteConfig::current_site_config();
-		if($sc->Blocks()->Count()){
+		if($sc->Blocks()->Count()) {
 			$set = BlockSet::get()->filter('Title', 'Global')->first();
-			if(!$set){
+			if(!$set) {
 				$set = BlockSet::create(array(
 					'Title' => 'Global'
 				));
 				$set->write();
 			}
 			foreach ($sc->Blocks() as $block) {
-				if(!$set->Blocks()->find('ID', $block->ID)){
+				if(!$set->Blocks()->find('ID', $block->ID)) {
 					$set->Blocks()->add($block, array(
 						'Sort' => $block->Weight,
 						'BlockArea' => $block->Area

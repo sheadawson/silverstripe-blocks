@@ -31,7 +31,7 @@ class BlockAdmin extends ModelAdmin {
 		$models = parent::getManagedModels();
 
 		// remove blocksets if not in use (set in config):
-		if(!$this->blockManager->getUseBlockSets()){
+		if(!$this->blockManager->getUseBlockSets()) {
 			unset( $models['BlockSet'] );
 		}
 
@@ -46,7 +46,7 @@ class BlockAdmin extends ModelAdmin {
 		Versioned::reading_stage('Stage');
 		$form = parent::getEditForm($id, $fields);
 
-		if($blockGridField = $form->Fields()->fieldByName('Block')){
+		if($blockGridField = $form->Fields()->fieldByName('Block')) {
 			$blockGridField->setConfig(GridFieldConfig_BlockManager::create(true, true, false));
 			$config = $blockGridField->getConfig();
 			$dcols = $config->getComponentByType('GridFieldDataColumns');
