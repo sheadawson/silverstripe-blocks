@@ -1,12 +1,11 @@
 <?php
 
-class ContentBlock extends Block{
+class ContentBlock extends Block
+{
+    private static $singular_name = 'Content Block';
+    private static $plural_name = 'Content Blocks';
 
-	private static $singular_name = 'Content Block';
-	private static $plural_name = 'Content Blocks';
-
-	private static $db = array(
-		'Content' => 'HTMLText'
-	);
+    private static $db = array(
+        'Content' => 'HTMLText',
+    );
 }
-
