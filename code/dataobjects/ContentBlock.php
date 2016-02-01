@@ -1,5 +1,5 @@
 <?php
-	
+
 class ContentBlock extends Block{
 
 	private static $singular_name = 'Content Block';
@@ -9,4 +9,4 @@ class ContentBlock extends Block{
 		'Content' => 'HTMLText'
 	);
 }
-	
+
