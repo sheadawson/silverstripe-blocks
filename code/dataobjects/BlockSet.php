@@ -5,7 +5,7 @@
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
 class BlockSet extends DataObject implements PermissionProvider{
-	
+
 	/**
 	 * @var array
 	 **/
@@ -22,7 +22,7 @@ class BlockSet extends DataObject implements PermissionProvider{
 		'Blocks' => 'Block',
 		'PageParents' => 'SiteTree'
 	);
-	
+
 	/**
 	 * @var array
 	 **/
@@ -90,10 +90,10 @@ class BlockSet extends DataObject implements PermissionProvider{
 		asort($pageTypes);
 		return $pageTypes;
 	}
-	
-	
+
+
 	/**
-	 * Returns a list of pages this BlockSet features on 
+	 * Returns a list of pages this BlockSet features on
 	 * @return DataList
 	 */
 	public function Pages(){

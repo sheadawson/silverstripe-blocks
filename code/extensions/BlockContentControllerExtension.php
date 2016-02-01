@@ -19,7 +19,7 @@ class BlocksContentControllerExtension extends Extension {
 	/**
 	 * Handles blocks attached to a page
 	 * Assumes URLs in the following format: <URLSegment>/block/<block-ID>.
-	 * 
+	 *
 	 * @return RequestHandler
 	 */
 	public function handleBlock() {

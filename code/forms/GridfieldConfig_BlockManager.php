@@ -21,14 +21,14 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		} else {
 			$areasFieldSource = $this->blockManager->getAreasForTheme();
 		}
-		
+
 		// EditableColumns only makes sense on Saveable parenst (eg Page), or inline changes won't be saved
 		if($editableRows){
 			$this->addComponent($editable = new GridFieldEditableColumns());
 			$displayfields = array(
 				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
 				'Title'        	=> array('title' => 'Title', 'field' => 'ReadonlyField'),
-				'BlockArea'	=> array(	
+				'BlockArea'	=> array(
 					'title' => 'Block Area
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
 						// the &nbsp;s prevent wrapping of dropdowns
@@ -52,7 +52,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$editable->setDisplayFields($displayfields);
 		} else {
 			$this->addComponent($dcols = new GridFieldDataColumns());
-			
+
 			$displayfields = array(
 				'singular_name' => 'Block Type',
 				'Title' => 'Title',
@@ -63,7 +63,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$dcols->setDisplayFields($displayfields);
 			$dcols->setFieldCasting(array("UsageListAsString"=>"HTMLText->Raw"));
 		}
-		
+
 		$this->addComponent(new GridFieldButtonRow('before'));
 		$this->addComponent(new GridFieldToolbarHeader());
 		$this->addComponent(new GridFieldDetailForm());
@@ -81,20 +81,20 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			$multiClass = new GridFieldAddNewMultiClass();
 			$classes = $this->blockManager->getBlockClasses();
 			$multiClass->setClasses($classes);
-			$this->addComponent($multiClass);	
-			//$this->addComponent(new GridFieldAddNewButton());	
+			$this->addComponent($multiClass);
+			//$this->addComponent(new GridFieldAddNewButton());
 		}
-		
+
 		if($canEdit){
-			$this->addComponent(new GridFieldEditButton());	
+			$this->addComponent(new GridFieldEditButton());
 		}
 
 		if($canDelete){
 			$this->addComponent(new GridFieldDeleteAction(true));
 		}
 
-		return $this;		
-		
+		return $this;
+
 	}
 
 
