@@ -15,7 +15,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		$this->blockManager = Injector::inst()->get('BlockManager');
 		$controllerClass = Controller::curr()->class;
 		// Get available Areas (for page) or all in case of ModelAdmin
-		if($controllerClass == 'CMSPageEditController'){
+		if($controllerClass == 'CMSPageEditController') {
 			$currentPage = Controller::curr()->currentPage();
 			$areasFieldSource = $this->blockManager->getAreasForPageType($currentPage->ClassName);
 		} else {
@@ -23,7 +23,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		}
 
 		// EditableColumns only makes sense on Saveable parenst (eg Page), or inline changes won't be saved
-		if($editableRows){
+		if($editableRows) {
 			$this->addComponent($editable = new GridFieldEditableColumns());
 			$displayfields = array(
 				'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
@@ -32,7 +32,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 					'title' => 'Block Area
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
 						// the &nbsp;s prevent wrapping of dropdowns
-					'callback' => function() use ($areasFieldSource){
+					'callback' => function() use ($areasFieldSource) {
 							return DropdownField::create('BlockArea', 'Block Area', $areasFieldSource)
 								->setHasEmptyDefault(true);
 						}
@@ -41,7 +41,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 				'UsageListAsString' => array('title' => 'Used on', 'field' => 'ReadonlyField'),
 			);
 
-			if($aboveOrBelow){
+			if($aboveOrBelow) {
 				$displayfields['AboveOrBelow'] = array(
 					'title' => 'Above or Below',
 					'callback' => function() {
@@ -70,14 +70,14 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 		$this->addComponent($sort = new GridFieldSortableHeader());
 		$this->addComponent($filter = new GridFieldFilterHeader());
 		$this->addComponent(new GridFieldDetailForm());
-		if($controllerClass == 'BlockAdmin' && class_exists('GridFieldCopyButton')){
+		if($controllerClass == 'BlockAdmin' && class_exists('GridFieldCopyButton')) {
 			$this->addComponent(new GridFieldCopyButton());
 		}
 
 		$filter->setThrowExceptionOnBadDataType(false);
 		$sort->setThrowExceptionOnBadDataType(false);
 
-		if($canAdd){
+		if($canAdd) {
 			$multiClass = new GridFieldAddNewMultiClass();
 			$classes = $this->blockManager->getBlockClasses();
 			$multiClass->setClasses($classes);
@@ -85,11 +85,11 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 			//$this->addComponent(new GridFieldAddNewButton());
 		}
 
-		if($canEdit){
+		if($canEdit) {
 			$this->addComponent(new GridFieldEditButton());
 		}
 
-		if($canDelete){
+		if($canDelete) {
 			$this->addComponent(new GridFieldDeleteAction(true));
 		}
 
@@ -102,7 +102,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 	 * Add the GridFieldAddExistingSearchButton component to this grid config
 	 * @return $this
 	 **/
-	public function addExisting(){
+	public function addExisting() {
 		$this->addComponent($add = new GridFieldAddExistingSearchButton());
 		$add->setSearchList(Block::get());
 		return $this;
@@ -112,8 +112,8 @@ class GridFieldConfig_BlockManager extends GridFieldConfig{
 	 * Add the GridFieldBulkManager component to this grid config
 	 * @return $this
 	 **/
-	public function addBulkEditing(){
-		if(class_exists('GridFieldBulkManager')){
+	public function addBulkEditing() {
+		if(class_exists('GridFieldBulkManager')) {
 			$this->addComponent(new GridFieldBulkManager());
 		}
 		return $this;

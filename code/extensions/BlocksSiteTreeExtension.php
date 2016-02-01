@@ -32,7 +32,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * Block manager for Pages
 	 * */
 	public function updateCMSFields(FieldList $fields) {
-		if($fields->fieldByName('Root.Blocks') || in_array($this->owner->ClassName, $this->blockManager->getExcludeFromPageTypes()) || !$this->owner->exists()){
+		if($fields->fieldByName('Root.Blocks') || in_array($this->owner->ClassName, $this->blockManager->getExcludeFromPageTypes()) || !$this->owner->exists()) {
 			return;
 		}
 
@@ -171,7 +171,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		}
 
 		if ($nativeBlocks->count()) {
-			foreach($nativeBlocks as $block){
+			foreach($nativeBlocks as $block) {
 				$blocks->add($block);
 			}
 		}
@@ -179,13 +179,13 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		// get blocks from BlockSets
 		if ($includeSets) {
 			$blocksFromSets = $this->getBlocksFromAppliedBlockSets($area, $includeDisabled);
-			if($blocksFromSets->count()){
+			if($blocksFromSets->count()) {
 				// merge set sources
 				foreach ($blocksFromSets as $block) {
 					if (!$blocks->find('ID', $block->ID)) {
-						if($block->AboveOrBelow == 'Above'){
+						if($block->AboveOrBelow == 'Above') {
 							$blocks->unshift($block);
-						}else{
+						} else {
 							$blocks->push($block);
 						}
 
@@ -204,7 +204,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	 * */
 	public function getAppliedSets() {
 		$list = ArrayList::create();
-		if(!$this->owner->InheritBlockSets){
+		if(!$this->owner->InheritBlockSets) {
 			return $list;
 		}
 
@@ -245,7 +245,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 		$blocks = ArrayList::create();
 		$sets = $this->getAppliedSets();
 
-		if(!$sets->count()){
+		if(!$sets->count()) {
 			return $blocks;
 		}
 

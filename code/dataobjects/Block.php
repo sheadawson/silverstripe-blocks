@@ -64,7 +64,7 @@ class Block extends DataObject implements PermissionProvider{
 	 */
     protected $controller;
 
-	public function getCMSFields(){
+	public function getCMSFields() {
 		Requirements::add_i18n_javascript(BLOCKS_DIR . '/javascript/lang');
 
 		// this line is a temporary patch until I can work out why this dependency isn't being
@@ -78,7 +78,7 @@ class Block extends DataObject implements PermissionProvider{
 		$fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes)->addExtraClass('block-type'), 'Title');
 
 		// BlockArea - display areas field if on page edit controller
-		if(Controller::curr()->class == 'CMSPageEditController'){
+		if(Controller::curr()->class == 'CMSPageEditController') {
 			$currentPage = Controller::curr()->currentPage();
 			$fields->addFieldToTab(
 				'Root.Main',
@@ -97,9 +97,9 @@ class Block extends DataObject implements PermissionProvider{
 		$fields->removeByName('Area');
 		$fields->removeByName('Published');
 
-		if($this->blockManager->getUseExtraCSSClasses()){
+		if($this->blockManager->getUseExtraCSSClasses()) {
 			$fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');
-		}else{
+		} else {
 			$fields->removeByName('ExtraCSSClasses');
 		}
 
@@ -143,7 +143,7 @@ class Block extends DataObject implements PermissionProvider{
 		// a GFRecordEditor (default) combined with BetterButtons already gives the possibility to
 		// edit versioned records (Pages), but STbutton loads them in their own interface instead
 		// of GFdetailform
-		// if(class_exists('GridFieldEditSiteTreeItemButton')){
+		// if(class_exists('GridFieldEditSiteTreeItemButton')) {
 		// 	$gconf->addComponent(new GridFieldEditSiteTreeItemButton());
 		// }
 
@@ -159,7 +159,7 @@ class Block extends DataObject implements PermissionProvider{
 	public function validate() {
 		$result = parent::validate();
 
-		if(!$this->Title){
+		if(!$this->Title) {
 			$result->error('Block Title is required');
 		}
 		return $result;
@@ -172,13 +172,13 @@ class Block extends DataObject implements PermissionProvider{
 	 * falls back to BlockClassName
 	 * @return string
 	 **/
-	public function forTemplate(){
+	public function forTemplate() {
 		$controller = $this->getController();
 
-		if ($this->BlockArea){
+		if ($this->BlockArea) {
 			$template = array($this->class . '_' . $this->BlockArea);
 
-			if (SSViewer::hasTemplate($template)){
+			if (SSViewer::hasTemplate($template)) {
 				return $controller->renderWith($template);
 			}
 		}
@@ -190,7 +190,7 @@ class Block extends DataObject implements PermissionProvider{
 	/**
 	 * @return string
 	 */
-	public function BlockHTML(){
+	public function BlockHTML() {
 		return $this->forTemplate();
 	}
 
@@ -199,7 +199,7 @@ class Block extends DataObject implements PermissionProvider{
 	 * Checks if deletion was an actual deletion, not just unpublish
 	 * If so, remove relations
 	 */
-	public function onAfterDelete(){
+	public function onAfterDelete() {
 		parent::onAfterDelete();
 		if (Versioned::current_stage() == 'Stage') {
 			$this->Pages()->removeAll();
@@ -221,7 +221,7 @@ class Block extends DataObject implements PermissionProvider{
 	/*
 	 * Base permissions
 	 */
-	public function canView($member = null){
+	public function canView($member = null) {
 		if(!$member || !(is_a($member, 'Member')) || is_numeric($member)) {
 			$member = Member::currentUserID();
 		}
@@ -243,7 +243,7 @@ class Block extends DataObject implements PermissionProvider{
 
 		// check for specific groups
 		if($member && is_numeric($member)) $member = DataObject::get_by_id('Member', $member);
-		if($this->CanViewType == 'OnlyTheseUsers' && $member && $member->inGroups($this->ViewerGroups())){
+		if($this->CanViewType == 'OnlyTheseUsers' && $member && $member->inGroups($this->ViewerGroups())) {
 			return true;
 		}
 
@@ -283,9 +283,9 @@ class Block extends DataObject implements PermissionProvider{
 		);
 	}
 
-	public function onAfterWrite(){
+	public function onAfterWrite() {
 		parent::onAfterWrite();
-		if($this->hasExtension('FilesystemPublisher')){
+		if($this->hasExtension('FilesystemPublisher')) {
 			$this->republish($this);
 		}
 	}
@@ -351,7 +351,7 @@ class Block extends DataObject implements PermissionProvider{
 			$classes = $prefix . str_replace(" ", " {$prefix}", $classes);
 		}
 
-		if($this->blockManager->getUseExtraCSSClasses()){
+		if($this->blockManager->getUseExtraCSSClasses()) {
 			$classes = $this->ExtraCSSClasses ? $classes . " $this->ExtraCSSClasses" : $classes;
 		}
 		return $classes;

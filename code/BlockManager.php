@@ -20,7 +20,7 @@ class BlockManager extends Object{
 	private static $use_default_blocks = true;
 
 
-	public function __construct(){
+	public function __construct() {
 		parent::__construct();
 	}
 
@@ -31,18 +31,18 @@ class BlockManager extends Object{
 	 * @param bool $keyAsValue
 	 * @return array $areas
 	 **/
-	public function getAreasForTheme($theme = null, $keyAsValue = true){
+	public function getAreasForTheme($theme = null, $keyAsValue = true) {
 		$theme 	= $theme ? $theme : $this->getTheme();
-		if(!$theme){
+		if(!$theme) {
 			return false;
 		}
 		$config = $this->config()->get('themes');
-		if(!isset($config[$theme]['areas'])){
+		if(!isset($config[$theme]['areas'])) {
 			return false;
 		}
 		$areas 	= $config[$theme]['areas'];
 		$areas = $keyAsValue ? ArrayLib::valuekey(array_keys($areas)) : $areas;
-		if(count($areas)){
+		if(count($areas)) {
 			foreach ($areas as $k => $v) {
 				$areas[$k] = $keyAsValue ? FormField::name_to_label($k) : $v;
 			}
@@ -58,10 +58,10 @@ class BlockManager extends Object{
 	 * @param string $class
 	 * @return array $areas
 	 **/
-	public function getAreasForPageType($class){
+	public function getAreasForPageType($class) {
 		$areas = $this->getAreasForTheme(null, false);
 
-		if(!$areas){
+		if(!$areas) {
 			return false;
 		}
 
@@ -93,29 +93,29 @@ class BlockManager extends Object{
 			}
 		}
 
-		if(count($areas)){
+		if(count($areas)) {
 			foreach ($areas as $k => $v) {
 				$areas[$k] = FormField::name_to_label($k);
 			}
 			return $areas;
-		}else{
+		} else {
 			return $areas;
 		}
 	}
 
 
-	public function getBlockClasses(){
+	public function getBlockClasses() {
 		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
 		array_shift($classes);
 		foreach ($classes as $k => $v) {
 			$classes[$k] = singleton($k)->singular_name();
 		}
 
-		if(!Config::inst()->get('BlockManager', 'use_default_blocks')){
+		if(!Config::inst()->get('BlockManager', 'use_default_blocks')) {
 			unset($classes['ContentBlock']);
 		}
 
-        if($disabledArr = Config::inst()->get('BlockManager', 'disabled_blocks')){
+        if($disabledArr = Config::inst()->get('BlockManager', 'disabled_blocks')) {
             foreach ($disabledArr as $k => $v) {
                 unset($classes[$v]);
             }
@@ -127,12 +127,12 @@ class BlockManager extends Object{
 	/*
      * Get the current/active theme or 'default' to support theme-less sites
      */
-    private function getTheme(){
+    private function getTheme() {
         $currentTheme = Config::inst()->get('SSViewer', 'theme');
 
         // check directly on SiteConfig incase ContentController hasn't set
         // the theme yet in ContentController->init()
-        if(!$currentTheme && class_exists('SiteConfig')){
+        if(!$currentTheme && class_exists('SiteConfig')) {
     		$currentTheme = SiteConfig::current_site_config()->Theme;
         }
 
@@ -142,7 +142,7 @@ class BlockManager extends Object{
 	/*
 	 * Get the block config for the current theme
 	 */
-	private function getThemeConfig(){
+	private function getThemeConfig() {
 		$theme = $this->getTheme();
 		$config = $this->config()->get('themes');
 		return $theme && isset($config[$theme]) ? $config[$theme] : null;
@@ -151,7 +151,7 @@ class BlockManager extends Object{
 	/*
 	 * Usage of BlockSets configurable from yaml
 	 */
-	public function getUseBlockSets(){
+	public function getUseBlockSets() {
 		$config = $this->getThemeConfig();
 		return isset($config['use_blocksets']) ? $config['use_blocksets'] : true;
 	}
@@ -159,7 +159,7 @@ class BlockManager extends Object{
 	/*
 	 * Exclusion of blocks from page types defined in yaml
 	 */
-	public function getExcludeFromPageTypes(){
+	public function getExcludeFromPageTypes() {
 		$config = $this->getThemeConfig();
 		return isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : array();
 	}
@@ -167,7 +167,7 @@ class BlockManager extends Object{
 	/*
 	 * Usage of extra css classes configurable from yaml
 	 */
-	public function getUseExtraCSSClasses(){
+	public function getUseExtraCSSClasses() {
 		$config = $this->getThemeConfig();
 		return isset($config['use_extra_css_classes']) ? $config['use_extra_css_classes'] : false;
 	}

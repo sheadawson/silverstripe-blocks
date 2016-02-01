@@ -43,7 +43,7 @@ class BlockSet extends DataObject implements PermissionProvider{
 	);
 
 
-	public function getCMSFields(){
+	public function getCMSFields() {
 		$fields = parent::getCMSFields();
 
 		$fields->removeFieldFromTab('Root', 'PageParents');
@@ -54,7 +54,7 @@ class BlockSet extends DataObject implements PermissionProvider{
 		$fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', 'Only apply to children of these Pages:', 'SiteTree'));
 		$fields->addFieldToTab('Root.Main', CheckboxField::create('IncludePageParent', 'Apply block set to selected page parents as well as children'));
 
-		if(!$this->ID){
+		if(!$this->ID) {
 			$fields->addFieldToTab('Root.Main', LiteralField::create('NotSaved', "<p class='message warning'>You can add Blocks to this set once you have saved it for the first time</p>"));
 			return $fields;
 		}
@@ -96,22 +96,22 @@ class BlockSet extends DataObject implements PermissionProvider{
 	 * Returns a list of pages this BlockSet features on
 	 * @return DataList
 	 */
-	public function Pages(){
+	public function Pages() {
 		$pages = SiteTree::get();
 		$types = $this->PageTypes->getValue();
-		if(count($types)){
+		if(count($types)) {
 			$pages = $pages->filter('ClassName', $types);
 		}
 
 		$parents = $this->PageParents()->column('ID');
-		if(count($parents)){
+		if(count($parents)) {
 			$pages = $pages->filter('ParentID', $parents);
 		}
 
 		return $pages;
 	}
 
-	public function canView($member = null){
+	public function canView($member = null) {
 		return true;
 	}
 
