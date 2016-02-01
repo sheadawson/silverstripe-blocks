@@ -103,7 +103,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension {
 	/**
 	 * Called from templates to get rendered blocks for the given area
 	 * @param string $area
-	 * @param integer $limit Limit the items to this number, or null for no limit
+	 * @param int $limit Limit the items to this number, or null for no limit
 	 */
 	public function BlockArea($area, $limit = null) {
 		if ($this->owner->ID <= 0) return; // blocks break on fake pages ie Security/login
