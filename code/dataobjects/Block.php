@@ -296,6 +296,10 @@ class Block extends DataObject implements PermissionProvider
                 'name' => 'Create a Block',
                 'category' => 'Blocks',
             ),
+            'BLOCK_PUBLISH' => array(
+                'name' => 'Publish a Block',
+                'category' => 'Blocks',
+            ),
         );
     }
 
