@@ -1,60 +1,60 @@
 <?php
 /**
- * BlockAdmin
- * @package silverstipe blocks
+ * BlockAdmin.
+ *
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
-class BlockAdmin extends ModelAdmin {
-   
+class BlockAdmin extends ModelAdmin
+{
     private static $managed_models = array(
-    	'Block',
-    	'BlockSet'
+        'Block',
+        'BlockSet',
     );
-	
-	private static $url_segment = 'block-admin';
-	
-	private static $menu_title = "Blocks";
-	
-	public $showImportForm = false;
-	
-	private static $dependencies = array(
-		'blockManager' => '%$blockManager',
-	);
-	
-	public $blockManager;
 
-	
-	/**
-	 * @return array
-	 **/
-	public function getManagedModels() {
-		$models = parent::getManagedModels();
-		
-		// remove blocksets if not in use (set in config):
-		if(!$this->blockManager->getUseBlockSets()){
-			unset( $models['BlockSet'] );
-		}
-		
-		return $models;
-	}
+    private static $url_segment = 'block-admin';
 
+    private static $menu_title = 'Blocks';
 
-	/**
-	 * @return Form
-	 **/
-	public function getEditForm($id = null, $fields = null) {
-		Versioned::reading_stage('Stage');
-		$form = parent::getEditForm($id, $fields);	
+    public $showImportForm = false;
 
-		if($blockGridField = $form->Fields()->fieldByName('Block')){
-			$blockGridField->setConfig(GridFieldConfig_BlockManager::create(true, true, false));
-			$config = $blockGridField->getConfig();
-			$dcols = $config->getComponentByType('GridFieldDataColumns');
-			$dfields = $dcols->getDisplayFields($blockGridField);
-			unset($dfields['BlockArea']);
-			$dcols->setDisplayFields($dfields);
-		}
+    private static $dependencies = array(
+        'blockManager' => '%$blockManager',
+    );
 
-		return $form;
-	}
+    public $blockManager;
+
+    /**
+     * @return array
+     **/
+    public function getManagedModels()
+    {
+        $models = parent::getManagedModels();
+
+        // remove blocksets if not in use (set in config):
+        if (!$this->blockManager->getUseBlockSets()) {
+            unset($models['BlockSet']);
+        }
+
+        return $models;
+    }
+
+    /**
+     * @return Form
+     **/
+    public function getEditForm($id = null, $fields = null)
+    {
+        Versioned::reading_stage('Stage');
+        $form = parent::getEditForm($id, $fields);
+
+        if ($blockGridField = $form->Fields()->fieldByName('Block')) {
+            $blockGridField->setConfig(GridFieldConfig_BlockManager::create(true, true, false));
+            $config = $blockGridField->getConfig();
+            $dcols = $config->getComponentByType('GridFieldDataColumns');
+            $dfields = $dcols->getDisplayFields($blockGridField);
+            unset($dfields['BlockArea']);
+            $dcols->setDisplayFields($dfields);
+        }
+
+        return $form;
+    }
 }
