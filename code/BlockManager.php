@@ -20,6 +20,13 @@ class BlockManager extends Object
      **/
     private static $use_default_blocks = true;
 
+    /**
+     * If true, adds a 'Blocks' button to the main CMS menu.
+     *
+     * @var bool
+     */
+    private static $add_menu_button = true;
+
     public function __construct()
     {
         parent::__construct();
