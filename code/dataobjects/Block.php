@@ -42,6 +42,28 @@ class Block extends DataObject implements PermissionProvider
         'UsageListAsString' => 'Used on',
     );
 
+    private static $searchable_fields = array(
+        'Title' => array(
+            'title' => 'Title'
+        ),
+        'ClassName' => array(
+            'title' => 'Block Type'
+        )
+    );
+
+    public function getDefaultSearchContext()
+    {
+        $context = parent::getDefaultSearchContext();
+        $results = $this->blockManager->getBlockClasses();
+        if (sizeof($results) > 1) {
+            $classfield = new DropdownField('ClassName', 'Block Type');
+            $classfield->setSource($results);
+            $classfield->setEmptyString('(any)');
+            $context->addField($classfield);
+        }
+        return $context;
+    }
+
     /**
      * @var array
      */
