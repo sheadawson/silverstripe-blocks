@@ -148,6 +148,14 @@ BlockManager:
       ...
 ```
 
+### Remove the Blocks button from the main CMS menu
+
+The BlockAdmin section is not always needed to be used. If you wish, you can remove the button from the menu by inserting this to `mysite/_config.php`:
+
+``` php
+CMSMenu::remove_menu_item('BlockAdmin');
+```
+
 ### Screenshots
 
 ![](docs/images/overview-1.0.png)
