@@ -48,14 +48,14 @@ class BlockSet extends DataObject implements PermissionProvider
 
         $fields->removeFieldFromTab('Root', 'PageParents');
 
-        $fields->addFieldToTab('Root.Main', HeaderField::create('SettingsHeading', 'Settings'), 'Title');
-        $fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', 'Only apply to these Page Types:', $this->pageTypeOptions())
-                ->setDescription('Selected Page Types will inherit this Block Set automatically. Leave all unchecked to apply to all page types.'));
-        $fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', 'Only apply to children of these Pages:', 'SiteTree'));
-        $fields->addFieldToTab('Root.Main', CheckboxField::create('IncludePageParent', 'Apply block set to selected page parents as well as children'));
+        $fields->addFieldToTab('Root.Main', HeaderField::create('SettingsHeading', _t('BlockSet.Settings', 'Settings')), 'Title');
+        $fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', _t('BlockSet.OnlyApplyToThesePageTypes', 'Only apply to these Page Types:'), $this->pageTypeOptions())
+                ->setDescription(_t('BlockSet.OnlyApplyToThesePageTypesDescription', 'Selected Page Types will inherit this Block Set automatically. Leave all unchecked to apply to all page types.')));
+        $fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', _t('BlockSet.OnlyApplyToChildrenOfThesePages', 'Only apply to children of these Pages:'), 'SiteTree'));
+        $fields->addFieldToTab('Root.Main', CheckboxField::create('IncludePageParent', _t('BlockSet.ApplyBlockSetToSelectedPageParentsAsWellAsChildren','Apply block set to selected page parents as well as children')));
 
         if (!$this->ID) {
-            $fields->addFieldToTab('Root.Main', LiteralField::create('NotSaved', "<p class='message warning'>You can add Blocks to this set once you have saved it for the first time</p>"));
+            $fields->addFieldToTab('Root.Main', LiteralField::create('NotSaved', "<p class='message warning'>"._t('BlockSet.YouCanAddBlocksToThisSetOnceYouHaveSavedIt', 'You can add Blocks to this set once you have saved it for the first time').'</p>'));
 
             return $fields;
         }
@@ -67,8 +67,8 @@ class BlockSet extends DataObject implements PermissionProvider
 
         $gridSource = $this->Blocks()->Sort('Sort');
 
-        $fields->addFieldToTab('Root.Main', HeaderField::create('BlocksHeading', 'Blocks'));
-        $fields->addFieldToTab('Root.Main', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
+        $fields->addFieldToTab('Root.Main', HeaderField::create('BlocksHeading', _t('Block.PLURALNAME', 'Blocks')));
+        $fields->addFieldToTab('Root.Main', GridField::create('Blocks', _t('Block.PLURALNAME', 'Blocks'), $gridSource, $gridConfig));
 
         return $fields;
     }
@@ -138,16 +138,16 @@ class BlockSet extends DataObject implements PermissionProvider
     {
         return array(
             'BLOCKSET_EDIT' => array(
-                'name' => 'Edit a Block Set',
-                'category' => 'Blocks',
+                'name' => _t('BlockSet.EditBlockSet','Edit a Block Set'),
+                'category' => _t('Block.PermissionCategory', 'Blocks'),
             ),
             'BLOCKSET_DELETE' => array(
-                'name' => 'Delete a Block Set',
-                'category' => 'Blocks',
+                'name' => _t('BlockSet.DeleteBlockSet','Delete a Block Set'),
+                'category' => _t('Block.PermissionCategory', 'Blocks'),
             ),
             'BLOCKSET_CREATE' => array(
-                'name' => 'Create a Block Set',
-                'category' => 'Blocks',
+                'name' => _t('BlockSet.CreateBlockSet','Create a Block Set'),
+                'category' => _t('Block.PermissionCategory', 'Blocks'),
             ),
         );
     }
