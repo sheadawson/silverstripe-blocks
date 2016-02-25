@@ -164,6 +164,5 @@ Add an existing block
 
 ## TODO
 
-- [ ] Add language/translation support
 - [ ] Re-add: Sorting primarily by Area (in order of declaration in config), on Pages (removed in favor of dr'ndr sorting)
 - [ ] Add icon/pic to base Block as method of recognition when dealing with lots of different blocks
