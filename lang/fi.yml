@@ -1,0 +1,49 @@
+fi:
+  Block:
+    Any: '(mikä tahansa)'
+    BlockArea: 'Sijaintialue'
+    BlockSetsAsString: 'Laatikkoryhmät: {sets}'
+    BlockType: 'Laatikon tyyppi'
+    Content: Sisältö
+    CreateBlock: 'Luo laatikko'
+    DeleteBlock: 'Poista laatikko'
+    EditBlock: 'Muokkaa laatikkoa'
+    ExtraCSSClasses: 'Lisä-CSS-luokat'
+    IsPublishedField: Julkaistu
+    PLURALNAME: Laatikot
+    PagesAsString: 'Sivut: {pages}'
+    PermissionCategory: Laatikot
+    PublishBlock: 'Julkaise laatikko'
+    SINGULARNAME: Laatikko
+    Title: Otsikko
+    TitleRequired: 'Laatikolle tulee syöttää otsikko'
+    UsageListAsString: 'Käytössä'
+    ViewerGroups: 'Oikeudet'
+  BlockAdmin:
+    MENUTITLE: Laatikot
+  BlockSet:
+    ApplyBlockSetToSelectedPageParentsAsWellAsChildren: 'Apply block set to selected page parents as well as children'
+    CreateBlockSet: 'Luo laatikkoryhmä'
+    DeleteBlockSet: 'Poista laatikkoryhmä'
+    EditBlockSet: 'Muokkaa laatikkoryhmää'
+    OnlyApplyToChildrenOfThesePages: 'Käytä vain näiden sivujen alasivuilla:'
+    OnlyApplyToThesePageTypes: 'Käytä vain näissä sivutyypeissä:'
+    OnlyApplyToThesePageTypesDescription: 'Valitut sivutyypit tulevat käyttämään tätä laatikkoryhmää automaattisesti. Jätä kaikki valitsematta käyttääksesi kaikilla sivutyypeillä.'
+    PLURALNAME: 'Laatikkoryhmät'
+    SINGULARNAME: 'Laatikkoryhmä'
+    Settings: Asetukset
+    YouCanAddBlocksToThisSetOnceYouHaveSavedIt: 'Voit lisätä laatikoita tähän ryhmään sitten kun olet tallentanut ryhmän ensimmäisen kerran.'
+  BlocksSiteTreeExtension:
+    BlocksInheritedFromBlockSets: 'Laatikkoryhmistä perityt laatikot'
+    DisableInheritedBlocks: 'Jätä pois nämä perityt laatikot'
+    DisableInheritedBlocksDescription: 'Voit valita mitä tahansa perittyjä laatikoita, joita et halua käyttää tällä sivulla.'
+    InheritBlocksFromBlockSets: 'Laatikkoryhmistä perittävät laatikot'
+    InheritedBlocksEditLink: 'Perittyjä laatikoita voi muokata {link_start}Laatikot-osiossa{link_end}'
+    NoBlockAreasConfigured: 'Tälle sivutyypille ei ole määritetty lainkaan laatikoiden sijaintialueita asetustiedostossa.'
+    NoInheritedBlocksToDisable: 'Tämä sivu ei peri mitään laatikoita.'
+    PreviewBlockAreasLink: 'Näytä laatikoiden sijaintialueet tällä sivulla'
+  ContentBlock:
+    PLURALNAME: 'Sisältölaatikot'
+    SINGULARNAME: 'Sisältölaatikko'
+  GridFieldConfigBlockManager:
+    AboveOrBelow: 'Ylä- tai alapuolella'

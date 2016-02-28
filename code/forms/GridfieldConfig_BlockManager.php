@@ -27,10 +27,10 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
         if ($editableRows) {
             $this->addComponent($editable = new GridFieldEditableColumns());
             $displayfields = array(
-                'singular_name' => array('title' => 'Block Type', 'field' => 'ReadonlyField'),
-                'Title' => array('title' => 'Title', 'field' => 'ReadonlyField'),
+                'singular_name' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'ReadonlyField'),
+                'Title' => array('title' => _t('Block.Title', 'Title'), 'field' => 'ReadonlyField'),
                 'BlockArea' => array(
-                    'title' => 'Block Area
+                    'title' => _t('Block.BlockArea', 'Block Area').'
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
                         // the &nbsp;s prevent wrapping of dropdowns
                     'callback' => function () use ($areasFieldSource) {
@@ -38,15 +38,15 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
                                 ->setHasEmptyDefault(true);
                         },
                 ),
-                'isPublishedNice' => array('title' => 'Published', 'field' => 'ReadonlyField'),
-                'UsageListAsString' => array('title' => 'Used on', 'field' => 'ReadonlyField'),
+                'isPublishedNice' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'ReadonlyField'),
+                'UsageListAsString' => array('title' => _t('Block.UsageListAsString', 'Used on'), 'field' => 'ReadonlyField'),
             );
 
             if ($aboveOrBelow) {
                 $displayfields['AboveOrBelow'] = array(
-                    'title' => 'Above or Below',
+                    'title' => _t('GridFieldConfigBlockManager.AboveOrBelow', 'Above or Below'),
                     'callback' => function () {
-                        return DropdownField::create('AboveOrBelow', 'Above or Below', BlockSet::config()->get('above_or_below_options'));
+                        return DropdownField::create('AboveOrBelow', _t('GridFieldConfigBlockManager.AboveOrBelow', 'Above or Below'), BlockSet::config()->get('above_or_below_options'));
                     },
                 );
             }
@@ -55,11 +55,11 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
             $this->addComponent($dcols = new GridFieldDataColumns());
 
             $displayfields = array(
-                'singular_name' => 'Block Type',
-                'Title' => 'Title',
-                'BlockArea' => 'Block Area',
-                'isPublishedNice' => 'Published',
-                'UsageListAsString' => 'Used on',
+                'singular_name' => _t('Block.BlockType', 'Block Type'),
+                'Title' => _t('Block.Title', 'Title'),
+                'BlockArea' => _t('Block.BlockArea', 'Block Area'),
+                'isPublishedNice' => _t('Block.IsPublishedField', 'Published'),
+                'UsageListAsString' => _t('Block.UsageListAsString', 'Used on'),
             );
             $dcols->setDisplayFields($displayfields);
             $dcols->setFieldCasting(array('UsageListAsString' => 'HTMLText->Raw'));

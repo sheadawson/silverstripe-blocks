@@ -36,29 +36,40 @@ class Block extends DataObject implements PermissionProvider
     );
 
     private static $summary_fields = array(
-        'singular_name' => 'Block Type',
-        'Title' => 'Title',
-        'isPublishedField' => 'Published',
-        'UsageListAsString' => 'Used on',
+        'singular_name',
+        'Title',
+        'isPublishedField',
+        'UsageListAsString',
     );
 
     private static $searchable_fields = array(
-        'Title' => array(
-            'title' => 'Title'
-        ),
-        'ClassName' => array(
-            'title' => 'Block Type'
-        )
+            'Title',
+            'ClassName',
     );
+
+    public function fieldLabels($includerelations = true)
+    {
+        $labels =  parent::fieldLabels($includerelations);
+        $labels = array_merge($labels, array(
+            'singular_name' => _t('Block.BlockType', 'Block Type'),
+            'Title' => _t('Block.Title', 'Title'),
+            'isPublishedField' => _t('Block.IsPublishedField', 'Published'),
+            'UsageListAsString' => _t('Block.UsageListAsString', 'Used on'),
+            'ExtraCSSClasses' => _t('Block.ExtraCSSClasses', 'Extra CSS Classes'),
+            'Content' => _t('Block.Content', 'Content'),
+            'ClassName' => 'Block Typeeee'
+        ));
+        return $labels;
+    }
 
     public function getDefaultSearchContext()
     {
         $context = parent::getDefaultSearchContext();
         $results = $this->blockManager->getBlockClasses();
         if (sizeof($results) > 1) {
-            $classfield = new DropdownField('ClassName', 'Block Type');
+            $classfield = new DropdownField('ClassName', _t('Block.BlockType', 'Block Type'));
             $classfield->setSource($results);
-            $classfield->setEmptyString('(any)');
+            $classfield->setEmptyString(_t('Block.Any', '(any)'));
             $context->addField($classfield);
         }
         return $context;
@@ -100,14 +111,14 @@ class Block extends DataObject implements PermissionProvider
 
         // ClassNmae - block type/class field
         $classes = $this->blockManager->getBlockClasses();
-        $fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', 'Block Type', $classes)->addExtraClass('block-type'), 'Title');
+        $fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', _t('Block.BlockType', 'Block Type'), $classes)->addExtraClass('block-type'), 'Title');
 
         // BlockArea - display areas field if on page edit controller
         if (Controller::curr()->class == 'CMSPageEditController') {
             $currentPage = Controller::curr()->currentPage();
             $fields->addFieldToTab(
                 'Root.Main',
-                DropdownField::create('ManyMany[BlockArea]', 'BlockArea', $this->blockManager->getAreasForPageType($currentPage->ClassName))
+                DropdownField::create('ManyMany[BlockArea]', _t('Block.BlockArea','Block Area'), $this->blockManager->getAreasForPageType($currentPage->ClassName))
                     ->setHasEmptyDefault(true)
                     ->setRightTitle($currentPage->areasPreviewButton()),
                 'ClassName'
@@ -149,6 +160,7 @@ class Block extends DataObject implements PermissionProvider
         $viewersOptionsSource['OnlyTheseUsers'] = _t('SiteTree.ACCESSONLYTHESE', 'Only these people (choose from list)');
         $viewersOptionsField->setSource($viewersOptionsSource)->setValue('Anyone');
 
+        $fields->addFieldToTab('Root', new Tab('ViewerGroups', _t('Block.ViewerGroups', 'Viewer Groups')));
         $fields->addFieldsToTab('Root.ViewerGroups', array(
             $viewersOptionsField,
             $viewerGroupsField,
@@ -183,7 +195,7 @@ class Block extends DataObject implements PermissionProvider
         $result = parent::validate();
 
         if (!$this->Title) {
-            $result->error('Block Title is required');
+            $result->error(_t('Block.TitleRequired', 'Block Title is required'));
         }
 
         return $result;
@@ -305,20 +317,20 @@ class Block extends DataObject implements PermissionProvider
     {
         return array(
             'BLOCK_EDIT' => array(
-                'name' => 'Edit a Block',
-                'category' => 'Blocks',
+                'name' => _t('Block.EditBlock', 'Edit a Block'),
+                'category' => _t('Block.PermissionCategory', 'Blocks'),
             ),
             'BLOCK_DELETE' => array(
-                'name' => 'Delete a Block',
-                'category' => 'Blocks',
+                'name' => _t('Block.DeleteBlock', 'Delete a Block'),
+                'category' => _t('Block.PermissionCategory', 'Blocks'),
             ),
             'BLOCK_CREATE' => array(
-                'name' => 'Create a Block',
-                'category' => 'Blocks',
+                'name' => _t('Block.CreateBlock', 'Create a Block'),
+                'category' => _t('Block.PermissionCategory', 'Blocks'),
             ),
             'BLOCK_PUBLISH' => array(
-                'name' => 'Publish a Block',
-                'category' => 'Blocks',
+                'name' => _t('Block.PublishBlock', 'Publish a Block'),
+                'category' => _t('Block.PermissionCategory', 'Blocks'),
             ),
         );
     }
@@ -353,14 +365,16 @@ class Block extends DataObject implements PermissionProvider
     {
         $pages = implode(', ', $this->Pages()->column('URLSegment'));
         $sets = implode(', ', $this->BlockSets()->column('Title'));
+        $_t_pages = _t('Block.PagesAsString', 'Pages: {pages}', '', array('pages' => $pages));
+        $_t_sets = _t('Block.BlockSetsAsString', 'Block Sets: {sets}', '', array('sets' => $sets));
         if ($pages && $sets) {
-            return "Pages: $pages<br />Block Sets: $sets";
+            return "$_t_pages<br />$_t_sets";
         }
         if ($pages) {
-            return "Pages: $pages";
+            return $_t_pages;
         }
         if ($sets) {
-            return "Block Sets: $sets";
+            return $_t_sets;
         }
     }
 

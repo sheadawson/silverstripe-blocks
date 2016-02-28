@@ -1,0 +1,49 @@
+en:
+  Block:
+    Any: (any)
+    BlockArea: 'Block Area'
+    BlockSetsAsString: 'Block Sets: {sets}'
+    BlockType: 'Block Type'
+    Content: Content
+    CreateBlock: 'Create a Block'
+    DeleteBlock: 'Delete a Block'
+    EditBlock: 'Edit a Block'
+    ExtraCSSClasses: 'Extra CSS Classes'
+    IsPublishedField: Published
+    PLURALNAME: Blocks
+    PagesAsString: 'Pages: {pages}'
+    PermissionCategory: Blocks
+    PublishBlock: 'Publish a Block'
+    SINGULARNAME: Block
+    Title: Title
+    TitleRequired: 'Block Title is required'
+    UsageListAsString: 'Used on'
+    ViewerGroups: 'Viewer Groups'
+  BlockAdmin:
+    MENUTITLE: Blocks
+  BlockSet:
+    ApplyBlockSetToSelectedPageParentsAsWellAsChildren: 'Apply block set to selected page parents as well as children'
+    CreateBlockSet: 'Create a Block Set'
+    DeleteBlockSet: 'Delete a Block Set'
+    EditBlockSet: 'Edit a Block Set'
+    OnlyApplyToChildrenOfThesePages: 'Only apply to children of these Pages:'
+    OnlyApplyToThesePageTypes: 'Only apply to these Page Types:'
+    OnlyApplyToThesePageTypesDescription: 'Selected Page Types will inherit this Block Set automatically. Leave all unchecked to apply to all page types.'
+    PLURALNAME: 'Block Sets'
+    SINGULARNAME: 'Block Set'
+    Settings: Settings
+    YouCanAddBlocksToThisSetOnceYouHaveSavedIt: 'You can add Blocks to this set once you have saved it for the first time'
+  BlocksSiteTreeExtension:
+    BlocksInheritedFromBlockSets: 'Blocks Inherited from Block Sets'
+    DisableInheritedBlocks: 'Disable Inherited Blocks'
+    DisableInheritedBlocksDescription: 'Select any inherited blocks that you would not like displayed on this page.'
+    InheritBlocksFromBlockSets: 'Inherit Blocks from Block Sets'
+    InheritedBlocksEditLink: 'Tip: Inherited blocks can be edited in the {link_start}Block Admin area{link_end}'
+    NoBlockAreasConfigured: 'This page type has no Block Areas configured.'
+    NoInheritedBlocksToDisable: 'This page has no inherited blocks to disable.'
+    PreviewBlockAreasLink: 'Preview Block Areas for this page'
+  ContentBlock:
+    PLURALNAME: 'Content Blocks'
+    SINGULARNAME: 'Content Block'
+  GridFieldConfigBlockManager:
+    AboveOrBelow: 'Above or Below'
