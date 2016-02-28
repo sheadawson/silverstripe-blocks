@@ -43,6 +43,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
         $areas = $this->blockManager->getAreasForPageType($this->owner->ClassName);
 
         if ($areas && count($areas)) {
+            $fields->addFieldToTab('Root', new Tab('Blocks', _t('Block.PLURALNAME')));
             $fields->addFieldToTab('Root.Blocks',
                     LiteralField::create('PreviewLink', $this->areasPreviewButton()));
 
@@ -61,7 +62,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
                 // 	'Name' => 'ASC'
                 // ));
 
-            $fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', 'Blocks', $gridSource, $gridConfig));
+            $fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', _t('Block.PLURALNAME', 'Blocks'), $gridSource, $gridConfig));
 
             // Blocks inherited from BlockSets
             if ($this->blockManager->getUseBlockSets()) {
@@ -72,28 +73,28 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 
                     if ($activeInherited->count()) {
                         $fields->addFieldsToTab('Root.Blocks', array(
-                            GridField::create('InheritedBlockList', 'Blocks Inherited from Block Sets', $activeInherited,
+                            GridField::create('InheritedBlockList', _t('BlocksSiteTreeExtension.BlocksInheritedFromBlockSets', 'Blocks Inherited from Block Sets'), $activeInherited,
                                 GridFieldConfig_BlockManager::create(false, false, false)),
-                            LiteralField::create('InheritedBlockListTip', "<p class='message'>Tip: Inherited blocks can be edited in the <a href='admin/block-admin'>Block Admin area</a><p>"),
+                            LiteralField::create('InheritedBlockListTip', "<p class='message'>"._t('BlocksSiteTreeExtension.InheritedBlocksEditLink', 'Tip: Inherited blocks can be edited in the {link_start}Block Admin area{link_end}', '', array('link_start' => '<a href="admin/block-admin">', 'link_end' => '</a>')).'<p>'),
                         ));
                     }
 
                     $fields->addFieldToTab('Root.Blocks',
-                            ListBoxField::create('DisabledBlocks', 'Disable Inherited Blocks',
+                            ListBoxField::create('DisabledBlocks', _t('BlocksSiteTreeExtension.DisableInheritedBlocks', 'Disable Inherited Blocks'),
                                     $inheritedBlocks->map('ID', 'Title'), null, null, true)
-                                    ->setDescription('Select any inherited blocks that you would not like displayed on this page.')
+                                    ->setDescription(_t('BlocksSiteTreeExtension.DisableInheritedBlocksDescription', 'Select any inherited blocks that you would not like displayed on this page.'))
                     );
                 } else {
                     $fields->addFieldToTab('Root.Blocks',
-                            ReadonlyField::create('DisabledBlocksReadOnly', 'Disable Inherited Blocks',
-                                    'This page has no inherited blocks to disable.'));
+                            ReadonlyField::create('DisabledBlocksReadOnly', _t('BlocksSiteTreeExtension.DisableInheritedBlocks', 'Disable Inherited Blocks'),
+                                    _t('BlocksSiteTreeExtension.NoInheritedBlocksToDisable','This page has no inherited blocks to disable.')));
                 }
 
                 $fields->addFieldToTab('Root.Blocks',
-                    CheckboxField::create('InheritBlockSets', 'Inherit Blocks from Block Sets'));
+                    CheckboxField::create('InheritBlockSets', _t('BlocksSiteTreeExtension.InheritBlocksFromBlockSets', 'Inherit Blocks from Block Sets')));
             }
         } else {
-            $fields->addFieldToTab('Root.Blocks', LiteralField::create('Blocks', 'This page type has no Block Areas configured.'));
+            $fields->addFieldToTab('Root.Blocks', LiteralField::create('Blocks', _t('BlocksSiteTreeExtension.NoBlockAreasConfigured', 'This page type has no Block Areas configured.')));
         }
     }
 
@@ -291,6 +292,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
      * */
     public function areasPreviewButton()
     {
-        return "<a class='ss-ui-button ss-ui-button-small' style='font-style:normal;' href='".$this->areasPreviewLink()."' target='_blank'>Preview Block Areas for this page</a>";
+        return "<a class='ss-ui-button ss-ui-button-small' style='font-style:normal;' href='".$this->areasPreviewLink()."' target='_blank'>"._t('BlocksSiteTreeExtension.PreviewBlockAreasLink', 'Preview Block Areas for this page').'</a>';
     }
 }
