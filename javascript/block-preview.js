@@ -7,5 +7,5 @@
  			self.append('<div class="block_preview_overlay"></div><div class="block_preview_label">' + label + '</div>');
  		});
 	});
- 
+
 }(jQuery));
