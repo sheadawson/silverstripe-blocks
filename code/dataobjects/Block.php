@@ -198,17 +198,15 @@ class Block extends DataObject implements PermissionProvider
      **/
     public function forTemplate()
     {
-        $controller = $this->getController();
-
         if ($this->BlockArea) {
             $template = array($this->class.'_'.$this->BlockArea);
 
             if (SSViewer::hasTemplate($template)) {
-                return $controller->renderWith($template);
+                return $this->renderWith($template);
             }
         }
 
-        return $controller->renderWith($this->ClassName);
+        return $this->renderWith($this->ClassName);
     }
 
     /**
