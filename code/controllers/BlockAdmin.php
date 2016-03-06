@@ -63,7 +63,7 @@ class BlockAdmin extends ModelAdmin
         $context = parent::getSearchContext();
         $fields = $context->getFields();
         $subclasses = $this->blockManager->getBlockClasses();
-        if (sizeof($subclasses) > 1) {
+        if ($fields->dataFieldByName('q[ClassName]') && sizeof($subclasses) > 1) {
             $fields->dataFieldByName('q[ClassName]')->setSource($subclasses);
             $fields->dataFieldByName('q[ClassName]')->setEmptyString('(any)');
         } else {
