@@ -65,6 +65,7 @@ BlockManager:
       #disabled_blocks: #allows you to disable specific blocks
       #  - ContentBlock
   use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)
+  block_area_preview: false # Disable block area preview button in CMS (default if undeclared: true)
 ```
 
 Remember to run ?flush=1 after modifying your .yml config to make sure it gets applied.
@@ -115,6 +116,8 @@ It's likely that your block areas may require different templates. You can achie
 #### Block Template
 
 Each subclass of Block requires it's own template with the same name as the class. So, SlideshowBlock.php would have a SlideshowBlock.ss template. If your block requires different templates depending on the BlockArea it's in, you can create SlideshowBlock_{AreaName}.ss
+
+The current page scope can be accessed from Block templates with `$CurrentPage`.
 
 ### Block Area Preview
 

@@ -20,6 +20,13 @@ class BlockManager extends Object
      **/
     private static $use_default_blocks = true;
 
+    /**
+     * Show a block area preview button in CMS
+     *
+     * @var bool
+     **/
+    private static $block_area_preview = true;
+
     public function __construct()
     {
         parent::__construct();
