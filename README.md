@@ -116,6 +116,8 @@ It's likely that your block areas may require different templates. You can achie
 
 Each subclass of Block requires it's own template with the same name as the class. So, SlideshowBlock.php would have a SlideshowBlock.ss template. If your block requires different templates depending on the BlockArea it's in, you can create SlideshowBlock_{AreaName}.ss
 
+The current page scope can be accessed from Block templates with `$CurrentPage`.
+
 ### Block Area Preview
 
 To aid website admins in identifying the areas they can apply blocks to, a "Preview Block Areas for this page" button is available in the cms. This opens the frontend view of the page in a new tab with ?block_preview=1. In Block Preview mode, Block Areas in the template are highlighted and labeled.

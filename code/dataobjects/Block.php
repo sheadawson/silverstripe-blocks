@@ -428,6 +428,16 @@ class Block extends DataObject implements PermissionProvider
     }
 
     /**
+     * Access current page scope from Block templates with $CurrentPage
+     *
+     * @return Controller
+     */
+    public function getCurrentPage()
+    {
+        return Controller::curr();
+    }
+
+    /**
      * @throws Exception
      *
      * @return BlockController
