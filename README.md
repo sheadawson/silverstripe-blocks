@@ -65,6 +65,7 @@ BlockManager:
       #disabled_blocks: #allows you to disable specific blocks
       #  - ContentBlock
   use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)
+  block_area_preview: false # Disable block area preview button in CMS (default if undeclared: true)
 ```
 
 Remember to run ?flush=1 after modifying your .yml config to make sure it gets applied.

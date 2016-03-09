@@ -44,8 +44,10 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 
         if ($areas && count($areas)) {
             $fields->addFieldToTab('Root', new Tab('Blocks', _t('Block.PLURALNAME')));
-            $fields->addFieldToTab('Root.Blocks',
-                    LiteralField::create('PreviewLink', $this->areasPreviewButton()));
+            if (BlockManager::config()->get('block_area_preview')) {
+                $fields->addFieldToTab('Root.Blocks',
+                        LiteralField::create('PreviewLink', $this->areasPreviewButton()));
+            }
 
             // Blocks related directly to this Page
             $gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true)
