@@ -118,11 +118,14 @@ class Block extends DataObject implements PermissionProvider
             $currentPage = Controller::curr()->currentPage();
             $fields->addFieldToTab(
                 'Root.Main',
-                DropdownField::create('ManyMany[BlockArea]', _t('Block.BlockArea','Block Area'), $this->blockManager->getAreasForPageType($currentPage->ClassName))
+                $blockAreaField = DropdownField::create('ManyMany[BlockArea]', _t('Block.BlockArea','Block Area'), $this->blockManager->getAreasForPageType($currentPage->ClassName))
                     ->setHasEmptyDefault(true)
-                    ->setRightTitle($currentPage->areasPreviewButton()),
+                    ->setEmptyString('(Select one)'),
                 'ClassName'
             );
+            if (BlockManager::config()->get('block_area_preview')) {
+                $blockAreaField->setRightTitle($currentPage->areasPreviewButton());
+            }
         }
 
         $fields->removeFieldFromTab('Root', 'BlockSets');
