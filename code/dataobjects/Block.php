@@ -221,7 +221,7 @@ class Block extends DataObject implements PermissionProvider
             }
         }
 
-        return $this->renderWith($this->ClassName);
+        return $this->renderWith($this->ClassName, $this->getController());
     }
 
     /**
@@ -460,6 +460,7 @@ class Block extends DataObject implements PermissionProvider
             throw new Exception("Could not find controller class for $this->classname");
         }
         $this->controller = Injector::inst()->create($controllerClass, $this);
+        $this->controller->init();
 
         return $this->controller;
     }
