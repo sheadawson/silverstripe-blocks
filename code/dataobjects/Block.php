@@ -118,11 +118,14 @@ class Block extends DataObject implements PermissionProvider
             $currentPage = Controller::curr()->currentPage();
             $fields->addFieldToTab(
                 'Root.Main',
-                DropdownField::create('ManyMany[BlockArea]', _t('Block.BlockArea','Block Area'), $this->blockManager->getAreasForPageType($currentPage->ClassName))
+                $blockAreaField = DropdownField::create('ManyMany[BlockArea]', _t('Block.BlockArea','Block Area'), $this->blockManager->getAreasForPageType($currentPage->ClassName))
                     ->setHasEmptyDefault(true)
-                    ->setRightTitle($currentPage->areasPreviewButton()),
+                    ->setEmptyString('(Select one)'),
                 'ClassName'
             );
+            if (BlockManager::config()->get('block_area_preview')) {
+                $blockAreaField->setRightTitle($currentPage->areasPreviewButton());
+            }
         }
 
         $fields->removeFieldFromTab('Root', 'BlockSets');
@@ -218,7 +221,7 @@ class Block extends DataObject implements PermissionProvider
             }
         }
 
-        return $this->renderWith($this->ClassName);
+        return $this->renderWith($this->ClassName, $this->getController());
     }
 
     /**
@@ -428,6 +431,16 @@ class Block extends DataObject implements PermissionProvider
     }
 
     /**
+     * Access current page scope from Block templates with $CurrentPage
+     *
+     * @return Controller
+     */
+    public function getCurrentPage()
+    {
+        return Controller::curr();
+    }
+
+    /**
      * @throws Exception
      *
      * @return BlockController
@@ -447,6 +460,7 @@ class Block extends DataObject implements PermissionProvider
             throw new Exception("Could not find controller class for $this->classname");
         }
         $this->controller = Injector::inst()->create($controllerClass, $this);
+        $this->controller->init();
 
         return $this->controller;
     }
