@@ -63,4 +63,14 @@ class Block_Controller extends Controller
     {
         return $this->block;
     }
+
+    /**
+     * CSS Classes to apply to block element in template.
+     *
+     * @return string $classes
+     */
+    public function CSSClasses($stopAtClass = 'DataObject')
+    {
+        return $this->getBlock()->CSSClasses($stopAtClass);
+    }
 }
