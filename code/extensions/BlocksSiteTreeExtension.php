@@ -133,7 +133,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
             $Pos==1 ? $block->First = 'first' : $block->First = false;
             $Pos==$LastPos ? $block->Last = 'last' : $block->Last = false;
             $block->FirstLast = "{$block->First} {$block->Last}";
-            if(!$block->First && !$block->Last){ $block->Middle = "Middle"; }
+            if(!$block->First && !$block->Last){ $block->Middle = "middle"; }
             $block->Pos = $Pos++;
         }
 
