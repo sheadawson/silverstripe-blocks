@@ -39,7 +39,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
                         },
                 ),
                 'isPublishedNice' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'ReadonlyField'),
-                'UsageListAsString' => array('title' => _t('Block.UsageListAsString', 'Used on'), 'field' => 'ReadonlyField'),
+                'UsageListAsString' => array('title' => _t('Block.UsageListAsString', 'Used on'), 'field' => 'LiteralField'),
             );
 
             if ($aboveOrBelow) {
