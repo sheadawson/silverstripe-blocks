@@ -97,6 +97,14 @@ class Block extends DataObject implements PermissionProvider
      */
     protected $controller;
 
+    /**
+     * @return mixed
+     */
+    public function getTypeForGridfield()
+    {
+        return $this->singular_name();
+    }
+
     public function getCMSFields()
     {
         Requirements::add_i18n_javascript(BLOCKS_DIR.'/javascript/lang');
