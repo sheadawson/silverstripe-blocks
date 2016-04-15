@@ -57,7 +57,7 @@ class Block extends DataObject implements PermissionProvider
             'UsageListAsString' => _t('Block.UsageListAsString', 'Used on'),
             'ExtraCSSClasses' => _t('Block.ExtraCSSClasses', 'Extra CSS Classes'),
             'Content' => _t('Block.Content', 'Content'),
-            'ClassName' => 'Block Typeeee'
+            'ClassName' => 'Block Type'
         ));
         return $labels;
     }
@@ -96,6 +96,14 @@ class Block extends DataObject implements PermissionProvider
      * @var BlockController
      */
     protected $controller;
+
+    /**
+     * @return mixed
+     */
+    public function getTypeForGridfield()
+    {
+        return $this->singular_name();
+    }
 
     public function getCMSFields()
     {
