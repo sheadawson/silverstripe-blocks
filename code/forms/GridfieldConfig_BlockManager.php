@@ -27,7 +27,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
         if ($editableRows) {
             $this->addComponent($editable = new GridFieldEditableColumns());
             $displayfields = array(
-                'singular_name' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'ReadonlyField'),
+                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'LiteralField'),
                 'Title' => array('title' => _t('Block.Title', 'Title'), 'field' => 'ReadonlyField'),
                 'BlockArea' => array(
                     'title' => _t('Block.BlockArea', 'Block Area').'
