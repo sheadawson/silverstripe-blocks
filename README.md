@@ -165,6 +165,29 @@ The BlockAdmin section is not always needed to be used. If you wish, you can rem
 CMSMenu::remove_menu_item('BlockAdmin');
 ```
 
+### Block icons
+
+Until this module properly supports icons, you can define icons by creating a `getTypeForGridfield` method in your block.
+Here's an example that uses font awesome:
+
+
+```php
+public function getIcon()
+{
+    return '<i class="fa fa-thumbs-up fa-3x" title="' . $this->singular_name() . '" aria-hidden="true"></i>';
+}
+public function getTypeForGridfield()
+{
+    $icon = $this->getIcon();
+    if ($icon) {
+        $obj = HTMLText::create();
+        $obj->setValue($icon);
+        return $obj;
+    } else {
+        return parent::getTypeForGridfield();
+    }
+}
+```
 
 ## Screenshots
 
