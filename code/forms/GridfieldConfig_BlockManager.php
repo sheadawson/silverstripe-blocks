@@ -38,7 +38,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
                                 ->setHasEmptyDefault(true);
                         },
                 ),
-                'isPublishedNice' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'ReadonlyField'),
+                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'LiteralField'),
                 'UsageListAsString' => array('title' => _t('Block.UsageListAsString', 'Used on'), 'field' => 'LiteralField'),
             );
 
