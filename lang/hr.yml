@@ -1,0 +1,49 @@
+hr:
+  Block:
+    Any: (bilo koji)
+    BlockArea: 'Područje bloka'
+    BlockSetsAsString: 'Blok setovi: {sets}'
+    BlockType: 'Vrsta bloka'
+    Content: Sadržaj
+    CreateBlock: 'Kreiraj blok'
+    DeleteBlock: 'Obriši blok'
+    EditBlock: 'Uredi block'
+    ExtraCSSClasses: 'Dodatne CSS klase'
+    IsPublishedField: Objavljen
+    PLURALNAME: Blokovi
+    PagesAsString: 'Stranice: {pages}'
+    PermissionCategory: Blokovi
+    PublishBlock: 'Objavi blok'
+    SINGULARNAME: Blok
+    Title: Naslov
+    TitleRequired: 'Naslov bloka je obavezan'
+    UsageListAsString: 'Korišten na'
+    ViewerGroups: 'Grupe za pregled'
+  BlockAdmin:
+    MENUTITLE: Blokovi
+  BlockSet:
+    ApplyBlockSetToSelectedPageParentsAsWellAsChildren: 'Primjeni blok set na označene stranice roditelja kao i djece'
+    CreateBlockSet: 'Kreiraj blok set'
+    DeleteBlockSet: 'Obriši blok set'
+    EditBlockSet: 'Uredi blok set'
+    OnlyApplyToChildrenOfThesePages: 'Primjeni samo na djecu ovih stranica:'
+    OnlyApplyToThesePageTypes: 'Primjeni samo na ove tipove stranica:'
+    OnlyApplyToThesePageTypesDescription: 'Odabrani tipovi stranica će naslijediti ovaj blok set automatski. Ostavite sve neoznačeno kako bi primjenili na sve tipove stranica.'
+    PLURALNAME: 'Blok setovi'
+    SINGULARNAME: 'Blok set'
+    Settings: Postavke
+    YouCanAddBlocksToThisSetOnceYouHaveSavedIt: 'Možete dodati blokove na ovaj set nakon što ga spremite po prvi puta'
+  BlocksSiteTreeExtension:
+    BlocksInheritedFromBlockSets: 'Blokovi nasljeđeni iz blok setova'
+    DisableInheritedBlocks: 'Onemogući nasljeđivanje blokova'
+    DisableInheritedBlocksDescription: 'Označi samo nasljeđene blokove koje ne želite prikazati na ovoj stranici.'
+    InheritBlocksFromBlockSets: 'Nasljeđeni blokovi iz blok setova'
+    InheritedBlocksEditLink: 'Savjet: Nasljeđeni blokovi mogu se uređivati {link_start}Blok admin sekciji{link_end}'
+    NoBlockAreasConfigured: 'Ovaj tip stranice nema konfiguriranih blok područja.'
+    NoInheritedBlocksToDisable: 'Ova stranica nema nasljećenih blokova za onemogućavanje.'
+    PreviewBlockAreasLink: 'Pregled blok područja za ovu stranicu'
+  ContentBlock:
+    PLURALNAME: 'Sadržajni blokovi'
+    SINGULARNAME: 'Sadržajni blok'
+  GridFieldConfigBlockManager:
+    AboveOrBelow: 'Iznad ili ispod'
