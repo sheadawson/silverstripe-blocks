@@ -95,8 +95,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
                 $fields->addFieldToTab('Root.Blocks',
                     CheckboxField::create('InheritBlockSets', _t('BlocksSiteTreeExtension.InheritBlocksFromBlockSets', 'Inherit Blocks from Block Sets')));
             }
-        } else {
-            $fields->addFieldToTab('Root.Blocks', LiteralField::create('Blocks', _t('BlocksSiteTreeExtension.NoBlockAreasConfigured', 'This page type has no Block Areas configured.')));
         }
     }
 
