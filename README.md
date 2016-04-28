@@ -57,6 +57,8 @@ BlockManager:
       prefix_default_css_classes: 'myprefix--' # prefix the automatically generated CSSClasses based on class name (default if undeclared: false)
       exclude_from_page_types: # Disable the Blocks tab completely on these pages of these types
         - ContactPage
+      include_only_in_page_types: # Alternatively, specify pages in which the Blocks tab should appear (If no pages are set, all are included)
+        - NewsPage
       #disabled_blocks: #allows you to disable specific blocks
       #  - ContentBlock
   use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)

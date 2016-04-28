@@ -183,6 +183,16 @@ class BlockManager extends Object
 
         return isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : array();
     }
+    
+    /*
+     * Inclusion of blocks in page types deine in yaml
+     */
+    public function getIncludeOnlyInPageTypes()
+    {
+        $config = $this->getThemeConfig();
+
+        return isset($config['include_only_in_page_types']) ? $config['include_only_in_page_types'] : array();
+    }
 
     /*
      * Usage of extra css classes configurable from yaml
