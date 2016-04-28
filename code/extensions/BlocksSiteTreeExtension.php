@@ -32,6 +32,12 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
      * */
     public function updateCMSFields(FieldList $fields)
     {
+        $includeOnlyInPageTypes = $this->blockManager->getIncludeOnlyInPageTypes();
+
+        if (!empty($includeOnlyInPageTypes) && !in_array($this->owner->ClassName, $includeOnlyInPageTypes)) {
+            return;
+        }
+
         if ($fields->fieldByName('Root.Blocks') || in_array($this->owner->ClassName, $this->blockManager->getExcludeFromPageTypes()) || !$this->owner->exists()) {
             return;
         }
