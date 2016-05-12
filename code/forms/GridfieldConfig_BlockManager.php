@@ -58,7 +58,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
                 'TypeForGridfield' => _t('Block.BlockType', 'Block Type'),
                 'Title' => _t('Block.Title', 'Title'),
                 'BlockArea' => _t('Block.BlockArea', 'Block Area'),
-                'isPublishedNice' => _t('Block.IsPublishedField', 'Published'),
+                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'LiteralField'),
                 'UsageListAsString' => _t('Block.UsageListAsString', 'Used on'),
             );
             $dcols->setDisplayFields($displayfields);
