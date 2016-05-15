@@ -27,7 +27,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
         if ($editableRows) {
             $this->addComponent($editable = new GridFieldEditableColumns());
             $displayfields = array(
-                'singular_name' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'ReadonlyField'),
+                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'LiteralField'),
                 'Title' => array('title' => _t('Block.Title', 'Title'), 'field' => 'ReadonlyField'),
                 'BlockArea' => array(
                     'title' => _t('Block.BlockArea', 'Block Area').'
@@ -38,8 +38,8 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
                                 ->setHasEmptyDefault(true);
                         },
                 ),
-                'isPublishedNice' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'ReadonlyField'),
-                'UsageListAsString' => array('title' => _t('Block.UsageListAsString', 'Used on'), 'field' => 'ReadonlyField'),
+                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'LiteralField'),
+                'UsageListAsString' => array('title' => _t('Block.UsageListAsString', 'Used on'), 'field' => 'LiteralField'),
             );
 
             if ($aboveOrBelow) {
@@ -55,10 +55,10 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
             $this->addComponent($dcols = new GridFieldDataColumns());
 
             $displayfields = array(
-                'singular_name' => _t('Block.BlockType', 'Block Type'),
+                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'LiteralField'),
                 'Title' => _t('Block.Title', 'Title'),
                 'BlockArea' => _t('Block.BlockArea', 'Block Area'),
-                'isPublishedNice' => _t('Block.IsPublishedField', 'Published'),
+                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'LiteralField'),
                 'UsageListAsString' => _t('Block.UsageListAsString', 'Used on'),
             );
             $dcols->setDisplayFields($displayfields);

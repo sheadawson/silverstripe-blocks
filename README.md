@@ -2,48 +2,43 @@
 
 The Blocks modules aims to provide developers with a flexible foundation for defining reusable blocks of content or widgets that can be managed in the CMS.
 
-### New Features in 1.0
+## Features
 
-* Blocks are now Versioned
-* Block_Controller added - Blocks with Forms now possible
-* BlockArea and Sort now managed on BlockSet_Blocks and SiteTree_Blocks many_many_ExtraFields
-* Drag and Drop re-ordering of Blocks added
-* Duplicate Block action now available in Block Admin
-* Global Blocks removed - use BlockSets applied to all pages instead
-* BlockSets and Block ExtraCSSClasses can be disabled in yaml config
-* Block lists show "Used on" column, displaying Pages/Sets the Block is used on
+* Blocks are Versioned
+* Blocks with Forms possible (through `Block_Controller`)
+* Drag and Drop re-ordering of Blocks
+* Duplicate Blocks
+* BlockSets for global blocks
 * Allow exclusion of any page types from using Blocks
 * Allow disabling of default/example block type - ContentBlock
 * Allow disabling of specific blocks
-* CMS Interfaces generally tidied up
 
-### Upgrading from 0.x
 
-1. Upgrade your module to the latest code, run dev/build
-2. The database structure of Blocks 1.0 differs slightly from earier versions, so backup your database, cross your fingers and run dev/tasks/BlockUpgradeTask. This will adapt your current Block records to the new structure. See BlockUpgradeTask.php for exact details.
-3. Check your blocks to make sure they're all happy.
+## Upgrading from 0.x
 
-### Requirements
+See [the upgrade guide](docs/upgrading.md)
+
+## Requirements
 
 * SilverStripe CMS ~3.1
 * [GridFieldExtensions](https://github.com/silverstripe-australia/silverstripe-gridfieldextensions)
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
 * [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons)
 
-### Recommended
+## Recommended
 * [GridField Copybutton](https://github.com/unisolutions/silverstripe-copybutton) (duplication of blocks, from BlockAdmin)
 
 ## Installation
 
-#### Composer
+```sh
+composer require sheadawson/silverstripe-blocks
+```
 
-	composer require sheadawson/silverstripe-blocks
-
-Install via composer, run dev/build
+Install via composer, run `dev/build`
 
 ## Quickstart
 
-### 1. Define Block Areas and Settings for your theme in mysite/_config/config.yml
+### 1. Define Block Areas and Settings for your theme in `mysite/_config/config.yml`
 
 ``` yml
 BlockManager:
@@ -68,11 +63,11 @@ BlockManager:
   block_area_preview: false # Disable block area preview button in CMS (default if undeclared: true)
 ```
 
-Remember to run ?flush=1 after modifying your .yml config to make sure it gets applied.
+Remember to run `?flush=1` after modifying your `.yml` config to make sure it gets applied.
 
 ### 2. Add Block Areas to your themes templates
 
-Adding the BeforeContent and AfterContent blocks would look something like
+Adding the `BeforeContent` and `AfterContent` blocks would look something like
 
 ```html
 <article>
@@ -83,7 +78,7 @@ Adding the BeforeContent and AfterContent blocks would look something like
 </article>
 ```
 
-$BlockArea(BeforeContent) will loop over and display all blocks assigned to the BeforeContent area on the current page
+`$BlockArea(BeforeContent)` will loop over and display all blocks assigned to the `BeforeContent` area on the current page
 
 You can limit a block area to a maximum number of blocks using the second limit parameter
 
@@ -95,11 +90,16 @@ You can limit a block area to a maximum number of blocks using the second limit 
 
 ### 3. Add Blocks to a page in the CMS
 
-You will now be able to add Blocks to Pages via the CMS page edit view and in the Blocks model admin. You can also define "BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
+You will now be able to add Blocks to Pages via the CMS page edit view and in the Blocks model admin. You can also define
+"BlockSets" in the Blocks model admin. BlockSets can be used to apply a common collection of blocks to pages that match the criteria you define on the set.
 
-This module ships with a basic "ContentBlock", but this can be disabled through the BlockManager::use_default_blocks config.
+This module ships with a basic `ContentBlock`, but this can be disabled through the `BlockManager::use_default_blocks config.
 
-#### Restrict Blocks to viewer groups or logged in users
+
+## Help
+
+
+### Restrict Blocks to viewer groups or logged in users
 
 When editing a block, you can restrict who can see it in the frontend by selecting "logged in users" or "users from these groups" under the Viewer Groups tab.
 
@@ -107,23 +107,29 @@ When editing a block, you can restrict who can see it in the frontend by selecti
 
 There are 2 types of templates you should be aware of.
 
-#### BlockArea Template
+### BlockArea Template
 
-The BlockArea template is responsible for looping over and rendering all blocks in that area. You can override this by creating a copy of the default BlockArea.ss and placing it in your theme's templates/Includes folder.
+The `BlockArea` template is responsible for looping over and rendering all blocks in that area. You can override this by
+creating a copy of the default `BlockArea.ss` and placing it in your theme's `templates/Includes` folder.
 
-It's likely that your block areas may require different templates. You can achieve this by creating a BlockArea_{AreaName}.ss template.
+It's likely that your block areas may require different templates. You can achieve this by creating a `BlockArea_{AreaName}.ss` template.
 
-#### Block Template
+### Block Template
 
-Each subclass of Block requires it's own template with the same name as the class. So, SlideshowBlock.php would have a SlideshowBlock.ss template. If your block requires different templates depending on the BlockArea it's in, you can create SlideshowBlock_{AreaName}.ss
+Each subclass of Block requires it's own template with the same name as the class. So, `SlideshowBlock.php` would have a
+`SlideshowBlock.ss` template. If your block requires different templates depending on the `BlockArea` it's in, you can
+create `SlideshowBlock_{AreaName}.ss`
 
 The current page scope can be accessed from Block templates with `$CurrentPage`.
 
 ### Block Area Preview
 
-To aid website admins in identifying the areas they can apply blocks to, a "Preview Block Areas for this page" button is available in the cms. This opens the frontend view of the page in a new tab with ?block_preview=1. In Block Preview mode, Block Areas in the template are highlighted and labeled.
+To aid website admins in identifying the areas they can apply blocks to, a "Preview Block Areas for this page" button
+is available in the cms. This opens the frontend view of the page in a new tab with `?block_preview=1`.
+In Block Preview mode, Block Areas in the template are highlighted and labeled.
 
-There is some markup required in your BlockArea templates to facilitate this: The css class "block-area" and the data-areaid='$AreaID' attribute.
+There is some markup required in your BlockArea templates to facilitate this: The css class `block-area` and the
+`data-areaid='$AreaID'` attribute.
 
 ```html
 <div class='block-area' data-areaid='$AreaID'>
@@ -159,7 +165,31 @@ The BlockAdmin section is not always needed to be used. If you wish, you can rem
 CMSMenu::remove_menu_item('BlockAdmin');
 ```
 
-### Screenshots
+### Block icons
+
+Until this module properly supports icons, you can define icons by creating a `getTypeForGridfield` method in your block.
+Here's an example that uses font awesome:
+
+
+```php
+public function getIcon()
+{
+    return '<i class="fa fa-thumbs-up fa-3x" title="' . $this->singular_name() . '" aria-hidden="true"></i>';
+}
+public function getTypeForGridfield()
+{
+    $icon = $this->getIcon();
+    if ($icon) {
+        $obj = HTMLText::create();
+        $obj->setValue($icon);
+        return $obj;
+    } else {
+        return parent::getTypeForGridfield();
+    }
+}
+```
+
+## Screenshots
 
 ![](docs/images/overview-1.0.png)
 Overview

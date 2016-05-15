@@ -50,6 +50,7 @@ class Block extends DataObject implements PermissionProvider
     public function fieldLabels($includerelations = true)
     {
         $labels =  parent::fieldLabels($includerelations);
+
         $labels = array_merge($labels, array(
             'singular_name' => _t('Block.BlockType', 'Block Type'),
             'Title' => _t('Block.Title', 'Title'),
@@ -57,14 +58,16 @@ class Block extends DataObject implements PermissionProvider
             'UsageListAsString' => _t('Block.UsageListAsString', 'Used on'),
             'ExtraCSSClasses' => _t('Block.ExtraCSSClasses', 'Extra CSS Classes'),
             'Content' => _t('Block.Content', 'Content'),
-            'ClassName' => 'Block Typeeee'
+            'ClassName' => _t('Block.BlockType', 'Block Type'),
         ));
+
         return $labels;
     }
 
     public function getDefaultSearchContext()
     {
         $context = parent::getDefaultSearchContext();
+
         $results = $this->blockManager->getBlockClasses();
         if (sizeof($results) > 1) {
             $classfield = new DropdownField('ClassName', _t('Block.BlockType', 'Block Type'));
@@ -72,6 +75,7 @@ class Block extends DataObject implements PermissionProvider
             $classfield->setEmptyString(_t('Block.Any', '(any)'));
             $context->addField($classfield);
         }
+
         return $context;
     }
 
@@ -96,6 +100,14 @@ class Block extends DataObject implements PermissionProvider
      * @var BlockController
      */
     protected $controller;
+
+    /**
+     * @return mixed
+     */
+    public function getTypeForGridfield()
+    {
+        return $this->singular_name();
+    }
 
     public function getCMSFields()
     {
@@ -408,6 +420,20 @@ class Block extends DataObject implements PermissionProvider
         $field->setValue($this->isPublished());
 
         return $field->Nice();
+    }
+
+    /**
+     * @return HTMLText
+     */
+    public function isPublishedIcon()
+    {
+        $obj = HTMLText::create();
+        if ($this->isPublished()) {
+            $obj->setValue('<img src="/framework/admin/images/alert-good.gif" />');
+        } else {
+            $obj->setValue('<img src="/framework/admin/images/alert-bad.gif" />');
+        }
+        return $obj;
     }
 
     /**
