@@ -55,7 +55,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
             $this->addComponent($dcols = new GridFieldDataColumns());
 
             $displayfields = array(
-                'TypeForGridfield' => _t('Block.BlockType', 'Block Type'),
+                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'LiteralField'),
                 'Title' => _t('Block.Title', 'Title'),
                 'BlockArea' => _t('Block.BlockArea', 'Block Area'),
                 'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'LiteralField'),
