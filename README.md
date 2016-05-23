@@ -1,5 +1,7 @@
 # SilverStripe Blocks
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sheadawson/silverstripe-blocks/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sheadawson/silverstripe-blocks/?branch=master)
+
 The Blocks modules aims to provide developers with a flexible foundation for defining reusable blocks of content or widgets that can be managed in the CMS.
 
 ## Features
