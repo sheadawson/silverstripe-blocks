@@ -203,20 +203,6 @@ class Block extends DataObject implements PermissionProvider
     }
 
     /**
-     * @return ValidationResult
-     */
-    public function validate()
-    {
-        $result = parent::validate();
-
-        if (!$this->Title) {
-            $result->error(_t('Block.TitleRequired', 'Block Title is required'));
-        }
-
-        return $result;
-    }
-
-    /**
      * Renders this block with appropriate templates
      * looks for templates that match BlockClassName_AreaName
      * falls back to BlockClassName.
