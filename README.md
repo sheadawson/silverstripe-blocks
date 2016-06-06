@@ -191,6 +191,10 @@ public function getTypeForGridfield()
 }
 ```
 
+## Translatable Blocks
+
+For creating Blocks with translatable content, using the [translatble module](https://github.com/silverstripe/silverstripe-translatable), see [this gist](https://gist.github.com/thezenmonkey/6e6730023af553f12e3ab762ace3b08a) for a kick start.
+
 ## Screenshots
 
 ![](docs/images/overview-1.0.png)
