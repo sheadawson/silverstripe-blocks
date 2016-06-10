@@ -122,6 +122,19 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
             $list = $list->limit($limit);
         }
 
+        // add some situational-awareness to Blocks for use in templates
+        $Pos = 1;
+        $LastPos = $list->count();
+        foreach ($list as $block) {
+            $block->Parent = $this->owner;
+            $block->TotalItems = $LastPos;
+            $Pos==1 ? $block->First = 'first' : $block->First = false;
+            $Pos==$LastPos ? $block->Last = 'last' : $block->Last = false;
+            $block->FirstLast = "{$block->First} {$block->Last}";
+            if(!$block->First && !$block->Last){ $block->Middle = "middle"; }
+            $block->Pos = $Pos++;
+        }
+
         $data = array();
         $data['HasBlockArea'] = ($this->owner->canEdit() && isset($_REQUEST['block_preview']) && $_REQUEST['block_preview']) || $list->Count() > 0;
         $data['BlockArea'] = $list;
