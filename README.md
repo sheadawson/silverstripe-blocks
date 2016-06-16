@@ -58,9 +58,9 @@ BlockManager:
 
       use_blocksets: false # Whether to use BlockSet functionality (default if undeclared: true)
       use_extra_css_classes: true # Whether to allow cms users to add extra css classes to blocks (default if undeclared: false)
-      include_from_page_types: # Enable the Blocks tab on these pages of these types
+      pagetype_whitelist: # Enable the Blocks tab on these pages of these types
         - HomePage
-      exclude_from_page_types: # Disable the Blocks tab completely on these pages of these types (can not use with include_from_page_type at the same time, otherwise, only based on include_from_page_type)
+      exclude_from_page_types: # Disable the Blocks tab completely on these pages of these types (can not use with pagetype_whitelist at the same time, otherwise, only based on pagetype_whitelist)
         - ContactPage
   use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)
 ```
