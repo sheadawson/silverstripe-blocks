@@ -1,5 +1,7 @@
 # SilverStripe Blocks
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sheadawson/silverstripe-blocks/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sheadawson/silverstripe-blocks/?branch=master)
+
 The Blocks modules aims to provide developers with a flexible foundation for defining reusable blocks of content or widgets that can be managed in the CMS.
 
 ## Features
@@ -42,25 +44,27 @@ Install via composer, run `dev/build`
 
 ``` yml
 BlockManager:
-  themes:
-    simple:
-      areas:
-        Sidebar: true # a Sidebar area will be available on all page types in simple theme
-        BeforeContent:
-          only: HomePage # a BeforeContent area will be available only on HomePage page types in simple theme
-        AfterContent:
-          except: HomePage # a AfterContent area will be available on all page types except HomePage in simple theme
-        Footer: true # a Footer area will be available on all page types in simple theme
+	themes:
+		simple:
+			areas:
+				Sidebar: true # a Sidebar area will be available on all page types in simple theme
+				BeforeContent:
+					only: HomePage # a BeforeContent area will be available only on HomePage page types in simple theme
+				AfterContent:
+					except: HomePage # a AfterContent area will be available on all page types except HomePage in simple theme
+				Footer: true # a Footer area will be available on all page types in simple theme
 
-      use_blocksets: false # Whether to use BlockSet functionality (default if undeclared: true)
-      use_extra_css_classes: true # Whether to allow cms users to add extra css classes to blocks (default if undeclared: false)
-      prefix_default_css_classes: 'myprefix--' # prefix the automatically generated CSSClasses based on class name (default if undeclared: false)
-      exclude_from_page_types: # Disable the Blocks tab completely on these pages of these types
-        - ContactPage
-      #disabled_blocks: #allows you to disable specific blocks
-      #  - ContentBlock
-  use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)
-  block_area_preview: false # Disable block area preview button in CMS (default if undeclared: true)
+			#use_blocksets: false # Whether to use BlockSet functionality (default if undeclared: true)
+			#use_extra_css_classes: true # Whether to allow cms users to add extra css classes to blocks (default if undeclared: false)
+			#prefix_default_css_classes: 'myprefix--' # prefix the automatically generated CSSClasses based on class name (default if undeclared: false)
+			#pagetype_whitelist: # Enable the Blocks tab only pages of these types (optional)
+			#  - HomePage
+			#pagetype_blacklist: # Disable the Blocks tab on pages of these types (optional)
+			#  - ContactPage
+			#disabled_blocks: #allows you to disable specific blocks (optional)
+			#  - ContentBlock
+	#use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)
+	#block_area_preview: false # Disable block area preview button in CMS (default if undeclared: true)
 ```
 
 Remember to run `?flush=1` after modifying your `.yml` config to make sure it gets applied.
@@ -151,10 +155,10 @@ If your running your SS instance "themeless", you can configure your blocks usin
 
 ``` yml
 BlockManager:
-  themes:
-    default:
-      areas:
-      ...
+	themes:
+		default:
+			areas:
+			...
 ```
 
 ### Remove the Blocks button from the main CMS menu
@@ -174,20 +178,24 @@ Here's an example that uses font awesome:
 ```php
 public function getIcon()
 {
-    return '<i class="fa fa-thumbs-up fa-3x" title="' . $this->singular_name() . '" aria-hidden="true"></i>';
+		return '<i class="fa fa-thumbs-up fa-3x" title="' . $this->singular_name() . '" aria-hidden="true"></i>';
 }
 public function getTypeForGridfield()
 {
-    $icon = $this->getIcon();
-    if ($icon) {
-        $obj = HTMLText::create();
-        $obj->setValue($icon);
-        return $obj;
-    } else {
-        return parent::getTypeForGridfield();
-    }
+		$icon = $this->getIcon();
+		if ($icon) {
+				$obj = HTMLText::create();
+				$obj->setValue($icon);
+				return $obj;
+		} else {
+				return parent::getTypeForGridfield();
+		}
 }
 ```
+
+## Translatable Blocks
+
+For creating Blocks with translatable content, using the [translatble module](https://github.com/silverstripe/silverstripe-translatable), see [this gist](https://gist.github.com/thezenmonkey/6e6730023af553f12e3ab762ace3b08a) for a kick start.
 
 ## Screenshots
 
