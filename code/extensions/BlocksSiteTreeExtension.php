@@ -65,7 +65,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 		$areas = $this->blockManager->getAreasForPageType($this->owner->ClassName);
 
 		if ($areas && count($areas)) {
-			$fields->addFieldToTab('Root', new Tab('Blocks', _t('Block.PLURALNAME')));
+			$fields->addFieldToTab('Root', new Tab('Blocks', _t('Block.PLURALNAME', 'Blocks')));
 			if (BlockManager::config()->get('block_area_preview')) {
 				$fields->addFieldToTab('Root.Blocks',
 						LiteralField::create('PreviewLink', $this->areasPreviewButton()));
