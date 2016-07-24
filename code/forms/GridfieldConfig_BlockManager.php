@@ -34,8 +34,11 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
                         // the &nbsp;s prevent wrapping of dropdowns
                     'callback' => function () use ($areasFieldSource) {
-                            return DropdownField::create('BlockArea', 'Block Area', $areasFieldSource)
-                                ->setHasEmptyDefault(true);
+                            $areasField = DropdownField::create('BlockArea', 'Block Area', $areasFieldSource);
+                            if (count($areasFieldSource) > 1) {
+                                $areasField->setHasEmptyDefault(true);
+                            }
+                            return $areasField;
                         },
                 ),
                 'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'LiteralField'),
