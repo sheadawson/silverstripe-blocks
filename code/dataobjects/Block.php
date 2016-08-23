@@ -419,9 +419,9 @@ class Block extends DataObject implements PermissionProvider
     {
         $obj = HTMLText::create();
         if ($this->isPublished()) {
-            $obj->setValue('<img src="/framework/admin/images/alert-good.gif" />');
+            $obj->setValue('<img src="' . FRAMEWORK_ADMIN_DIR . '/images/alert-good.gif" />');
         } else {
-            $obj->setValue('<img src="/framework/admin/images/alert-bad.gif" />');
+            $obj->setValue('<img src="' . FRAMEWORK_ADMIN_DIR . '/images/alert-bad.gif" />');
         }
         return $obj;
     }
