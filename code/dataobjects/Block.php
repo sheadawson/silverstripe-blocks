@@ -128,13 +128,17 @@ class Block extends DataObject implements PermissionProvider
         // BlockArea - display areas field if on page edit controller
         if (Controller::curr()->class == 'CMSPageEditController') {
             $currentPage = Controller::curr()->currentPage();
+            $areas = $this->blockManager->getAreasForPageType($currentPage->ClassName);
             $fields->addFieldToTab(
                 'Root.Main',
-                $blockAreaField = DropdownField::create('ManyMany[BlockArea]', _t('Block.BlockArea','Block Area'), $this->blockManager->getAreasForPageType($currentPage->ClassName))
-                    ->setHasEmptyDefault(true)
-                    ->setEmptyString('(Select one)'),
+                $blockAreaField = DropdownField::create('ManyMany[BlockArea]', _t('Block.BlockArea','Block Area'), $areas),
                 'ClassName'
             );
+
+            if (count($areas) > 1) {
+                $blockAreaField->setEmptyString('(Select one)');
+            }
+
             if (BlockManager::config()->get('block_area_preview')) {
                 $blockAreaField->setRightTitle($currentPage->areasPreviewButton());
             }
@@ -415,9 +419,9 @@ class Block extends DataObject implements PermissionProvider
     {
         $obj = HTMLText::create();
         if ($this->isPublished()) {
-            $obj->setValue('<img src="/framework/admin/images/alert-good.gif" />');
+            $obj->setValue('<img src="' . FRAMEWORK_ADMIN_DIR . '/images/alert-good.gif" />');
         } else {
-            $obj->setValue('<img src="/framework/admin/images/alert-bad.gif" />');
+            $obj->setValue('<img src="' . FRAMEWORK_ADMIN_DIR . '/images/alert-bad.gif" />');
         }
         return $obj;
     }

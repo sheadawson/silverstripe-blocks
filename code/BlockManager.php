@@ -124,11 +124,17 @@ class BlockManager extends Object
 			$classes[$k] = singleton($k)->singular_name();
 		}
 
-		if (!Config::inst()->get('BlockManager', 'use_default_blocks')) {
+		$themeConfig = $this->getThemeConfig();
+
+		if (!isset($themeConfig['use_default_blocks']) || !Config::inst()->get('BlockManager', 'use_default_blocks')) {
 			unset($classes['ContentBlock']);
 		}
 
-		if ($disabledArr = Config::inst()->get('BlockManager', 'disabled_blocks')) {
+		$disabledArr = Config::inst()->get('BlockManager', 'disabled_blocks') ? Config::inst()->get('BlockManager', 'disabled_blocks') : array();
+		if (isset($themeConfig['disabled_blocks'])) {
+		    $disabledArr = array_merge($disabledArr, $themeConfig['disabled_blocks']);
+		}
+		if (count($disabledArr)) {
 			foreach ($disabledArr as $k => $v) {
 				unset($classes[$v]);
 			}

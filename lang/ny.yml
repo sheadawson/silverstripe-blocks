@@ -1,0 +1,49 @@
+nl:
+  Block:
+    Any: '(alle)'
+    BlockArea: 'Blokgebied'
+    BlockSetsAsString: 'Blokreeks: {sets}'
+    BlockType: 'Bloktype'
+    Content: 'Inhoud'
+    CreateBlock: 'Creër een Blok'
+    DeleteBlock: 'Verwijder een Blok'
+    EditBlock: 'Bewerk een Blok'
+    ExtraCSSClasses: 'Extra CSS Classes'
+    IsPublishedField: 'Gepubliceerd'
+    PLURALNAME: 'Blokken'
+    PagesAsString: "Pagina's: {Pagina's}"
+    PermissionCategory: 'Blokken'
+    PublishBlock: 'Publiceer een Blok'
+    SINGULARNAME: 'Blok'
+    Title: 'Titel'
+    TitleRequired: 'Blok Titel is verplicht'
+    UsageListAsString: 'Gebruikt op'
+    ViewerGroups: 'Viewer Groepen'
+  BlockAdmin:
+    MENUTITLE: 'Blokken'
+  BlockSet:
+    ApplyBlockSetToSelectedPageParentsAsWellAsChildren: "Blokreeks toepassen op geselecteerde pagina's én onderliggende pagina's"
+    CreateBlockSet: 'Creër een Blokreeks'
+    DeleteBlockSet: 'Verwijder een Blokreeks'
+    EditBlockSet: 'Bewerk een Blokreeks'
+    OnlyApplyToChildrenOfThesePages: "Alleen van toepassing op onderliggende pagina's van deze pagina's:"
+    OnlyApplyToThesePageTypes: 'Alleen van toepassing op deze paginatypen:'
+    OnlyApplyToThesePageTypesDescription: 'Geselecteerde paginatypen zullen deze Blokreeks automatisch overnemen. Laat alle uitgeschakeld om toe te passen op alle paginatypen.'
+    PLURALNAME: 'Blokreeks'
+    SINGULARNAME: 'Blokreeksen'
+    Settings: 'Instellingen'
+    YouCanAddBlocksToThisSetOnceYouHaveSavedIt: 'U kunt blokken toevoegen aan deze reeks zodra u het voor de eerste keer heeft opgeslagen'
+  BlocksSiteTreeExtension:
+    BlocksInheritedFromBlockSets: 'Blokken overgenomen van Blokreeksen'
+    DisableInheritedBlocks: 'Overgenomen Blokken uitschakelen'
+    DisableInheritedBlocksDescription: 'Selecteer alle overgenomen blokken welke u niet wilt tonen op deze pagina.'
+    InheritBlocksFromBlockSets: 'Neem Blokken over van Blokreeksen'
+    InheritedBlocksEditLink: 'Tip: Overgenomen blokken kunnen worden bewerkt in de {link_start}Blokadminstrator{link_end}'
+    NoBlockAreasConfigured: 'Dit paginatype heeft geen Blokgebieden geconfigureerd.'
+    NoInheritedBlocksToDisable: 'Deze pagina heeft geen overgenomen Blokken om uit te schakelen.'
+    PreviewBlockAreasLink: 'Bekijk Blokgebieden voor deze pagina'
+  ContentBlock:
+    PLURALNAME: 'Inhoudblokken'
+    SINGULARNAME: 'Inhoudblok'
+  GridFieldConfigBlockManager:
+    AboveOrBelow: 'Boven of onder'
