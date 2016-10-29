@@ -57,7 +57,6 @@ class Block extends DataObject implements PermissionProvider
             'isPublishedField' => _t('Block.IsPublishedField', 'Published'),
             'UsageListAsString' => _t('Block.UsageListAsString', 'Used on'),
             'ExtraCSSClasses' => _t('Block.ExtraCSSClasses', 'Extra CSS Classes'),
-            'Content' => _t('Block.Content', 'Content'),
             'ClassName' => _t('Block.BlockType', 'Block Type'),
         ));
 

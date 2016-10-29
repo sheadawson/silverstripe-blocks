@@ -25,4 +25,14 @@ class ContentBlock extends Block
     private static $db = array(
         'Content' => 'HTMLText',
     );
+
+	public function fieldLabels($includeRelations = true)
+	{
+		return array_merge(
+			parent::fieldLabels($includeRelations),
+			array(
+				'Content' => _t('Block.Content', 'Content'),
+			)
+		);
+	}
 }
