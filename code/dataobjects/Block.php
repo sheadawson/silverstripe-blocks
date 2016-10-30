@@ -111,24 +111,25 @@ class Block extends DataObject implements PermissionProvider
 
     public function getCMSFields()
     {
-        $this->beforeUpdateCMSFields(function($fields) {
+        $self = $this;
+        $this->beforeUpdateCMSFields(function($fields) use($self) {
             /** @var FieldList $fields */
             Requirements::add_i18n_javascript(BLOCKS_DIR . '/javascript/lang');
 
             // this line is a temporary patch until I can work out why this dependency isn't being
             // loaded in some cases...
-            if (!$this->blockManager) {
-                $this->blockManager = singleton('BlockManager');
+            if (!$self->blockManager) {
+                $self->blockManager = singleton('BlockManager');
             }
 
             // ClassNmae - block type/class field
-            $classes = $this->blockManager->getBlockClasses();
+            $classes = $self->blockManager->getBlockClasses();
             $fields->addFieldToTab('Root.Main', DropdownField::create('ClassName', _t('Block.BlockType', 'Block Type'), $classes)->addExtraClass('block-type'), 'Title');
 
             // BlockArea - display areas field if on page edit controller
             if (Controller::curr()->class == 'CMSPageEditController') {
                 $currentPage = Controller::curr()->currentPage();
-                $areas = $this->blockManager->getAreasForPageType($currentPage->ClassName);
+                $areas = $self->blockManager->getAreasForPageType($currentPage->ClassName);
                 $fields->addFieldToTab(
                     'Root.Main',
                     $blockAreaField = DropdownField::create('ManyMany[BlockArea]', _t('Block.BlockArea', 'Block Area'), $areas),
@@ -152,7 +153,7 @@ class Block extends DataObject implements PermissionProvider
             $fields->removeByName('Area');
             $fields->removeByName('Published');
 
-            if ($this->blockManager->getUseExtraCSSClasses()) {
+            if ($self->blockManager->getUseExtraCSSClasses()) {
                 $fields->addFieldToTab('Root.Main', $fields->dataFieldByName('ExtraCSSClasses'), 'Title');
             } else {
                 $fields->removeByName('ExtraCSSClasses');
@@ -193,7 +194,7 @@ class Block extends DataObject implements PermissionProvider
             //         new GridField(
             //                 'Pages',
             //                 'Used on pages',
-            //                 $this->Pages(),
+            //                 $self->Pages(),
             //                 $gconf = GridFieldConfig_Base::create()));
             // enhance gridfield with edit links to pages if GFEditSiteTreeItemButtons is available
             // a GFRecordEditor (default) combined with BetterButtons already gives the possibility to
