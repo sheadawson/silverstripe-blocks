@@ -126,9 +126,11 @@ class BlockManager extends Object
 
 		$themeConfig = $this->getThemeConfig();
 
-		if (!isset($themeConfig['use_default_blocks']) || !Config::inst()->get('BlockManager', 'use_default_blocks')) {
-			unset($classes['ContentBlock']);
-		}
+		if (isset($themeConfig['use_default_blocks']) && !$themeConfig['use_default_blocks']) {
+	        unset($classes['ContentBlock']);
+	    } else if (!$this->config()->use_default_blocks) {
+	        unset($classes['ContentBlock']);
+	    }
 
 		$disabledArr = Config::inst()->get('BlockManager', 'disabled_blocks') ? Config::inst()->get('BlockManager', 'disabled_blocks') : array();
 		if (isset($themeConfig['disabled_blocks'])) {
