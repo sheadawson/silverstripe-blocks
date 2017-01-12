@@ -1,4 +1,13 @@
 <?php
+
+namespace Blocks;
+
+use SilverStripe\Core\Object;
+use SilverStripe\ORM\ArrayLib;
+use SilverStripe\CMS\Controllers\SiteConfig;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Forms\FormField;
 /**
  * BlockManager.
  *
@@ -118,7 +127,7 @@ class BlockManager extends Object
 
 	public function getBlockClasses()
 	{
-		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Block'));
+		$classes = ArrayLib::valuekey(ClassInfo::subclassesFor('Blocks\Model\Block'));
 		array_shift($classes);
 		foreach ($classes as $k => $v) {
 			$classes[$k] = singleton($k)->singular_name();

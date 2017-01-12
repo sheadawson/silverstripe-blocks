@@ -1,4 +1,10 @@
 <?php
+
+namespace Blocks\Controllers;
+
+use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\ORM\Versioning\Versioned;
+
 /**
  * BlockAdmin.
  *
@@ -7,8 +13,8 @@
 class BlockAdmin extends ModelAdmin
 {
     private static $managed_models = array(
-        'Block',
-        'BlockSet',
+        'Blocks\Model\Block',
+        'Blocks\Model\BlockSet',
     );
 
     private static $url_segment = 'block-admin';
@@ -18,7 +24,7 @@ class BlockAdmin extends ModelAdmin
     public $showImportForm = false;
 
     private static $dependencies = array(
-        'blockManager' => '%$blockManager',
+        'blockManager' => '%$Blocks\BlockManager',
     );
 
     public $blockManager;

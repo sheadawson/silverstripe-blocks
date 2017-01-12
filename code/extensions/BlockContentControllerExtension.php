@@ -1,5 +1,10 @@
 <?php
 
+namespace Blocks\Extensions;
+
+use SilverStripe\View\Requirements;
+use SilverStripe\Core\Extension;
+
 class BlocksContentControllerExtension extends Extension
 {
     /**

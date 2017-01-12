@@ -1,4 +1,23 @@
 <?php
+
+namespace Blocks\Forms;
+
+use Blocks\Model\Block;
+
+use SilverStripe\Control\Controller;
+
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\GridField\GridFieldConfig;
+use SilverStripe\Forms\GridField\GridFieldDataColumns;
+use SilverStripe\Forms\GridField\GridFieldButtonRow;
+use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
+use SilverStripe\Forms\GridField\GridFieldSortableHeader;
+use SilverStripe\Forms\GridField\GridFieldFilterHeader;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridFieldCopyButton;
+use SilverStripe\Forms\GridField\GridFieldEditButton;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+
 /**
  * GridFieldConfig_BlockManager
  * Provides a reusable GridFieldConfig for managing Blocks.
@@ -108,7 +127,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
     public function addExisting()
     {
         $classes = $this->blockManager->getBlockClasses();
-        
+
         $this->addComponent($add = new GridFieldAddExistingSearchButton());
         $add->setSearchList(Block::get()->filter(array(
             'ClassName' => array_keys($classes),

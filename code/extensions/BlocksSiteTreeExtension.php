@@ -1,4 +1,25 @@
 <?php
+
+namespace Blocks\Extensions;
+
+use Blocks\BlockManager;
+use Blocks\Model\Blockset;
+use Blocks\Forms\GridFieldConfig_BlockManager;
+
+use SilverStripe\CMS\Model\SiteTreeExtension;
+
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\FieldList;
+
+use SilverStripe\View\SSViewer;
+
+use SilverStripe\ORM\ArrayList;
+
+use SilverStripe\Security\Permission;
+
+use SilverStripe\Control\Controller;
+
 /**
  * BlocksSiteTreeExtension.
  *
@@ -10,8 +31,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 		'InheritBlockSets' => 'Boolean',
 	);
 	private static $many_many = array(
-		'Blocks' => 'Block',
-		'DisabledBlocks' => 'Block',
+		'Blocks' => 'Blocks\Model\Block',
+		'DisabledBlocks' => 'Blocks\Model\Block',
 	);
 	public static $many_many_extraFields = array(
 		'Blocks' => array(
@@ -23,8 +44,9 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 		'InheritBlockSets' => 1,
 	);
 	private static $dependencies = array(
-		'blockManager' => '%$blockManager',
+		'blockManager' => '%$Blocks\BlockManager',
 	);
+
 	public $blockManager;
 
 

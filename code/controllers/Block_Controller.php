@@ -1,4 +1,10 @@
 <?php
+
+namespace Blocks\Controller;
+
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\Director;
+
 /**
  * Block_Controller.
  *

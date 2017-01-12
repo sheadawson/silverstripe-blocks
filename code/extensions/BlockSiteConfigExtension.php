@@ -1,4 +1,9 @@
 <?php
+
+namespace Blocks\Extensions;
+
+use SilverStripe\ORM\DataExtension;
+
 /**
  * Legacy extension to aid with migrating from Blocks 0.x to 1.x.
  *

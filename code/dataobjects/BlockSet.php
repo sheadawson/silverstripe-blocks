@@ -1,4 +1,21 @@
 <?php
+
+namespace Blocks\Model;
+
+use Blocks\Forms\GridFieldConfig_BlockManager;
+
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\ArrayLib;
+
+use SilverStripe\CMS\Model\SiteTree;
+
+use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Security\Permission;
+use SilverStripe\Security\Group;
+
+use SilverStripe\Forms\TreeMultiselectField;
+use SilverStripe\Forms\CheckboxField;
+
 /**
  * BlockSet.
  *
@@ -6,6 +23,11 @@
  */
 class BlockSet extends DataObject implements PermissionProvider
 {
+    /**
+     * @var array
+     **/
+    private static $table_name = "BlockSet";
+
     /**
      * @var array
      **/
@@ -19,8 +41,8 @@ class BlockSet extends DataObject implements PermissionProvider
      * @var array
      **/
     private static $many_many = array(
-        'Blocks' => 'Block',
-        'PageParents' => 'SiteTree',
+        'Blocks' => 'Blocks\Model\Block',
+        'PageParents' => 'SilverStripe\CMS\Model\SiteTree',
     );
 
     /**
@@ -129,7 +151,7 @@ class BlockSet extends DataObject implements PermissionProvider
         return Permission::check('ADMIN') || Permission::check('BLOCK_DELETE');
     }
 
-    public function canCreate($member = null)
+    public function canCreate($member = null, $context = array())
     {
         return Permission::check('ADMIN') || Permission::check('BLOCK_CREATE');
     }
