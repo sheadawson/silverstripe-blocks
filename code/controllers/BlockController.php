@@ -1,10 +1,16 @@
 <?php
+
+namespace SheaDawson\Blocks\controllers;
+
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\Director;
+
 /**
  * Block_Controller.
  *
  * @author Shea Dawson <shea@silverstripe.com.au>
  */
-class Block_Controller extends Controller
+class BlockController extends Controller
 {
     /**
      * @var Block

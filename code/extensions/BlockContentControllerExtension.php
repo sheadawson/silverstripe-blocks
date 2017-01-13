@@ -1,5 +1,10 @@
 <?php
 
+namespace SheaDawson\Blocks\extensions;
+
+use SilverStripe\View\Requirements;
+use SilverStripe\Core\Extension;
+
 class BlocksContentControllerExtension extends Extension
 {
     /**

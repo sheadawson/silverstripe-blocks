@@ -28,5 +28,10 @@
     },
     "extra": {
         "installer-name": "blocks"
+    },
+    "autoload": {
+    	"psr-4": {
+    		"SheaDawson\\Blocks\\": "code/"
+    	}
     }
 }

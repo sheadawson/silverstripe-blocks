@@ -1,7 +1,10 @@
 <?php
 
-class ContentBlock extends Block
-{
+namespace SheaDawson\Blocks\model;
+
+class ContentBlock extends Block {
+
+	private static $table_name = "ContentBlock";
     /**
      * If the singular name is set in a private static $singular_name, it cannot be changed using the translation files
      * for some reason. Fix it by defining a method that handles the translation.
