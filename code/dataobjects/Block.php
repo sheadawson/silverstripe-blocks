@@ -1,8 +1,8 @@
 <?php
 
-namespace Blocks\Model;
+namespace SheaDawson\Blocks\model;
 
-use Blocks\BlockManager;
+use SheaDawson\Blocks\BlockManager;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Versioning\Versioned;
@@ -52,15 +52,15 @@ class Block extends DataObject implements PermissionProvider
      * @var array
      */
     private static $many_many = array(
-        'ViewerGroups' => 'SilverStripe\Security\Group',
+        "ViewerGroups" => "SilverStripe\Security\Group",
     );
 
     /**
      * @var array
      */
     private static $belongs_many_many = array(
-        'Pages' => 'SilverStripe\CMS\Model\SiteTree',
-        'BlockSets' => 'BlockSet',
+        "Pages" => "SilverStripe\CMS\Model\SiteTree",
+        "BlockSets" => "SheaDawson\Blocks\model\BlockSet",
     );
 
     private static $summary_fields = array(

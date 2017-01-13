@@ -1,10 +1,10 @@
 <?php
 
-namespace Blocks\Extensions;
+namespace SheaDawson\Blocks\extensions;
 
-use Blocks\BlockManager;
-use Blocks\Model\Blockset;
-use Blocks\Forms\GridFieldConfig_BlockManager;
+use SheaDawson\Blocks\BlockManager;
+use SheaDawson\Blocks\model\Blockset;
+use SheaDawson\Blocks\forms\GridFieldConfig_BlockManager;
 
 use SilverStripe\CMS\Model\SiteTreeExtension;
 
@@ -31,8 +31,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 		'InheritBlockSets' => 'Boolean',
 	);
 	private static $many_many = array(
-		'Blocks' => 'Blocks\Model\Block',
-		'DisabledBlocks' => 'Blocks\Model\Block',
+		"Blocks" => "SheaDawson\Blocks\model\Block",
+		"DisabledBlocks" => "SheaDawson\Blocks\model\Block",
 	);
 	public static $many_many_extraFields = array(
 		'Blocks' => array(
@@ -44,7 +44,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 		'InheritBlockSets' => 1,
 	);
 	private static $dependencies = array(
-		'blockManager' => '%$Blocks\BlockManager',
+		'blockManager' => '%$blockManager',
 	);
 
 	public $blockManager;

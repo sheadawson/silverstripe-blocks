@@ -1,8 +1,9 @@
 <?php
 
-namespace Blocks\Forms;
+namespace SheaDawson\Blocks\forms;
 
-use Blocks\Model\Block;
+use SheaDawson\Blocks\model\Block;
+use SheaDawson\Blocks\model\BlockSet;
 
 use SilverStripe\Control\Controller;
 

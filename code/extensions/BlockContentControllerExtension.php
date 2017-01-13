@@ -1,6 +1,6 @@
 <?php
 
-namespace Blocks\Extensions;
+namespace SheaDawson\Blocks\extensions;
 
 use SilverStripe\View\Requirements;
 use SilverStripe\Core\Extension;

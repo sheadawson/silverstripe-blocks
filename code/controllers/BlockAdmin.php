@@ -1,6 +1,6 @@
 <?php
 
-namespace Blocks\Controllers;
+namespace SheaDawson\Blocks\controllers;
 
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\ORM\Versioning\Versioned;
@@ -13,13 +13,13 @@ use SilverStripe\ORM\Versioning\Versioned;
 class BlockAdmin extends ModelAdmin
 {
     private static $managed_models = array(
-        'Blocks\Model\Block',
-        'Blocks\Model\BlockSet',
+        "SheaDawson\Blocks\model\Block",
+        "SheaDawson\Blocks\model\BlockSet",
     );
 
-    private static $url_segment = 'block-admin';
+    private static $url_segment = "block-admin";
 
-    private static $menu_title = 'Blocks';
+    private static $menu_title = "Blocks";
 
     public $showImportForm = false;
 

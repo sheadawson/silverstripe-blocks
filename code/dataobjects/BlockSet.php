@@ -1,8 +1,8 @@
 <?php
 
-namespace Blocks\Model;
+namespace SheaDawson\Blocks\model;
 
-use Blocks\Forms\GridFieldConfig_BlockManager;
+use SheaDawson\Blocks\forms\GridFieldConfig_BlockManager;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ArrayLib;
@@ -41,8 +41,8 @@ class BlockSet extends DataObject implements PermissionProvider
      * @var array
      **/
     private static $many_many = array(
-        'Blocks' => 'Blocks\Model\Block',
-        'PageParents' => 'SilverStripe\CMS\Model\SiteTree',
+        "Blocks" => "SheaDawson\Blocks\model\Block",
+        "PageParents" => "SilverStripe\CMS\Model\SiteTree",
     );
 
     /**
