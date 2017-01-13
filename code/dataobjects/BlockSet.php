@@ -2,7 +2,7 @@
 
 namespace SheaDawson\Blocks\model;
 
-use SheaDawson\Blocks\forms\GridFieldConfig_BlockManager;
+use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ArrayLib;
@@ -83,7 +83,7 @@ class BlockSet extends DataObject implements PermissionProvider
         }
 
         $fields->removeFieldFromTab('Root', 'Blocks');
-        $gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true, true)
+        $gridConfig = GridFieldConfigBlockManager::create(true, true, true, true, true)
             ->addExisting()
             ->addComponent(new GridFieldOrderableRows());
 

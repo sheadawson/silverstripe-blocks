@@ -25,7 +25,7 @@ use SilverStripe\Forms\GridField\GridFieldDeleteAction;
  *
  * @author Shea Dawson <shea@livesource.co.nz>
  */
-class GridFieldConfig_BlockManager extends GridFieldConfig
+class GridFieldConfigBlockManager extends GridFieldConfig
 {
     public $blockManager;
 

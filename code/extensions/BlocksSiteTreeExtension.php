@@ -4,7 +4,7 @@ namespace SheaDawson\Blocks\extensions;
 
 use SheaDawson\Blocks\BlockManager;
 use SheaDawson\Blocks\model\Blockset;
-use SheaDawson\Blocks\forms\GridFieldConfig_BlockManager;
+use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
 
 use SilverStripe\CMS\Model\SiteTreeExtension;
 
@@ -94,7 +94,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 			}
 
 			// Blocks related directly to this Page
-			$gridConfig = GridFieldConfig_BlockManager::create(true, true, true, true)
+			$gridConfig = GridFieldConfigBlockManager::create(true, true, true, true)
 				->addExisting($this->owner->class)
 				//->addBulkEditing()
 				->addComponent(new GridFieldOrderableRows())
@@ -120,7 +120,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 					if ($activeInherited->count()) {
 						$fields->addFieldsToTab('Root.Blocks', array(
 							GridField::create('InheritedBlockList', _t('BlocksSiteTreeExtension.BlocksInheritedFromBlockSets', 'Blocks Inherited from Block Sets'), $activeInherited,
-								GridFieldConfig_BlockManager::create(false, false, false)),
+								GridFieldConfigBlockManager::create(false, false, false)),
 							LiteralField::create('InheritedBlockListTip', "<p class='message'>"._t('BlocksSiteTreeExtension.InheritedBlocksEditLink', 'Tip: Inherited blocks can be edited in the {link_start}Block Admin area{link_end}', '', array('link_start' => '<a href="admin/block-admin">', 'link_end' => '</a>')).'<p>'),
 						));
 					}
