@@ -44,7 +44,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 		'InheritBlockSets' => 1,
 	);
 	private static $dependencies = array(
-		'blockManager' => '%$blockManager',
+		'blockManager' => '%$SheaDawson\\Blocks\\BlockManager',
 	);
 
 	public $blockManager;
