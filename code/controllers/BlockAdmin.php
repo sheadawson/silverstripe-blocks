@@ -24,7 +24,7 @@ class BlockAdmin extends ModelAdmin
     public $showImportForm = false;
 
     private static $dependencies = array(
-        'blockManager' => '%$Blocks\BlockManager',
+        "blockManager" => '%$blockManager',
     );
 
     public $blockManager;

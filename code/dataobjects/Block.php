@@ -115,7 +115,7 @@ class Block extends DataObject implements PermissionProvider
      * @var array
      */
     private static $dependencies = array(
-        'blockManager' => '%$Blocks\BlockManager',
+        'blockManager' => '%$blockManager',
     );
 
     /**
