@@ -1,4 +1,7 @@
 <?php
+
+use SilverStripe\Core\Config\Config;
+
 //define global path to Components' root folder
 if (!defined('BLOCKS_DIR')) {
     define('BLOCKS_DIR', rtrim(basename(dirname(__FILE__))));

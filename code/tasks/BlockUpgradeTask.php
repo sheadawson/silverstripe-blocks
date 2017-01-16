@@ -1,4 +1,13 @@
 <?php
+
+namespace SheaDawson\Blocks\tasks;
+
+use SheaDawson\Blocks\model\Block;
+use SheaDawson\Blocks\model\BlockSet;
+
+use SilverStripe\ORM\DB;
+use SilverStripe\SiteConfig\SiteConfig;
+
 /**
  * BlockUpgradeTask
  * Run this task to migrate from Blocks 0.x to 1.x.

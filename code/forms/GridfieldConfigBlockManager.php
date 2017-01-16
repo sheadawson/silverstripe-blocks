@@ -1,11 +1,31 @@
 <?php
+
+namespace SheaDawson\Blocks\forms;
+
+use SheaDawson\Blocks\model\Block;
+use SheaDawson\Blocks\model\BlockSet;
+
+use SilverStripe\Control\Controller;
+
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\GridField\GridFieldConfig;
+use SilverStripe\Forms\GridField\GridFieldDataColumns;
+use SilverStripe\Forms\GridField\GridFieldButtonRow;
+use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
+use SilverStripe\Forms\GridField\GridFieldSortableHeader;
+use SilverStripe\Forms\GridField\GridFieldFilterHeader;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridFieldCopyButton;
+use SilverStripe\Forms\GridField\GridFieldEditButton;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+
 /**
  * GridFieldConfig_BlockManager
  * Provides a reusable GridFieldConfig for managing Blocks.
  *
  * @author Shea Dawson <shea@livesource.co.nz>
  */
-class GridFieldConfig_BlockManager extends GridFieldConfig
+class GridFieldConfigBlockManager extends GridFieldConfig
 {
     public $blockManager;
 
@@ -13,7 +33,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
     {
         parent::__construct();
 
-        $this->blockManager = Injector::inst()->get('BlockManager');
+        $this->blockManager = Injector::inst()->get("SheaDawson\Blocks\BlockManager");
         $controllerClass = Controller::curr()->class;
         // Get available Areas (for page) or all in case of ModelAdmin
         if ($controllerClass == 'CMSPageEditController') {
@@ -108,7 +128,7 @@ class GridFieldConfig_BlockManager extends GridFieldConfig
     public function addExisting()
     {
         $classes = $this->blockManager->getBlockClasses();
-        
+
         $this->addComponent($add = new GridFieldAddExistingSearchButton());
         $add->setSearchList(Block::get()->filter(array(
             'ClassName' => array_keys($classes),

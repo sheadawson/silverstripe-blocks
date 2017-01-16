@@ -1,4 +1,10 @@
 <?php
+
+namespace SheaDawson\Blocks\controllers;
+
+use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\ORM\Versioning\Versioned;
+
 /**
  * BlockAdmin.
  *
@@ -7,18 +13,18 @@
 class BlockAdmin extends ModelAdmin
 {
     private static $managed_models = array(
-        'Block',
-        'BlockSet',
+        "SheaDawson\Blocks\model\Block",
+        "SheaDawson\Blocks\model\BlockSet",
     );
 
-    private static $url_segment = 'block-admin';
+    private static $url_segment = "block-admin";
 
-    private static $menu_title = 'Blocks';
+    private static $menu_title = "Blocks";
 
     public $showImportForm = false;
 
     private static $dependencies = array(
-        'blockManager' => '%$blockManager',
+        "blockManager" => '%$SheaDawson\\Blocks\\BlockManager',
     );
 
     public $blockManager;
@@ -43,7 +49,7 @@ class BlockAdmin extends ModelAdmin
      **/
     public function getEditForm($id = null, $fields = null)
     {
-        Versioned::reading_stage('Stage');
+        // Versioned::reading_stage('Stage');
         $form = parent::getEditForm($id, $fields);
 
         if ($blockGridField = $form->Fields()->fieldByName('Block')) {

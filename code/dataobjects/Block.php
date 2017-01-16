@@ -1,4 +1,29 @@
 <?php
+
+namespace SheaDawson\Blocks\model;
+
+use SheaDawson\Blocks\BlockManager;
+
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\Versioning\Versioned;
+
+use SilverStripe\Core\ClassInfo;
+
+use SilverStripe\View\Requirements;
+use SilverStripe\View\SSViewer;
+
+use SilverStripe\Control\Controller;
+
+use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Security\Permission;
+use SilverStripe\Security\Group;
+use SilverStripe\Security\Member;
+
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\HTMLText;
+use SilverStripe\Forms\OptionsetField;
+use SilverStripe\Forms\ListboxField;
+use SilverStripe\Forms\Tab;
 /**
  * Block
  * Subclass this basic Block with your more interesting ones.
@@ -7,6 +32,9 @@
  */
 class Block extends DataObject implements PermissionProvider
 {
+
+	private static $table_name = 'Block';
+
     /**
      * @var array
      */
@@ -24,15 +52,15 @@ class Block extends DataObject implements PermissionProvider
      * @var array
      */
     private static $many_many = array(
-        'ViewerGroups' => 'Group',
+        "ViewerGroups" => "SilverStripe\Security\Group",
     );
 
     /**
      * @var array
      */
     private static $belongs_many_many = array(
-        'Pages' => 'SiteTree',
-        'BlockSets' => 'BlockSet',
+        "Pages" => "SilverStripe\CMS\Model\SiteTree",
+        "BlockSets" => "SheaDawson\Blocks\model\BlockSet",
     );
 
     private static $summary_fields = array(
@@ -43,8 +71,8 @@ class Block extends DataObject implements PermissionProvider
     );
 
     private static $searchable_fields = array(
-            'Title',
-            'ClassName',
+        'Title',
+        'ClassName',
     );
 
     public function fieldLabels($includerelations = true)
@@ -87,7 +115,7 @@ class Block extends DataObject implements PermissionProvider
      * @var array
      */
     private static $dependencies = array(
-        'blockManager' => '%$blockManager',
+        'blockManager' => '%$SheaDawson\\Blocks\\BlockManager',
     );
 
     /**
@@ -167,7 +195,6 @@ class Block extends DataObject implements PermissionProvider
                 _t('SiteTree.ACCESSHEADER', 'Who can view this page?')
             );
             $viewerGroupsField = ListboxField::create('ViewerGroups', _t('SiteTree.VIEWERGROUPS', 'Viewer Groups'))
-                ->setMultiple(true)
                 ->setSource($groupsMap)
                 ->setAttribute(
                     'data-placeholder',
@@ -289,7 +316,7 @@ class Block extends DataObject implements PermissionProvider
 
         // check for specific groups
         if ($member && is_numeric($member)) {
-            $member = DataObject::get_by_id('Member', $member);
+            $member = Member::get()->byID($member);
         }
         if ($this->CanViewType == 'OnlyTheseUsers' && $member && $member->inGroups($this->ViewerGroups())) {
             return true;
@@ -308,7 +335,7 @@ class Block extends DataObject implements PermissionProvider
         return Permission::check('ADMIN') || Permission::check('BLOCK_DELETE');
     }
 
-    public function canCreate($member = null)
+    public function canCreate($member = null, $context = array())
     {
         return Permission::check('ADMIN') || Permission::check('BLOCK_CREATE');
     }
@@ -467,7 +494,7 @@ class Block extends DataObject implements PermissionProvider
             return $this->controller;
         }
         foreach (array_reverse(ClassInfo::ancestry($this->class)) as $blockClass) {
-            $controllerClass = "{$blockClass}_Controller";
+            $controllerClass = "{$blockClass}Controller";
             if (class_exists($controllerClass)) {
                 break;
             }
