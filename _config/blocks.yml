@@ -6,17 +6,15 @@ After:
 ---
 SiteTree:
   extensions:
-    - BlocksSiteTreeExtension
+    - SheaDawson\Blocks\extensions\BlocksSiteTreeExtension
 ContentController:
   extensions:
-    - BlocksContentControllerExtension
+    - SheaDawson\Blocks\extensions\BlocksContentControllerExtension
   url_handlers:
     'block/$ID!': 'handleBlock'
 SiteConfig:
   extensions:
-    - BlockSiteConfigExtension
-
+    - SheaDawson\Blocks\extensions\BlockSiteConfigExtension
 Block:
   extensions:
-    - Versioned('Stage','Live')
-
+    - SilverStripe\ORM\Versioning\Versioned('Stage','Live')
