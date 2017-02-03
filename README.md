@@ -7,7 +7,7 @@ The Blocks modules aims to provide developers with a flexible foundation for def
 ## Features
 
 * Blocks are Versioned
-* Blocks with Forms possible (through `Block_Controller`)
+* Blocks with Forms possible (through `BlockController`)
 * Drag and Drop re-ordering of Blocks
 * Duplicate Blocks
 * BlockSets for global blocks
@@ -22,7 +22,7 @@ See [the upgrade guide](docs/upgrading.md)
 
 ## Requirements
 
-* SilverStripe CMS ~3.1
+* SilverStripe CMS ^4.0
 * [GridFieldExtensions](https://github.com/silverstripe-australia/silverstripe-gridfieldextensions)
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
 * [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons)
