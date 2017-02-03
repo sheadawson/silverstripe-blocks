@@ -14,7 +14,9 @@ use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
-use SilverStripe\MultiValueField\MultiValueCheckboxField;
+use SilverStripe\MultiValueField\Fields\MultiValueCheckboxField;
+use SilverStripe\MultiValueField\Fields\MultiValueField;
+
 /**
  * BlockSet.
  *
@@ -32,7 +34,7 @@ class BlockSet extends DataObject implements PermissionProvider
      **/
     private static $db = [
         'Title' => 'Varchar(255)',
-        'PageTypes' => 'MultiValueField',
+        'PageTypes' => MultiValueField::class,
         'IncludePageParent' => 'Boolean',
     ];
 
