@@ -9,7 +9,7 @@ use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\CMS\Model\SiteTree
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
 use SilverStripe\Control\Controller;
@@ -137,6 +137,7 @@ class Block extends DataObject implements PermissionProvider
 
     public function getCMSFields()
     {
+    	error_log('in here');
         $self = $this;
         $this->beforeUpdateCMSFields(function($fields) use($self) {
             /** @var FieldList $fields */
@@ -145,7 +146,7 @@ class Block extends DataObject implements PermissionProvider
             // this line is a temporary patch until I can work out why this dependency isn't being
             // loaded in some cases...
             if (!$self->blockManager) {
-                $self->blockManager = singleton('BlockManager');
+                $self->blockManager = singleton("SheaDawson\\Blocks\\BlockManager");
             }
 
             // ClassNmae - block type/class field
@@ -503,6 +504,7 @@ class Block extends DataObject implements PermissionProvider
         if (!class_exists($controllerClass)) {
             throw new ValidationException("Could not find controller class for $this->classname");
         }
+
         $this->controller = Injector::inst()->create($controllerClass, $this);
         $this->controller->init();
 
