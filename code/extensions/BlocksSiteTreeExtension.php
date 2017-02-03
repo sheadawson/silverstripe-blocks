@@ -5,19 +5,13 @@ namespace SheaDawson\Blocks\extensions;
 use SheaDawson\Blocks\BlockManager;
 use SheaDawson\Blocks\model\Blockset;
 use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
-
 use SilverStripe\CMS\Model\SiteTreeExtension;
-
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
-
 use SilverStripe\View\SSViewer;
-
 use SilverStripe\ORM\ArrayList;
-
 use SilverStripe\Security\Permission;
-
 use SilverStripe\Control\Controller;
 
 /**
@@ -27,25 +21,25 @@ use SilverStripe\Control\Controller;
  */
 class BlocksSiteTreeExtension extends SiteTreeExtension
 {
-	private static $db = array(
+	private static $db = [
 		'InheritBlockSets' => 'Boolean',
-	);
-	private static $many_many = array(
+	];
+	private static $many_many = [
 		"Blocks" => "SheaDawson\Blocks\model\Block",
 		"DisabledBlocks" => "SheaDawson\Blocks\model\Block",
-	);
-	public static $many_many_extraFields = array(
-		'Blocks' => array(
+	];
+	public static $many_many_extraFields = [
+		'Blocks' => [
 			'Sort' => 'Int',
 			'BlockArea' => 'Varchar',
-		),
-	);
-	private static $defaults = array(
+		],
+	];
+	private static $defaults = [
 		'InheritBlockSets' => 1,
-	);
-	private static $dependencies = array(
+	];
+	private static $dependencies = [
 		'blockManager' => '%$blockManager',
-	);
+	];
 
 	public $blockManager;
 
@@ -118,11 +112,11 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 					$activeInherited = $this->getBlocksFromAppliedBlockSets(null, false);
 
 					if ($activeInherited->count()) {
-						$fields->addFieldsToTab('Root.Blocks', array(
+						$fields->addFieldsToTab('Root.Blocks', [
 							GridField::create('InheritedBlockList', _t('BlocksSiteTreeExtension.BlocksInheritedFromBlockSets', 'Blocks Inherited from Block Sets'), $activeInherited,
 								GridFieldConfigBlockManager::create(false, false, false)),
-							LiteralField::create('InheritedBlockListTip', "<p class='message'>"._t('BlocksSiteTreeExtension.InheritedBlocksEditLink', 'Tip: Inherited blocks can be edited in the {link_start}Block Admin area{link_end}', '', array('link_start' => '<a href="admin/block-admin">', 'link_end' => '</a>')).'<p>'),
-						));
+							LiteralField::create('InheritedBlockListTip', "<p class='message'>"._t('BlocksSiteTreeExtension.InheritedBlocksEditLink', 'Tip: Inherited blocks can be edited in the {link_start}Block Admin area{link_end}', '', ['link_start' => '<a href="admin/block-admin">', 'link_end' => '</a>']).'<p>'),
+						]);
 					}
 
 					$fields->addFieldToTab('Root.Blocks',
@@ -166,14 +160,14 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 			$list = $list->limit($limit);
 		}
 
-		$data = array();
+		$data = [];
 		$data['HasBlockArea'] = ($this->owner->canEdit() && isset($_REQUEST['block_preview']) && $_REQUEST['block_preview']) || $list->Count() > 0;
 		$data['BlockArea'] = $list;
 		$data['AreaID'] = $area;
 
 		$data = $this->owner->customise($data);
 
-		$template = array('BlockArea_'.$area);
+		$template = ['BlockArea_'.$area];
 
 		if (SSViewer::hasTemplate($template)) {
 			return $data->renderWith($template);

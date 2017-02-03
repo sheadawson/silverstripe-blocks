@@ -10,9 +10,9 @@ class BlocksContentControllerExtension extends Extension
     /**
      * @var array
      */
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         'handleBlock',
-    );
+    ];
 
     public function onAfterInit()
     {

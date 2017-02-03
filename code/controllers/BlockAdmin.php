@@ -2,6 +2,8 @@
 
 namespace SheaDawson\Blocks\controllers;
 
+use SheaDawson\Blocks\model\Block;
+use SheaDawson\Blocks\model\BlockSet;
 use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\ORM\Versioning\Versioned;
@@ -13,10 +15,10 @@ use SilverStripe\ORM\Versioning\Versioned;
  */
 class BlockAdmin extends ModelAdmin
 {
-    private static $managed_models = array(
-        "SheaDawson\Blocks\model\Block",
-        "SheaDawson\Blocks\model\BlockSet",
-    );
+    private static $managed_models = [
+        Block::class,
+        Blockset::class,
+    ];
 
     private static $url_segment = "block-admin";
 

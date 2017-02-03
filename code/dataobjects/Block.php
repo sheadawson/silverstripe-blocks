@@ -3,27 +3,24 @@
 namespace SheaDawson\Blocks\model;
 
 use SheaDawson\Blocks\BlockManager;
-
+use SheaDawson\Blocks\model\BlockSet;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Versioning\Versioned;
-
 use SilverStripe\Core\ClassInfo;
-
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
-
+use SilverStripe\CMS\Model\SiteTree
 use SilverStripe\Control\Controller;
-
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
-
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\HTMLText;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\ListboxField;
 use SilverStripe\Forms\Tab;
+
 /**
  * Block
  * Subclass this basic Block with your more interesting ones.
@@ -38,7 +35,7 @@ class Block extends DataObject implements PermissionProvider
     /**
      * @var array
      */
-    private static $db = array(
+    private static $db = [
         'Title' => 'Varchar(255)',
         'CanViewType' => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
         'ExtraCSSClasses' => 'Varchar',
@@ -46,47 +43,47 @@ class Block extends DataObject implements PermissionProvider
         'Weight' => 'Int',
         'Area' => 'Varchar',
         'Published' => 'Boolean',
-    );
+    ];
 
     /**
      * @var array
      */
-    private static $many_many = array(
-        "ViewerGroups" => "SilverStripe\Security\Group",
-    );
+    private static $many_many = [
+        "ViewerGroups" => Group::class,
+    ];
 
     /**
      * @var array
      */
-    private static $belongs_many_many = array(
-        "Pages" => "SilverStripe\CMS\Model\SiteTree",
-        "BlockSets" => "SheaDawson\Blocks\model\BlockSet",
-    );
+    private static $belongs_many_many = [
+        "Pages" => SiteTree::class,
+        "BlockSets" => Blockset::class,
+    ];
 
-    private static $summary_fields = array(
+    private static $summary_fields = [
         'singular_name',
         'Title',
         'isPublishedField',
         'UsageListAsString',
-    );
+    ];
 
-    private static $searchable_fields = array(
+    private static $searchable_fields = [
         'Title',
         'ClassName',
-    );
+    ];
 
     public function fieldLabels($includerelations = true)
     {
         $labels =  parent::fieldLabels($includerelations);
 
-        $labels = array_merge($labels, array(
+        $labels = array_merge($labels, [
             'singular_name' => _t('Block.BlockType', 'Block Type'),
             'Title' => _t('Block.Title', 'Title'),
             'isPublishedField' => _t('Block.IsPublishedField', 'Published'),
             'UsageListAsString' => _t('Block.UsageListAsString', 'Used on'),
             'ExtraCSSClasses' => _t('Block.ExtraCSSClasses', 'Extra CSS Classes'),
             'ClassName' => _t('Block.BlockType', 'Block Type'),
-        ));
+        ]);
 
         return $labels;
     }
@@ -109,7 +106,7 @@ class Block extends DataObject implements PermissionProvider
     /**
      * @var array
      */
-    private static $default_sort = array('Title' => 'ASC');
+    private static $default_sort = ['Title' => 'ASC'];
 
     /**
      * @var array
@@ -200,17 +197,17 @@ class Block extends DataObject implements PermissionProvider
                     'data-placeholder',
                     _t('SiteTree.GroupPlaceholder', 'Click to select group')
                 );
-            $viewersOptionsSource = array();
+            $viewersOptionsSource = [];
             $viewersOptionsSource['Anyone'] = _t('SiteTree.ACCESSANYONE', 'Anyone');
             $viewersOptionsSource['LoggedInUsers'] = _t('SiteTree.ACCESSLOGGEDIN', 'Logged-in users');
             $viewersOptionsSource['OnlyTheseUsers'] = _t('SiteTree.ACCESSONLYTHESE', 'Only these people (choose from list)');
             $viewersOptionsField->setSource($viewersOptionsSource)->setValue('Anyone');
 
             $fields->addFieldToTab('Root', new Tab('ViewerGroups', _t('Block.ViewerGroups', 'Viewer Groups')));
-            $fields->addFieldsToTab('Root.ViewerGroups', array(
+            $fields->addFieldsToTab('Root.ViewerGroups', [
                 $viewersOptionsField,
                 $viewerGroupsField,
-            ));
+            ]);
 
             // Disabled for now, until we can list ALL pages this block is applied to (inc via sets)
             // As otherwise it could be misleading
@@ -243,7 +240,7 @@ class Block extends DataObject implements PermissionProvider
     public function forTemplate()
     {
         if ($this->BlockArea) {
-            $template = array($this->class.'_'.$this->BlockArea);
+            $template = [$this->class.'_'.$this->BlockArea];
 
             if (SSViewer::hasTemplate($template)) {
                 return $this->renderWith($template);
@@ -294,7 +291,7 @@ class Block extends DataObject implements PermissionProvider
         }
 
         // admin override
-        if ($member && Permission::checkMember($member, array('ADMIN', 'SITETREE_VIEW_ALL'))) {
+        if ($member && Permission::checkMember($member, ['ADMIN', 'SITETREE_VIEW_ALL'])) {
             return true;
         }
 
@@ -335,7 +332,7 @@ class Block extends DataObject implements PermissionProvider
         return Permission::check('ADMIN') || Permission::check('BLOCK_DELETE');
     }
 
-    public function canCreate($member = null, $context = array())
+    public function canCreate($member = null, $context = [])
     {
         return Permission::check('ADMIN') || Permission::check('BLOCK_CREATE');
     }
@@ -347,24 +344,24 @@ class Block extends DataObject implements PermissionProvider
 
     public function providePermissions()
     {
-        return array(
-            'BLOCK_EDIT' => array(
+        return [
+            'BLOCK_EDIT' => [
                 'name' => _t('Block.EditBlock', 'Edit a Block'),
                 'category' => _t('Block.PermissionCategory', 'Blocks'),
-            ),
-            'BLOCK_DELETE' => array(
+            ],
+            'BLOCK_DELETE' => [
                 'name' => _t('Block.DeleteBlock', 'Delete a Block'),
                 'category' => _t('Block.PermissionCategory', 'Blocks'),
-            ),
-            'BLOCK_CREATE' => array(
+            ],
+            'BLOCK_CREATE' => [
                 'name' => _t('Block.CreateBlock', 'Create a Block'),
                 'category' => _t('Block.PermissionCategory', 'Blocks'),
-            ),
-            'BLOCK_PUBLISH' => array(
+            ],
+            'BLOCK_PUBLISH' => [
                 'name' => _t('Block.PublishBlock', 'Publish a Block'),
                 'category' => _t('Block.PermissionCategory', 'Blocks'),
-            ),
-        );
+            ],
+        ];
     }
 
     public function onAfterWrite()
@@ -382,7 +379,7 @@ class Block extends DataObject implements PermissionProvider
     public function pagesAffectedByChanges()
     {
         $pages = $this->Pages();
-        $urls = array();
+        $urls = [];
         foreach ($pages as $page) {
             $urls[] = $page->Link();
         }
@@ -397,8 +394,8 @@ class Block extends DataObject implements PermissionProvider
     {
         $pages = implode(', ', $this->Pages()->column('URLSegment'));
         $sets = implode(', ', $this->BlockSets()->column('Title'));
-        $_t_pages = _t('Block.PagesAsString', 'Pages: {pages}', '', array('pages' => $pages));
-        $_t_sets = _t('Block.BlockSetsAsString', 'Block Sets: {sets}', '', array('sets' => $sets));
+        $_t_pages = _t('Block.PagesAsString', 'Pages: {pages}', '', ['pages' => $pages]);
+        $_t_sets = _t('Block.BlockSetsAsString', 'Block Sets: {sets}', '', ['sets' => $sets]);
         if ($pages && $sets) {
             return "$_t_pages<br />$_t_sets";
         }

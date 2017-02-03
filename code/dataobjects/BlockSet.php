@@ -3,16 +3,13 @@
 namespace SheaDawson\Blocks\model;
 
 use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
-
+use SheaDawson\Blocks\model\Block;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ArrayLib;
-
 use SilverStripe\CMS\Model\SiteTree;
-
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Group;
-
 use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\Forms\CheckboxField;
 
@@ -31,38 +28,38 @@ class BlockSet extends DataObject implements PermissionProvider
     /**
      * @var array
      **/
-    private static $db = array(
+    private static $db = [
         'Title' => 'Varchar(255)',
         'PageTypes' => 'MultiValueField',
         'IncludePageParent' => 'Boolean',
-    );
+    ];
 
     /**
      * @var array
      **/
-    private static $many_many = array(
-        "Blocks" => "SheaDawson\Blocks\model\Block",
-        "PageParents" => "SilverStripe\CMS\Model\SiteTree",
-    );
+    private static $many_many = [
+        "Blocks" => Block::class,
+        "PageParents" => SiteTree::class,
+    ];
 
     /**
      * @var array
      **/
-    private static $many_many_extraFields = array(
-        'Blocks' => array(
+    private static $many_many_extraFields = [
+        'Blocks' => [
             'Sort' => 'Int',
             'BlockArea' => 'Varchar',
             'AboveOrBelow' => 'Varchar',
-        ),
-    );
+        ],
+    ];
 
     /**
      * @var array
      **/
-    private static $above_or_below_options = array(
+    private static $above_or_below_options = [
         'Above' => 'Above Page Blocks',
         'Below' => 'Below Page Blocks',
-    );
+    ];
 
     public function getCMSFields()
     {
@@ -102,7 +99,7 @@ class BlockSet extends DataObject implements PermissionProvider
      */
     protected function pageTypeOptions()
     {
-        $pageTypes = array();
+        $pageTypes = [];
         $classes = ArrayLib::valueKey(SiteTree::page_type_classes());
         unset($classes['VirtualPage']);
         unset($classes['ErrorPage']);
@@ -151,26 +148,26 @@ class BlockSet extends DataObject implements PermissionProvider
         return Permission::check('ADMIN') || Permission::check('BLOCK_DELETE');
     }
 
-    public function canCreate($member = null, $context = array())
+    public function canCreate($member = null, $context = [])
     {
         return Permission::check('ADMIN') || Permission::check('BLOCK_CREATE');
     }
 
     public function providePermissions()
     {
-        return array(
-            'BLOCKSET_EDIT' => array(
+        return [
+            'BLOCKSET_EDIT' => [
                 'name' => _t('BlockSet.EditBlockSet','Edit a Block Set'),
                 'category' => _t('Block.PermissionCategory', 'Blocks'),
-            ),
-            'BLOCKSET_DELETE' => array(
+            ],
+            'BLOCKSET_DELETE' => [
                 'name' => _t('BlockSet.DeleteBlockSet','Delete a Block Set'),
                 'category' => _t('Block.PermissionCategory', 'Blocks'),
-            ),
-            'BLOCKSET_CREATE' => array(
+            ],
+            'BLOCKSET_CREATE' => [
                 'name' => _t('BlockSet.CreateBlockSet','Create a Block Set'),
                 'category' => _t('Block.PermissionCategory', 'Blocks'),
-            ),
-        );
+            ],
+        ];
     }
 }
