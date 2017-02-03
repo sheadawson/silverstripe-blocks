@@ -4,9 +4,7 @@ namespace SheaDawson\Blocks\forms;
 
 use SheaDawson\Blocks\model\Block;
 use SheaDawson\Blocks\model\BlockSet;
-
 use SilverStripe\Control\Controller;
-
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;

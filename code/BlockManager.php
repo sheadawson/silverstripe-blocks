@@ -8,6 +8,7 @@ use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Forms\FormField;
+
 /**
  * BlockManager.
  *
@@ -20,8 +21,7 @@ class BlockManager extends Object
 	 *
 	 * @var array
 	 **/
-	private static $themes = array();
-
+	private static $themes = [];
 	/**
 	 * Use default ContentBlock class.
 	 *
@@ -141,7 +141,7 @@ class BlockManager extends Object
 	        unset($classes['ContentBlock']);
 	    }
 
-		$disabledArr = Config::inst()->get("BlockManager", 'disabled_blocks') ? Config::inst()->get("BlockManager", 'disabled_blocks') : array();
+		$disabledArr = Config::inst()->get("BlockManager", 'disabled_blocks') ? Config::inst()->get("BlockManager", 'disabled_blocks') : [];
 		if (isset($themeConfig['disabled_blocks'])) {
 		    $disabledArr = array_merge($disabledArr, $themeConfig['disabled_blocks']);
 		}
@@ -198,7 +198,7 @@ class BlockManager extends Object
 	{
 		$config = $this->getThemeConfig();
 
-		return isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : array();
+		return isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : [];
 	}
 
 	/*
@@ -207,7 +207,7 @@ class BlockManager extends Object
 	public function getWhiteListedPageTypes()
 	{
 		$config = $this->getThemeConfig();
-		return isset($config['pagetype_whitelist']) ? $config['pagetype_whitelist'] : array();
+		return isset($config['pagetype_whitelist']) ? $config['pagetype_whitelist'] : [];
 	}
 
 	/*
@@ -217,8 +217,8 @@ class BlockManager extends Object
 	public function getBlackListedPageTypes()
 	{
 		$config = $this->getThemeConfig();
-		$legacy = isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : array();
-		$current = isset($config['pagetype_blacklist']) ? $config['pagetype_blacklist'] : array();
+		$legacy = isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : [];
+		$current = isset($config['pagetype_blacklist']) ? $config['pagetype_blacklist'] : [];
 		return array_merge($legacy, $current);
 	}
 

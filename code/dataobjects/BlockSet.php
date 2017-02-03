@@ -3,7 +3,6 @@
 namespace SheaDawson\Blocks\model;
 
 use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
-use SheaDawson\Blocks\model\Block;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ArrayLib;
 use SilverStripe\CMS\Model\SiteTree;

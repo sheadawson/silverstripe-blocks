@@ -2,6 +2,7 @@
 
 namespace SheaDawson\Blocks\extensions;
 
+use SheaDawson\Blocks\model\Block;
 use SheaDawson\Blocks\BlockManager;
 use SheaDawson\Blocks\model\Blockset;
 use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
@@ -9,6 +10,9 @@ use SilverStripe\CMS\Model\SiteTreeExtension;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\ListboxField;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\View\SSViewer;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Security\Permission;
@@ -25,8 +29,8 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 		'InheritBlockSets' => 'Boolean',
 	];
 	private static $many_many = [
-		"Blocks" => "SheaDawson\Blocks\model\Block",
-		"DisabledBlocks" => "SheaDawson\Blocks\model\Block",
+		"Blocks" => Block::class,
+		"DisabledBlocks" => Block::class,
 	];
 	public static $many_many_extraFields = [
 		'Blocks' => [
@@ -120,7 +124,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 					}
 
 					$fields->addFieldToTab('Root.Blocks',
-							ListBoxField::create('DisabledBlocks', _t('BlocksSiteTreeExtension.DisableInheritedBlocks', 'Disable Inherited Blocks'),
+							ListboxField::create('DisabledBlocks', _t('BlocksSiteTreeExtension.DisableInheritedBlocks', 'Disable Inherited Blocks'),
 									$inheritedBlocks->map('ID', 'Title'), null, null, true)
 									->setDescription(_t('BlocksSiteTreeExtension.DisableInheritedBlocksDescription', 'Select any inherited blocks that you would not like displayed on this page.'))
 					);

@@ -4,7 +4,6 @@ namespace SheaDawson\Blocks\tasks;
 
 use SheaDawson\Blocks\model\Block;
 use SheaDawson\Blocks\model\BlockSet;
-
 use SilverStripe\ORM\DB;
 use SilverStripe\SiteConfig\SiteConfig;
 
@@ -50,24 +49,23 @@ class BlockUpgradeTask extends BuildTask
         if ($sc->Blocks()->Count()) {
             $set = BlockSet::get()->filter('Title', 'Global')->first();
             if (!$set) {
-                $set = BlockSet::create(array(
+                $set = BlockSet::create(
                     'Title' => 'Global',
-                ));
+                ]);
                 $set->write();
             }
             foreach ($sc->Blocks() as $block) {
                 if (!$set->Blocks()->find('ID', $block->ID)) {
-                    $set->Blocks()->add($block, array(
+                    $set->Blocks()->add($block, [
                         'Sort' => $block->Weight,
                         'BlockArea' => $block->Area,
-                    ));
+                    ]);
                     echo "Block #$block->ID added to Global block set<br />";
                 }
             }
         }
 
         // publish blocks
-
         $blocks = Block::get()->filter('Published', 1);
         foreach ($blocks as $block) {
             $block->publish('Stage', 'Live');

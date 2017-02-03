@@ -3,7 +3,6 @@
 namespace SheaDawson\Blocks\model;
 
 use SheaDawson\Blocks\BlockManager;
-use SheaDawson\Blocks\model\BlockSet;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Versioning\Versioned;
 use SilverStripe\Core\ClassInfo;
@@ -159,6 +158,8 @@ class Block extends DataObject implements PermissionProvider
                     $blockAreaField = DropdownField::create('ManyMany[BlockArea]', _t('Block.BlockArea', 'Block Area'), $areas),
                     'ClassName'
                 );
+
+
 
                 if (count($areas) > 1) {
                     $blockAreaField->setEmptyString('(Select one)');
