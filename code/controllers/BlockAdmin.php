@@ -52,7 +52,7 @@ class BlockAdmin extends ModelAdmin
      **/
     public function getEditForm($id = null, $fields = null)
     {
-        // Versioned::reading_stage('Stage');
+        Versioned::reading_stage('Stage');
         $form = parent::getEditForm($id, $fields);
 
         if ($blockGridField = $form->Fields()->fieldByName('Block')) {
