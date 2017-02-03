@@ -5,10 +5,13 @@ namespace SheaDawson\Blocks\model;
 use SheaDawson\Blocks\BlockManager;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Versioning\Versioned;
+use SilverStripe\ORM\FieldType\DBBoolean;
+use SilverStripe\ORM\ValidationException;
 use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\CMS\Model\SiteTree
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
-use SilverStripe\CMS\Model\SiteTree
 use SilverStripe\Control\Controller;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Permission;
@@ -431,7 +434,7 @@ class Block extends DataObject implements PermissionProvider
      */
     public function isPublishedNice()
     {
-        $field = Boolean::create('isPublished');
+        $field = DBBoolean::create('isPublished');
         $field->setValue($this->isPublished());
 
         return $field->Nice();
@@ -498,7 +501,7 @@ class Block extends DataObject implements PermissionProvider
             }
         }
         if (!class_exists($controllerClass)) {
-            throw new Exception("Could not find controller class for $this->classname");
+            throw new ValidationException("Could not find controller class for $this->classname");
         }
         $this->controller = Injector::inst()->create($controllerClass, $this);
         $this->controller->init();
