@@ -6,6 +6,7 @@ use SheaDawson\Blocks\model\Block;
 use SheaDawson\Blocks\model\BlockSet;
 use SilverStripe\Control\Controller;
 use SilverStripe\Forms\DropdownField;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldButtonRow;
@@ -16,6 +17,9 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldCopyButton;
 use SilverStripe\Forms\GridField\GridFieldEditButton;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+use SilverStripe\GridFieldExtensions\GridFieldAddNewMultiClass;
+use SilverStripe\GridFieldExtensions\GridFieldAddExistingSearchButton;
+use SilverStripe\GridFieldExtensions\GridFieldEditableColumns;
 
 /**
  * GridFieldConfig_BlockManager

@@ -17,6 +17,7 @@ use SilverStripe\View\SSViewer;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Control\Controller;
+use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
 
 /**
  * BlocksSiteTreeExtension.

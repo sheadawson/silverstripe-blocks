@@ -11,7 +11,11 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Group;
 use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\Forms\CheckboxField;
-
+use SilverStripe\Forms\HeaderField;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\TreeMultiselectField;
+use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
+use SilverStripe\MultiValueField\MultiValueCheckboxField;
 /**
  * BlockSet.
  *
