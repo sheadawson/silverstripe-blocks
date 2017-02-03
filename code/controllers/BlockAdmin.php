@@ -23,9 +23,9 @@ class BlockAdmin extends ModelAdmin
 
     public $showImportForm = false;
 
-    private static $dependencies = array(
-        "blockManager" => '%$SheaDawson\\Blocks\\BlockManager',
-    );
+    private static $dependencies = [
+        "blockManager" => '%$blockManager',
+    ];
 
     public $blockManager;
 
