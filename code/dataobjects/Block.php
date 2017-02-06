@@ -60,7 +60,7 @@ class Block extends DataObject implements PermissionProvider
      */
     private static $belongs_many_many = [
         "Pages" => SiteTree::class,
-        "BlockSets" => Blockset::class,
+        "BlockSets" => BlockSet::class,
     ];
 
     private static $summary_fields = [
