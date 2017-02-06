@@ -271,7 +271,7 @@ class Block extends DataObject implements PermissionProvider
     public function onAfterDelete()
     {
         parent::onAfterDelete();
-        if (Versioned::current_stage() == 'Stage') {
+        if (Versioned::get_stage() == 'Stage') {
             $this->Pages()->removeAll();
             $this->BlockSets()->removeAll();
         }
