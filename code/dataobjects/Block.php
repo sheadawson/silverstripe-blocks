@@ -7,6 +7,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Versioning\Versioned;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\ValidationException;
+use SilverStripe\ORM\DB;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\CMS\Model\SiteTree;
