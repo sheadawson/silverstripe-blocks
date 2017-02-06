@@ -29,19 +29,23 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 	private static $db = [
 		'InheritBlockSets' => 'Boolean',
 	];
+
 	private static $many_many = [
 		"Blocks" => Block::class,
 		"DisabledBlocks" => Block::class,
 	];
+
 	public static $many_many_extraFields = [
 		'Blocks' => [
 			'Sort' => 'Int',
 			'BlockArea' => 'Varchar',
 		],
 	];
+
 	private static $defaults = [
 		'InheritBlockSets' => 1,
 	];
+
 	private static $dependencies = [
 		'blockManager' => '%$blockManager',
 	];
