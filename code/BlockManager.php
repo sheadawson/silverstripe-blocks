@@ -18,12 +18,6 @@ use SilverStripe\View\SSViewer;
 class BlockManager extends Object
 {
 	/**
-	 * Define areas and config on a per theme basis.
-	 *
-	 * @var array
-	 **/
-	private static $themes = [];
-	/**
 	 * Use default ContentBlock class.
 	 *
 	 * @var bool
@@ -43,20 +37,16 @@ class BlockManager extends Object
 	}
 
 	/**
-	 * Gets an array of all areas defined for the current theme.
+	 * Gets an array of all areas defined for blocks.
 	 *
-	 * @param string $theme
 	 * @param bool   $keyAsValue
 	 *
 	 * @return array $areas
 	 **/
-	public function getAreasForTheme($theme = null, $keyAsValue = true)
+	public function getAreas($keyAsValue = true)
 	{
-		$currentTheme = $this->getTheme($theme);
+		$areas = $this->config()->get('areas');
 
-		$config = $this->config()->get('themes');
-
-		$areas = $config[$currentTheme]['areas'];
 		$areas = $keyAsValue ? ArrayLib::valuekey(array_keys($areas)) : $areas;
 		if (count($areas)) {
 			foreach ($areas as $k => $v) {
@@ -68,8 +58,7 @@ class BlockManager extends Object
 	}
 
 	/**
-	 * Gets an array of all areas defined for the current theme that are compatible
-	 * with pages of type $class.
+	 * Gets an array of all areas defined that are compatible with pages of type $class.
 	 *
 	 * @param string $class
 	 *
@@ -77,7 +66,7 @@ class BlockManager extends Object
 	 **/
 	public function getAreasForPageType($class)
 	{
-		$areas = $this->getAreasForTheme(null, false);
+		$areas = $this->getAreas(false);
 
 		if (!$areas) {
 			return false;
@@ -130,17 +119,17 @@ class BlockManager extends Object
 			$classes[$k] = singleton($k)->singular_name();
 		}
 
-		$themeConfig = $this->getThemeConfig();
+		$config = $this->config()->get('options');
 
-		if (isset($themeConfig['use_default_blocks']) && !$themeConfig['use_default_blocks']) {
+		if (isset($config['use_default_blocks']) && !$config['use_default_blocks']) {
 	        unset($classes['ContentBlock']);
-	    } else if (!$this->config()->use_default_blocks) {
+	    } else if (!$config['use_default_blocks']) {
 	        unset($classes['ContentBlock']);
 	    }
 
 		$disabledArr = Config::inst()->get("BlockManager", 'disabled_blocks') ? Config::inst()->get("BlockManager", 'disabled_blocks') : [];
-		if (isset($themeConfig['disabled_blocks'])) {
-		    $disabledArr = array_merge($disabledArr, $themeConfig['disabled_blocks']);
+		if (isset($config['disabled_blocks'])) {
+		    $disabledArr = array_merge($disabledArr, $config['disabled_blocks']);
 		}
 		if (count($disabledArr)) {
 			foreach ($disabledArr as $k => $v) {
@@ -152,60 +141,11 @@ class BlockManager extends Object
 	}
 
 	/*
-	 * Get the current/active theme or 'default' to support theme-less sites
-	 */
-	private function getTheme($theme = null)
-	{
-    	$themes = SSViewer::get_themes();
-
-		$config = $this->config()->get('themes');
-
-		$theme = $theme ? $theme : array_shift($themes);
-
-		if (!$theme) {
-			return false;
-		}
-
-
-		if (!isset($config[$theme])) {
-
-			$no_theme = true;
-
-			// loop all themes, if one matches then use that instead of failing.
-			foreach($themes as $t) {
-				if (!empty($config[$t])) {
-					$no_theme = false;
-					$theme = $t;
-				}
-			}
-
-			// If no theme matches, throw user error to inform the user a theme is either not set or doesn't match.
-			if ($no_theme) {
-				user_error('No themes found via SSViewer::get_themes() match any themes used in your yml config for BlockManager');
-				return false;
-			}
-		}
-
-		return $theme ? $theme : 'default';
-	}
-
-	/*
-	 * Get the block config for the current theme
-	 */
-	private function getThemeConfig()
-	{
-		$theme = $this->getTheme();
-		$config = $this->config()->get('themes');
-
-		return $theme && isset($config[$theme]) ? $config[$theme] : null;
-	}
-
-	/*
 	 * Usage of BlockSets configurable from yaml
 	 */
 	public function getUseBlockSets()
 	{
-		$config = $this->getThemeConfig();
+		$config = $this->config()->get('options');
 
 		return isset($config['use_blocksets']) ? $config['use_blocksets'] : true;
 	}
@@ -215,7 +155,7 @@ class BlockManager extends Object
 	 */
 	public function getExcludeFromPageTypes()
 	{
-		$config = $this->getThemeConfig();
+		$config = $this->config()->get('options');
 
 		return isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : [];
 	}
@@ -225,7 +165,7 @@ class BlockManager extends Object
 	 */
 	public function getWhiteListedPageTypes()
 	{
-		$config = $this->getThemeConfig();
+		$config = $this->config()->get('options');
 		return isset($config['pagetype_whitelist']) ? $config['pagetype_whitelist'] : [];
 	}
 
@@ -235,7 +175,7 @@ class BlockManager extends Object
 	 */
 	public function getBlackListedPageTypes()
 	{
-		$config = $this->getThemeConfig();
+		$config = $this->config()->get('options');
 		$legacy = isset($config['exclude_from_page_types']) ? $config['exclude_from_page_types'] : [];
 		$current = isset($config['pagetype_blacklist']) ? $config['pagetype_blacklist'] : [];
 		return array_merge($legacy, $current);
@@ -246,7 +186,7 @@ class BlockManager extends Object
 	 */
 	public function getUseExtraCSSClasses()
 	{
-		$config = $this->getThemeConfig();
+		$config = $this->config()->get('options');
 
 		return isset($config['use_extra_css_classes']) ? $config['use_extra_css_classes'] : false;
 	}
@@ -256,7 +196,7 @@ class BlockManager extends Object
 	 */
 	public function getPrefixDefaultCSSClasses()
 	{
-		$config = $this->getThemeConfig();
+		$config = $this->config()->get('options');
 
 		return isset($config['prefix_default_css_classes']) ? $config['prefix_default_css_classes'] : false;
 	}

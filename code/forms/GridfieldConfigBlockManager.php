@@ -42,7 +42,7 @@ class GridFieldConfigBlockManager extends GridFieldConfig
             $currentPage = Controller::curr()->currentPage();
             $areasFieldSource = $this->blockManager->getAreasForPageType($currentPage->ClassName);
         } else {
-            $areasFieldSource = $this->blockManager->getAreasForTheme();
+            $areasFieldSource = $this->blockManager->getAreas();
         }
 
         // EditableColumns only makes sense on Saveable parenst (eg Page), or inline changes won't be saved
