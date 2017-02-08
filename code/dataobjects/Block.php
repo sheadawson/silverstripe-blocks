@@ -41,11 +41,7 @@ class Block extends DataObject implements PermissionProvider
     private static $db = [
         'Title' => 'Varchar(255)',
         'CanViewType' => "Enum('Anyone, LoggedInUsers, OnlyTheseUsers', 'Anyone')",
-        'ExtraCSSClasses' => 'Varchar',
-        // these are legacy fields, in place to make migrations from old blocks version easier
-        'Weight' => 'Int',
-        'Area' => 'Varchar',
-        'Published' => 'Boolean',
+        'ExtraCSSClasses' => 'Varchar'
     ];
 
     /**
