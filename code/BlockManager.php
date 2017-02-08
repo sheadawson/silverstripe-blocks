@@ -8,6 +8,7 @@ use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Forms\FormField;
+use SilverStripe\View\SSViewer;
 
 /**
  * BlockManager.
@@ -51,15 +52,11 @@ class BlockManager extends Object
 	 **/
 	public function getAreasForTheme($theme = null, $keyAsValue = true)
 	{
-		$theme = $theme ? $theme : $this->getTheme();
-		if (!$theme) {
-			return false;
-		}
+		$currentTheme = $this->getTheme($theme);
+
 		$config = $this->config()->get('themes');
-		if (!isset($config[$theme]['areas'])) {
-			return false;
-		}
-		$areas = $config[$theme]['areas'];
+
+		$areas = $config[$currentTheme]['areas'];
 		$areas = $keyAsValue ? ArrayLib::valuekey(array_keys($areas)) : $areas;
 		if (count($areas)) {
 			foreach ($areas as $k => $v) {
@@ -157,17 +154,39 @@ class BlockManager extends Object
 	/*
 	 * Get the current/active theme or 'default' to support theme-less sites
 	 */
-	private function getTheme()
+	private function getTheme($theme = null)
 	{
-		$currentTheme = Config::inst()->get('SSViewer', 'theme');
+    	$themes = SSViewer::get_themes();
 
-		// check directly on SiteConfig incase ContentController hasn't set
-		// the theme yet in ContentController->init()
-		if (!$currentTheme && class_exists('SiteConfig')) {
-			$currentTheme = SiteConfig::current_site_config()->Theme;
+		$config = $this->config()->get('themes');
+
+		$theme = $theme ? $theme : array_shift($themes);
+
+		if (!$theme) {
+			return false;
 		}
 
-		return $currentTheme ? $currentTheme : 'default';
+
+		if (!isset($config[$theme])) {
+
+			$no_theme = true;
+
+			// loop all themes, if one matches then use that instead of failing.
+			foreach($themes as $t) {
+				if (!empty($config[$t])) {
+					$no_theme = false;
+					$theme = $t;
+				}
+			}
+
+			// If no theme matches, throw user error to inform the user a theme is either not set or doesn't match.
+			if ($no_theme) {
+				user_error('No themes found via SSViewer::get_themes() match any themes used in your yml config for BlockManager');
+				return false;
+			}
+		}
+
+		return $theme ? $theme : 'default';
 	}
 
 	/*
