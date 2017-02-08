@@ -49,12 +49,10 @@ class GridFieldConfigBlockManager extends GridFieldConfig
         if ($editableRows) {
             $this->addComponent($editable = new GridFieldEditableColumns());
             $displayfields = array(
-                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'LiteralField'),
-                'Title' => array('title' => _t('Block.Title', 'Title'), 'field' => 'ReadonlyField'),
+                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'SilverStripe\\Forms\\LiteralField'),
+                'Title' => array('title' => _t('Block.Title', 'Title'), 'field' => 'Silverstripe\\Forms\\ReadonlyField'),
                 'BlockArea' => array(
-                    'title' => _t('Block.BlockArea', 'Block Area').'
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
-                        // the &nbsp;s prevent wrapping of dropdowns
+                    'title' => _t('Block.BlockArea', 'Block Area'),
                     'callback' => function () use ($areasFieldSource) {
                             $areasField = DropdownField::create('BlockArea', 'Block Area', $areasFieldSource);
                             if (count($areasFieldSource) > 1) {
@@ -63,8 +61,8 @@ class GridFieldConfigBlockManager extends GridFieldConfig
                             return $areasField;
                         },
                 ),
-                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'LiteralField'),
-                'UsageListAsString' => array('title' => _t('Block.UsageListAsString', 'Used on'), 'field' => 'LiteralField'),
+                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'SilverStripe\\Forms\\LiteralField'),
+                'UsageListAsString' => array('title' => _t('Block.UsageListAsString', 'Used on'), 'field' => 'SilverStripe\\Forms\\LiteralField'),
             );
 
             if ($aboveOrBelow) {
@@ -80,15 +78,16 @@ class GridFieldConfigBlockManager extends GridFieldConfig
             $this->addComponent($dcols = new GridFieldDataColumns());
 
             $displayfields = array(
-                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'LiteralField'),
+                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'SilverStripe\\Forms\\LiteralField'),
                 'Title' => _t('Block.Title', 'Title'),
                 'BlockArea' => _t('Block.BlockArea', 'Block Area'),
-                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'LiteralField'),
+                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'SilverStripe\\Forms\\LiteralField'),
                 'UsageListAsString' => _t('Block.UsageListAsString', 'Used on'),
             );
             $dcols->setDisplayFields($displayfields);
             $dcols->setFieldCasting(array('UsageListAsString' => 'HTMLText->Raw'));
         }
+
 
         $this->addComponent(new GridFieldButtonRow('before'));
         $this->addComponent(new GridFieldToolbarHeader());

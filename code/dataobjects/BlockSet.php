@@ -75,7 +75,7 @@ class BlockSet extends DataObject implements PermissionProvider
         $fields->addFieldToTab('Root.Main', HeaderField::create('SettingsHeading', _t('BlockSet.Settings', 'Settings')), 'Title');
         $fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', _t('BlockSet.OnlyApplyToThesePageTypes', 'Only apply to these Page Types:'), $this->pageTypeOptions())
                 ->setDescription(_t('BlockSet.OnlyApplyToThesePageTypesDescription', 'Selected Page Types will inherit this Block Set automatically. Leave all unchecked to apply to all page types.')));
-        $fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', _t('BlockSet.OnlyApplyToChildrenOfThesePages', 'Only apply to children of these Pages:'), 'SiteTree'));
+        $fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', _t('BlockSet.OnlyApplyToChildrenOfThesePages', 'Only apply to children of these Pages:'), 'SilverStripe\\CMS\\Model\\SiteTree'));
         $fields->addFieldToTab('Root.Main', CheckboxField::create('IncludePageParent', _t('BlockSet.ApplyBlockSetToSelectedPageParentsAsWellAsChildren','Apply block set to selected page parents as well as children')));
 
         if (!$this->ID) {
