@@ -6,6 +6,7 @@ use SheaDawson\Blocks\BlockManager;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Versioning\Versioned;
 use SilverStripe\ORM\FieldType\DBBoolean;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\ORM\DB;
 use SilverStripe\Core\ClassInfo;
@@ -19,7 +20,6 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\HTMLText;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\ListboxField;
 use SilverStripe\Forms\Tab;
@@ -443,11 +443,11 @@ class Block extends DataObject implements PermissionProvider
     }
 
     /**
-     * @return HTMLText
+     * @return DBHTMLText
      */
     public function isPublishedIcon()
     {
-        $obj = HTMLText::create();
+        $obj = DBHTMLText::create();
         if ($this->isPublished()) {
             $obj->setValue('<img src="' . FRAMEWORK_ADMIN_DIR . '/images/alert-good.gif" />');
         } else {
