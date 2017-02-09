@@ -134,7 +134,6 @@ class Block extends DataObject implements PermissionProvider
 
     public function getCMSFields()
     {
-    	error_log('in here');
         $self = $this;
         $this->beforeUpdateCMSFields(function($fields) use($self) {
             /** @var FieldList $fields */
