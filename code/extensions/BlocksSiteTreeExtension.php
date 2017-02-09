@@ -12,6 +12,7 @@ use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\ListboxField;
+use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\View\SSViewer;
 use SilverStripe\ORM\ArrayList;
@@ -100,8 +101,9 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 			$gridConfig = GridFieldConfigBlockManager::create(true, true, true, true)
 				->addExisting($this->owner->class)
 				//->addBulkEditing()
-				->addComponent(new GridFieldOrderableRows())
+				// ->addComponent(new GridFieldOrderableRows()) // Comment until below TODO is complete.
 				;
+
 
 			// TODO it seems this sort is not being applied...
 			$gridSource = $this->owner->Blocks();
@@ -112,6 +114,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 				// ));
 
 			$fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', _t('Block.PLURALNAME', 'Blocks'), $gridSource, $gridConfig));
+
 
 			// Blocks inherited from BlockSets
 			if ($this->blockManager->getUseBlockSets()) {
