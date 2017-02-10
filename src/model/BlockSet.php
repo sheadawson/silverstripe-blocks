@@ -1,8 +1,8 @@
 <?php
 
-namespace SheaDawson\Blocks\model;
+namespace SheaDawson\Blocks\Model;
 
-use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
+use SheaDawson\Blocks\Forms\GridFieldConfigBlockManager;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ArrayLib;
 use SilverStripe\CMS\Model\SiteTree;
@@ -14,6 +14,7 @@ use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
 use SilverStripe\MultiValueField\Fields\MultiValueCheckboxField;
 use SilverStripe\MultiValueField\Fields\MultiValueField;
@@ -84,15 +85,17 @@ class BlockSet extends DataObject implements PermissionProvider
             return $fields;
         }
 
+
+        /**
+        * @todo - change relation editor back to the custom block manager config and fix issues when 'creating' Blocks from a BlockSet.
+		*/
         $fields->removeFieldFromTab('Root', 'Blocks');
-        $gridConfig = GridFieldConfigBlockManager::create(true, true, true, true, true)
-            ->addExisting()
-            ->addComponent(new GridFieldOrderableRows());
+        $gridConfig = GridFieldConfig_RelationEditor::create();
 
         $gridSource = $this->Blocks()->Sort('Sort');
 
-        $fields->addFieldToTab('Root.Main', HeaderField::create('BlocksHeading', _t('Block.PLURALNAME', 'Blocks')));
-        $fields->addFieldToTab('Root.Main', GridField::create('Blocks', _t('Block.PLURALNAME', 'Blocks'), $gridSource, $gridConfig));
+        $fields->addFieldToTab('Root.Blocks', HeaderField::create('BlocksHeading', _t('Block.PLURALNAME', 'Blocks')));
+        $fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', _t('Block.PLURALNAME', 'Blocks'), $gridSource, $gridConfig));
 
         return $fields;
     }

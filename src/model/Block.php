@@ -1,6 +1,6 @@
 <?php
 
-namespace SheaDawson\Blocks\model;
+namespace SheaDawson\Blocks\Model;
 
 use SheaDawson\Blocks\BlockManager;
 use SilverStripe\ORM\DataObject;

@@ -1,6 +1,6 @@
 <?php
 
-namespace SheaDawson\Blocks\model;
+namespace SheaDawson\Blocks\Model;
 
 class ContentBlock extends Block
 {
