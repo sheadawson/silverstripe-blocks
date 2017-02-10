@@ -16,8 +16,8 @@
     ],
     "require": {
         "composer/installers": "*",
-        "silverstripe/framework": "~3.1",
-        "silverstripe/cms": "~3.1",
+        "silverstripe/framework": "^4.0",
+        "silverstripe/cms": "^4.0",
         "silverstripe-australia/gridfieldextensions": "dev-master",
         "silverstripe/multivaluefield": "~2.0",
         "unclecheese/betterbuttons": "~1.2"
