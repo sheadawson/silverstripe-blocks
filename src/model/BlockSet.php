@@ -15,6 +15,7 @@ use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
 use SilverStripe\MultiValueField\Fields\MultiValueCheckboxField;
 use SilverStripe\MultiValueField\Fields\MultiValueField;
@@ -85,12 +86,14 @@ class BlockSet extends DataObject implements PermissionProvider
             return $fields;
         }
 
+        $fields->removeFieldFromTab('Root', 'Blocks');
 
         /**
         * @todo - change relation editor back to the custom block manager config and fix issues when 'creating' Blocks from a BlockSet.
 		*/
-        $fields->removeFieldFromTab('Root', 'Blocks');
         $gridConfig = GridFieldConfig_RelationEditor::create();
+        $gridConfig->addComponent(new GridFieldOrderableRows('Sort'));
+        $gridConfig->addComponent(new GridFieldDeleteAction());
 
         $gridSource = $this->Blocks()->Sort('Sort');
 
