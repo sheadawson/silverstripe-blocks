@@ -1,11 +1,11 @@
 <?php
 
-namespace SheaDawson\Blocks\extensions;
+namespace SheaDawson\Blocks\Extensions;
 
-use SheaDawson\Blocks\model\Block;
+use SheaDawson\Blocks\Model\Block;
+use SheaDawson\Blocks\Model\Blockset;
 use SheaDawson\Blocks\BlockManager;
-use SheaDawson\Blocks\model\Blockset;
-use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
+use SheaDawson\Blocks\Forms\GridFieldConfigBlockManager;
 use SilverStripe\CMS\Model\SiteTreeExtension;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\CheckboxField;

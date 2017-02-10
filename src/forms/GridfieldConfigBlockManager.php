@@ -1,9 +1,9 @@
 <?php
 
-namespace SheaDawson\Blocks\forms;
+namespace SheaDawson\Blocks\Forms;
 
-use SheaDawson\Blocks\model\Block;
-use SheaDawson\Blocks\model\BlockSet;
+use SheaDawson\Blocks\Model\Block;
+use SheaDawson\Blocks\Model\BlockSet;
 use SilverStripe\Control\Controller;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Core\Injector\Injector;
@@ -35,7 +35,7 @@ class GridFieldConfigBlockManager extends GridFieldConfig
     {
         parent::__construct();
 
-        $this->blockManager = Injector::inst()->get("SheaDawson\Blocks\BlockManager");
+        $this->blockManager = Injector::inst()->get('SheaDawson\\Blocks\\BlockManager');
         $controllerClass = Controller::curr()->class;
         // Get available Areas (for page) or all in case of ModelAdmin
         if ($controllerClass == 'CMSPageEditController') {

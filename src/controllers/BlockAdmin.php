@@ -1,10 +1,10 @@
 <?php
 
-namespace SheaDawson\Blocks\controllers;
+namespace SheaDawson\Blocks\Controllers;
 
-use SheaDawson\Blocks\model\Block;
-use SheaDawson\Blocks\model\BlockSet;
-use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
+use SheaDawson\Blocks\Model\Block;
+use SheaDawson\Blocks\Model\BlockSet;
+use SheaDawson\Blocks\Forms\GridFieldConfigBlockManager;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\ORM\Versioning\Versioned;
 

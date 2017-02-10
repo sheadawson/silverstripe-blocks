@@ -1,9 +1,9 @@
 <?php
 
-namespace SheaDawson\Blocks\extensions;
+namespace SheaDawson\Blocks\Extensions;
 
+use SheaDawson\Blocks\Model\Block;
 use SilverStripe\ORM\DataExtension;
-use SheaDawson\Blocks\model\Block;
 
 /**
  * Legacy extension to aid with migrating from Blocks 0.x to 1.x.

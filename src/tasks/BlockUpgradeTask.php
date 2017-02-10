@@ -1,9 +1,9 @@
 <?php
 
-namespace SheaDawson\Blocks\tasks;
+namespace SheaDawson\Blocks\Tasks;
 
-use SheaDawson\Blocks\model\Block;
-use SheaDawson\Blocks\model\BlockSet;
+use SheaDawson\Blocks\Model\Block;
+use SheaDawson\Blocks\Model\BlockSet;
 use SilverStripe\ORM\DB;
 use SilverStripe\SiteConfig\SiteConfig;
 
