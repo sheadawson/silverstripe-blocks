@@ -4,19 +4,19 @@ After:
   - 'framework/*'
   - 'cms/*'
 ---
-SiteTree:
+SilverStripe\CMS\Model\SiteTree:
   extensions:
-    - BlocksSiteTreeExtension
-ContentController:
+    - SheaDawson\Blocks\extensions\BlocksSiteTreeExtension
+SilverStripe\CMS\Controllers\ContentController:
   extensions:
-    - BlocksContentControllerExtension
+    - SheaDawson\Blocks\extensions\BlocksContentControllerExtension
   url_handlers:
     'block/$ID!': 'handleBlock'
-SiteConfig:
+SilverStripe\CMS\Controllers\SiteConfig:
   extensions:
-    - BlockSiteConfigExtension
-
-Block:
+    - SheaDawson\Blocks\extensions\BlockSiteConfigExtension
+SheaDawson\Blocks\model\Block:
   extensions:
-    - Versioned('Stage','Live')
-
+    - SilverStripe\ORM\Versioning\Versioned('Stage','Live')
+SilverStripe\Core\Injector\Injector:
+  blockManager: SheaDawson\Blocks\BlockManager

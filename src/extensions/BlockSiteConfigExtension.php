@@ -1,7 +1,8 @@
 <?php
 
-namespace SheaDawson\Blocks\extensions;
+namespace SheaDawson\Blocks\Extensions;
 
+use SheaDawson\Blocks\Model\Block;
 use SilverStripe\ORM\DataExtension;
 
 /**
@@ -11,9 +12,9 @@ use SilverStripe\ORM\DataExtension;
  */
 class BlockSiteConfigExtension extends DataExtension
 {
-    private static $many_many = array(
-        "Blocks" => "SheaDawson\Blocks\model\Block",
-    );
+    private static $many_many = [
+        "Blocks" => Block::class,
+    ];
 
     /**
      *

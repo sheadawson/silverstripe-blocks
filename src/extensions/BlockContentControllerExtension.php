@@ -1,6 +1,6 @@
 <?php
 
-namespace SheaDawson\Blocks\extensions;
+namespace SheaDawson\Blocks\Extensions;
 
 use SilverStripe\View\Requirements;
 use SilverStripe\Core\Extension;
@@ -10,9 +10,9 @@ class BlocksContentControllerExtension extends Extension
     /**
      * @var array
      */
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         'handleBlock',
-    );
+    ];
 
     public function onAfterInit()
     {

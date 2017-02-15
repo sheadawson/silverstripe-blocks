@@ -1,6 +1,6 @@
 <?php
 
-namespace SheaDawson\Blocks\controllers;
+namespace SheaDawson\Blocks\Controllers;
 
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;

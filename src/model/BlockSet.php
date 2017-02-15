@@ -1,20 +1,24 @@
 <?php
 
-namespace SheaDawson\Blocks\model;
+namespace SheaDawson\Blocks\Model;
 
-use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
-
+use SheaDawson\Blocks\Forms\GridFieldConfigBlockManager;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ArrayLib;
-
 use SilverStripe\CMS\Model\SiteTree;
-
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Group;
-
 use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\HeaderField;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
+use SilverStripe\MultiValueField\Fields\MultiValueCheckboxField;
+use SilverStripe\MultiValueField\Fields\MultiValueField;
 
 /**
  * BlockSet.
@@ -31,38 +35,38 @@ class BlockSet extends DataObject implements PermissionProvider
     /**
      * @var array
      **/
-    private static $db = array(
+    private static $db = [
         'Title' => 'Varchar(255)',
-        'PageTypes' => 'MultiValueField',
+        'PageTypes' => MultiValueField::class,
         'IncludePageParent' => 'Boolean',
-    );
+    ];
 
     /**
      * @var array
      **/
-    private static $many_many = array(
-        "Blocks" => "SheaDawson\Blocks\model\Block",
-        "PageParents" => "SilverStripe\CMS\Model\SiteTree",
-    );
+    private static $many_many = [
+        "Blocks" => Block::class,
+        "PageParents" => SiteTree::class,
+    ];
 
     /**
      * @var array
      **/
-    private static $many_many_extraFields = array(
-        'Blocks' => array(
+    private static $many_many_extraFields = [
+        'Blocks' => [
             'Sort' => 'Int',
             'BlockArea' => 'Varchar',
             'AboveOrBelow' => 'Varchar',
-        ),
-    );
+        ],
+    ];
 
     /**
      * @var array
      **/
-    private static $above_or_below_options = array(
+    private static $above_or_below_options = [
         'Above' => 'Above Page Blocks',
         'Below' => 'Below Page Blocks',
-    );
+    ];
 
     public function getCMSFields()
     {
@@ -73,7 +77,7 @@ class BlockSet extends DataObject implements PermissionProvider
         $fields->addFieldToTab('Root.Main', HeaderField::create('SettingsHeading', _t('BlockSet.Settings', 'Settings')), 'Title');
         $fields->addFieldToTab('Root.Main', MultiValueCheckboxField::create('PageTypes', _t('BlockSet.OnlyApplyToThesePageTypes', 'Only apply to these Page Types:'), $this->pageTypeOptions())
                 ->setDescription(_t('BlockSet.OnlyApplyToThesePageTypesDescription', 'Selected Page Types will inherit this Block Set automatically. Leave all unchecked to apply to all page types.')));
-        $fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', _t('BlockSet.OnlyApplyToChildrenOfThesePages', 'Only apply to children of these Pages:'), 'SiteTree'));
+        $fields->addFieldToTab('Root.Main', TreeMultiselectField::create('PageParents', _t('BlockSet.OnlyApplyToChildrenOfThesePages', 'Only apply to children of these Pages:'), 'SilverStripe\\CMS\\Model\\SiteTree'));
         $fields->addFieldToTab('Root.Main', CheckboxField::create('IncludePageParent', _t('BlockSet.ApplyBlockSetToSelectedPageParentsAsWellAsChildren','Apply block set to selected page parents as well as children')));
 
         if (!$this->ID) {
@@ -83,14 +87,18 @@ class BlockSet extends DataObject implements PermissionProvider
         }
 
         $fields->removeFieldFromTab('Root', 'Blocks');
-        $gridConfig = GridFieldConfigBlockManager::create(true, true, true, true, true)
-            ->addExisting()
-            ->addComponent(new GridFieldOrderableRows());
+
+        /**
+        * @todo - change relation editor back to the custom block manager config and fix issues when 'creating' Blocks from a BlockSet.
+		*/
+        $gridConfig = GridFieldConfig_RelationEditor::create();
+        $gridConfig->addComponent(new GridFieldOrderableRows('Sort'));
+        $gridConfig->addComponent(new GridFieldDeleteAction());
 
         $gridSource = $this->Blocks()->Sort('Sort');
 
-        $fields->addFieldToTab('Root.Main', HeaderField::create('BlocksHeading', _t('Block.PLURALNAME', 'Blocks')));
-        $fields->addFieldToTab('Root.Main', GridField::create('Blocks', _t('Block.PLURALNAME', 'Blocks'), $gridSource, $gridConfig));
+        $fields->addFieldToTab('Root.Blocks', HeaderField::create('BlocksHeading', _t('Block.PLURALNAME', 'Blocks')));
+        $fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', _t('Block.PLURALNAME', 'Blocks'), $gridSource, $gridConfig));
 
         return $fields;
     }
@@ -102,7 +110,7 @@ class BlockSet extends DataObject implements PermissionProvider
      */
     protected function pageTypeOptions()
     {
-        $pageTypes = array();
+        $pageTypes = [];
         $classes = ArrayLib::valueKey(SiteTree::page_type_classes());
         unset($classes['VirtualPage']);
         unset($classes['ErrorPage']);
@@ -151,26 +159,26 @@ class BlockSet extends DataObject implements PermissionProvider
         return Permission::check('ADMIN') || Permission::check('BLOCK_DELETE');
     }
 
-    public function canCreate($member = null, $context = array())
+    public function canCreate($member = null, $context = [])
     {
         return Permission::check('ADMIN') || Permission::check('BLOCK_CREATE');
     }
 
     public function providePermissions()
     {
-        return array(
-            'BLOCKSET_EDIT' => array(
+        return [
+            'BLOCKSET_EDIT' => [
                 'name' => _t('BlockSet.EditBlockSet','Edit a Block Set'),
                 'category' => _t('Block.PermissionCategory', 'Blocks'),
-            ),
-            'BLOCKSET_DELETE' => array(
+            ],
+            'BLOCKSET_DELETE' => [
                 'name' => _t('BlockSet.DeleteBlockSet','Delete a Block Set'),
                 'category' => _t('Block.PermissionCategory', 'Blocks'),
-            ),
-            'BLOCKSET_CREATE' => array(
+            ],
+            'BLOCKSET_CREATE' => [
                 'name' => _t('BlockSet.CreateBlockSet','Create a Block Set'),
                 'category' => _t('Block.PermissionCategory', 'Blocks'),
-            ),
-        );
+            ],
+        ];
     }
 }

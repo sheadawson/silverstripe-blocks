@@ -1,13 +1,12 @@
 <?php
 
-namespace SheaDawson\Blocks\forms;
+namespace SheaDawson\Blocks\Forms;
 
-use SheaDawson\Blocks\model\Block;
-use SheaDawson\Blocks\model\BlockSet;
-
+use SheaDawson\Blocks\Model\Block;
+use SheaDawson\Blocks\Model\BlockSet;
 use SilverStripe\Control\Controller;
-
 use SilverStripe\Forms\DropdownField;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldButtonRow;
@@ -18,6 +17,9 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldCopyButton;
 use SilverStripe\Forms\GridField\GridFieldEditButton;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+use SilverStripe\GridFieldExtensions\GridFieldAddNewMultiClass;
+use SilverStripe\GridFieldExtensions\GridFieldAddExistingSearchButton;
+use SilverStripe\GridFieldExtensions\GridFieldEditableColumns;
 
 /**
  * GridFieldConfig_BlockManager
@@ -33,26 +35,24 @@ class GridFieldConfigBlockManager extends GridFieldConfig
     {
         parent::__construct();
 
-        $this->blockManager = Injector::inst()->get("SheaDawson\Blocks\BlockManager");
+        $this->blockManager = Injector::inst()->get('SheaDawson\\Blocks\\BlockManager');
         $controllerClass = Controller::curr()->class;
         // Get available Areas (for page) or all in case of ModelAdmin
         if ($controllerClass == 'CMSPageEditController') {
             $currentPage = Controller::curr()->currentPage();
             $areasFieldSource = $this->blockManager->getAreasForPageType($currentPage->ClassName);
         } else {
-            $areasFieldSource = $this->blockManager->getAreasForTheme();
+            $areasFieldSource = $this->blockManager->getAreas();
         }
 
         // EditableColumns only makes sense on Saveable parenst (eg Page), or inline changes won't be saved
         if ($editableRows) {
             $this->addComponent($editable = new GridFieldEditableColumns());
             $displayfields = array(
-                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'LiteralField'),
-                'Title' => array('title' => _t('Block.Title', 'Title'), 'field' => 'ReadonlyField'),
+                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'SilverStripe\\Forms\\LiteralField'),
+                'Title' => array('title' => _t('Block.Title', 'Title'), 'field' => 'Silverstripe\\Forms\\ReadonlyField'),
                 'BlockArea' => array(
-                    'title' => _t('Block.BlockArea', 'Block Area').'
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
-                        // the &nbsp;s prevent wrapping of dropdowns
+                    'title' => _t('Block.BlockArea', 'Block Area'),
                     'callback' => function () use ($areasFieldSource) {
                             $areasField = DropdownField::create('BlockArea', 'Block Area', $areasFieldSource);
                             if (count($areasFieldSource) > 1) {
@@ -61,8 +61,8 @@ class GridFieldConfigBlockManager extends GridFieldConfig
                             return $areasField;
                         },
                 ),
-                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'LiteralField'),
-                'UsageListAsString' => array('title' => _t('Block.UsageListAsString', 'Used on'), 'field' => 'LiteralField'),
+                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'SilverStripe\\Forms\\LiteralField'),
+                'UsageListAsString' => array('title' => _t('Block.UsageListAsString', 'Used on'), 'field' => 'SilverStripe\\Forms\\LiteralField'),
             );
 
             if ($aboveOrBelow) {
@@ -78,15 +78,16 @@ class GridFieldConfigBlockManager extends GridFieldConfig
             $this->addComponent($dcols = new GridFieldDataColumns());
 
             $displayfields = array(
-                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'LiteralField'),
+                'TypeForGridfield' => array('title' => _t('Block.BlockType', 'Block Type'), 'field' => 'SilverStripe\\Forms\\LiteralField'),
                 'Title' => _t('Block.Title', 'Title'),
                 'BlockArea' => _t('Block.BlockArea', 'Block Area'),
-                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'LiteralField'),
+                'isPublishedIcon' => array('title' => _t('Block.IsPublishedField', 'Published'), 'field' => 'SilverStripe\\Forms\\LiteralField'),
                 'UsageListAsString' => _t('Block.UsageListAsString', 'Used on'),
             );
             $dcols->setDisplayFields($displayfields);
             $dcols->setFieldCasting(array('UsageListAsString' => 'HTMLText->Raw'));
         }
+
 
         $this->addComponent(new GridFieldButtonRow('before'));
         $this->addComponent(new GridFieldToolbarHeader());

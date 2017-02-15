@@ -7,7 +7,7 @@ The Blocks modules aims to provide developers with a flexible foundation for def
 ## Features
 
 * Blocks are Versioned
-* Blocks with Forms possible (through `Block_Controller`)
+* Blocks with Forms possible (through `BlockController`)
 * Drag and Drop re-ordering of Blocks
 * Duplicate Blocks
 * BlockSets for global blocks
@@ -22,7 +22,7 @@ See [the upgrade guide](docs/upgrading.md)
 
 ## Requirements
 
-* SilverStripe CMS ~3.1
+* SilverStripe CMS ^4.0
 * [GridFieldExtensions](https://github.com/silverstripe-australia/silverstripe-gridfieldextensions)
 * [MultivalueField](https://github.com/nyeholt/silverstripe-multivaluefield)
 * [GridField BetterButtons](https://github.com/unclecheese/silverstripe-gridfield-betterbuttons)
@@ -40,36 +40,34 @@ Install via composer, run `dev/build`
 
 ## Quickstart
 
-### 1. Define Block Areas and Settings for your theme in `mysite/_config/config.yml`
+### 1. Define Block Areas and Settings for your project in `mysite/_config/config.yml`
 
 ``` yml
 BlockManager:
-	themes:
-		simple:
-			areas:
-				Sidebar: true # a Sidebar area will be available on all page types in simple theme
-				BeforeContent:
-					only: HomePage # a BeforeContent area will be available only on HomePage page types in simple theme
-				AfterContent:
-					except: HomePage # a AfterContent area will be available on all page types except HomePage in simple theme
-				Footer: true # a Footer area will be available on all page types in simple theme
-
-			#use_blocksets: false # Whether to use BlockSet functionality (default if undeclared: true)
-			#use_extra_css_classes: true # Whether to allow cms users to add extra css classes to blocks (default if undeclared: false)
-			#prefix_default_css_classes: 'myprefix--' # prefix the automatically generated CSSClasses based on class name (default if undeclared: false)
-			#pagetype_whitelist: # Enable the Blocks tab only pages of these types (optional)
-			#  - HomePage
-			#pagetype_blacklist: # Disable the Blocks tab on pages of these types (optional)
-			#  - ContactPage
-			#disabled_blocks: #allows you to disable specific blocks (optional)
-			#  - ContentBlock
-	#use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)
-	#block_area_preview: false # Disable block area preview button in CMS (default if undeclared: true)
+	areas:
+		Sidebar: true # a Sidebar area will be available on all page types
+		BeforeContent:
+			only: HomePage # a BeforeContent area will be available only on HomePage page types
+		AfterContent:
+			except: HomePage # a AfterContent area will be available on all page types except HomePage
+		Footer: true # a Footer area will be available on all page types
+	options:
+		#use_blocksets: false # Whether to use BlockSet functionality (default if undeclared: true)
+		#use_extra_css_classes: true # Whether to allow cms users to add extra css classes to blocks (default if undeclared: false)
+		#prefix_default_css_classes: 'myprefix--' # prefix the automatically generated CSSClasses based on class name (default if undeclared: false)
+		#pagetype_whitelist: # Enable the Blocks tab only pages of these types (optional)
+		#  - HomePage
+		#pagetype_blacklist: # Disable the Blocks tab on pages of these types (optional)
+		#  - ContactPage
+		#disabled_blocks: #allows you to disable specific blocks (optional)
+		#  - ContentBlock
+		#use_default_blocks: false # Disable/enable the default Block types (ContentBlock) (default if undeclared: true)
+		#block_area_preview: false # Disable block area preview button in CMS (default if undeclared: true)
 ```
 
 Remember to run `?flush=1` after modifying your `.yml` config to make sure it gets applied.
 
-### 2. Add Block Areas to your themes templates
+### 2. Add Block Areas to your templates
 
 Adding the `BeforeContent` and `AfterContent` blocks would look something like
 
@@ -114,7 +112,7 @@ There are 2 types of templates you should be aware of.
 ### BlockArea Template
 
 The `BlockArea` template is responsible for looping over and rendering all blocks in that area. You can override this by
-creating a copy of the default `BlockArea.ss` and placing it in your theme's `templates/Includes` folder.
+creating a copy of the default `BlockArea.ss` and placing it in your `templates/Includes` folder.
 
 It's likely that your block areas may require different templates. You can achieve this by creating a `BlockArea_{AreaName}.ss` template.
 
@@ -148,18 +146,6 @@ There is some markup required in your BlockArea templates to facilitate this: Th
 As of v1.0 Blocks can now handle forms. See this gist for as an example:
 
 * [Block with Form example](https://gist.github.com/sheadawson/e584b0771f6b124701b4)
-
-### What if I'm not using a theme?
-
-If your running your SS instance "themeless", you can configure your blocks using the imaginary "default" theme.
-
-``` yml
-BlockManager:
-	themes:
-		default:
-			areas:
-			...
-```
 
 ### Remove the Blocks button from the main CMS menu
 

@@ -1,24 +1,24 @@
 <?php
 
-namespace SheaDawson\Blocks\extensions;
+namespace SheaDawson\Blocks\Extensions;
 
+use SheaDawson\Blocks\Model\Block;
+use SheaDawson\Blocks\Model\Blockset;
 use SheaDawson\Blocks\BlockManager;
-use SheaDawson\Blocks\model\Blockset;
-use SheaDawson\Blocks\forms\GridFieldConfigBlockManager;
-
+use SheaDawson\Blocks\Forms\GridFieldConfigBlockManager;
 use SilverStripe\CMS\Model\SiteTreeExtension;
-
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
-
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\ListboxField;
+use SilverStripe\Forms\Tab;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\View\SSViewer;
-
 use SilverStripe\ORM\ArrayList;
-
 use SilverStripe\Security\Permission;
-
 use SilverStripe\Control\Controller;
+use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
 
 /**
  * BlocksSiteTreeExtension.
@@ -27,25 +27,29 @@ use SilverStripe\Control\Controller;
  */
 class BlocksSiteTreeExtension extends SiteTreeExtension
 {
-	private static $db = array(
+	private static $db = [
 		'InheritBlockSets' => 'Boolean',
-	);
-	private static $many_many = array(
-		"Blocks" => "SheaDawson\Blocks\model\Block",
-		"DisabledBlocks" => "SheaDawson\Blocks\model\Block",
-	);
-	public static $many_many_extraFields = array(
-		'Blocks' => array(
+	];
+
+	private static $many_many = [
+		"Blocks" => Block::class,
+		"DisabledBlocks" => Block::class,
+	];
+
+	public static $many_many_extraFields = [
+		'Blocks' => [
 			'Sort' => 'Int',
 			'BlockArea' => 'Varchar',
-		),
-	);
-	private static $defaults = array(
+		],
+	];
+
+	private static $defaults = [
 		'InheritBlockSets' => 1,
-	);
-	private static $dependencies = array(
-		'blockManager' => '%$SheaDawson\\Blocks\\BlockManager',
-	);
+	];
+
+	private static $dependencies = [
+		'blockManager' => '%$blockManager',
+	];
 
 	public $blockManager;
 
@@ -97,8 +101,9 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 			$gridConfig = GridFieldConfigBlockManager::create(true, true, true, true)
 				->addExisting($this->owner->class)
 				//->addBulkEditing()
-				->addComponent(new GridFieldOrderableRows())
+				// ->addComponent(new GridFieldOrderableRows()) // Comment until below TODO is complete.
 				;
+
 
 			// TODO it seems this sort is not being applied...
 			$gridSource = $this->owner->Blocks();
@@ -110,6 +115,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 
 			$fields->addFieldToTab('Root.Blocks', GridField::create('Blocks', _t('Block.PLURALNAME', 'Blocks'), $gridSource, $gridConfig));
 
+
 			// Blocks inherited from BlockSets
 			if ($this->blockManager->getUseBlockSets()) {
 				$inheritedBlocks = $this->getBlocksFromAppliedBlockSets(null, true);
@@ -118,15 +124,15 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 					$activeInherited = $this->getBlocksFromAppliedBlockSets(null, false);
 
 					if ($activeInherited->count()) {
-						$fields->addFieldsToTab('Root.Blocks', array(
+						$fields->addFieldsToTab('Root.Blocks', [
 							GridField::create('InheritedBlockList', _t('BlocksSiteTreeExtension.BlocksInheritedFromBlockSets', 'Blocks Inherited from Block Sets'), $activeInherited,
 								GridFieldConfigBlockManager::create(false, false, false)),
-							LiteralField::create('InheritedBlockListTip', "<p class='message'>"._t('BlocksSiteTreeExtension.InheritedBlocksEditLink', 'Tip: Inherited blocks can be edited in the {link_start}Block Admin area{link_end}', '', array('link_start' => '<a href="admin/block-admin">', 'link_end' => '</a>')).'<p>'),
-						));
+							LiteralField::create('InheritedBlockListTip', "<p class='message'>"._t('BlocksSiteTreeExtension.InheritedBlocksEditLink', 'Tip: Inherited blocks can be edited in the {link_start}Block Admin area{link_end}', '', ['link_start' => '<a href="admin/block-admin">', 'link_end' => '</a>']).'<p>'),
+						]);
 					}
 
 					$fields->addFieldToTab('Root.Blocks',
-							ListBoxField::create('DisabledBlocks', _t('BlocksSiteTreeExtension.DisableInheritedBlocks', 'Disable Inherited Blocks'),
+							ListboxField::create('DisabledBlocks', _t('BlocksSiteTreeExtension.DisableInheritedBlocks', 'Disable Inherited Blocks'),
 									$inheritedBlocks->map('ID', 'Title'), null, null, true)
 									->setDescription(_t('BlocksSiteTreeExtension.DisableInheritedBlocksDescription', 'Select any inherited blocks that you would not like displayed on this page.'))
 					);
@@ -166,14 +172,14 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 			$list = $list->limit($limit);
 		}
 
-		$data = array();
+		$data = [];
 		$data['HasBlockArea'] = ($this->owner->canEdit() && isset($_REQUEST['block_preview']) && $_REQUEST['block_preview']) || $list->Count() > 0;
 		$data['BlockArea'] = $list;
 		$data['AreaID'] = $area;
 
 		$data = $this->owner->customise($data);
 
-		$template = array('BlockArea_'.$area);
+		$template = ['BlockArea_'.$area];
 
 		if (SSViewer::hasTemplate($template)) {
 			return $data->renderWith($template);
@@ -336,6 +342,6 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 	 * */
 	public function areasPreviewButton()
 	{
-		return "<a class='ss-ui-button ss-ui-button-small' style='font-style:normal;' href='".$this->areasPreviewLink()."' target='_blank'>"._t('BlocksSiteTreeExtension.PreviewBlockAreasLink', 'Preview Block Areas for this page').'</a>';
+		return "<a class='btn btn-primary' style='font-style:normal;' href='".$this->areasPreviewLink()."' target='_blank'>"._t('BlocksSiteTreeExtension.PreviewBlockAreasLink', 'Preview Block Areas for this page').'</a>';
 	}
 }

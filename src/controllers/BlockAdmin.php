@@ -1,7 +1,10 @@
 <?php
 
-namespace SheaDawson\Blocks\controllers;
+namespace SheaDawson\Blocks\Controllers;
 
+use SheaDawson\Blocks\Model\Block;
+use SheaDawson\Blocks\Model\BlockSet;
+use SheaDawson\Blocks\Forms\GridFieldConfigBlockManager;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\ORM\Versioning\Versioned;
 
@@ -12,10 +15,10 @@ use SilverStripe\ORM\Versioning\Versioned;
  */
 class BlockAdmin extends ModelAdmin
 {
-    private static $managed_models = array(
-        "SheaDawson\Blocks\model\Block",
-        "SheaDawson\Blocks\model\BlockSet",
-    );
+    private static $managed_models = [
+        Block::class,
+        Blockset::class,
+    ];
 
     private static $url_segment = "block-admin";
 
@@ -23,9 +26,9 @@ class BlockAdmin extends ModelAdmin
 
     public $showImportForm = false;
 
-    private static $dependencies = array(
-        "blockManager" => '%$SheaDawson\\Blocks\\BlockManager',
-    );
+    private static $dependencies = [
+        "blockManager" => '%$blockManager',
+    ];
 
     public $blockManager;
 
@@ -49,11 +52,11 @@ class BlockAdmin extends ModelAdmin
      **/
     public function getEditForm($id = null, $fields = null)
     {
-        // Versioned::reading_stage('Stage');
+        Versioned::set_stage('Stage');
         $form = parent::getEditForm($id, $fields);
 
         if ($blockGridField = $form->Fields()->fieldByName('Block')) {
-            $blockGridField->setConfig(GridFieldConfig_BlockManager::create(true, true, false));
+            $blockGridField->setConfig(GridFieldConfigBlockManager::create(true, true, false));
             $config = $blockGridField->getConfig();
             $dcols = $config->getComponentByType('GridFieldDataColumns');
             $dfields = $dcols->getDisplayFields($blockGridField);
