@@ -16,9 +16,9 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
-use SilverStripe\MultiValueField\Fields\MultiValueCheckboxField;
-use SilverStripe\MultiValueField\Fields\MultiValueField;
+use SilverStripeAustralia\GridFieldExtensions\GridFieldOrderableRows;
+use SilverStripeAustralia\MultiValueField\Fields\MultiValueCheckboxField;
+use SilverStripeAustralia\MultiValueField\Fields\MultiValueField;
 
 /**
  * BlockSet.
