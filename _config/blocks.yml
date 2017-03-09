@@ -1,8 +1,5 @@
 ---
 Name: 'blocks'
-After:
-  - 'framework/*'
-  - 'cms/*'
 ---
 SilverStripe\CMS\Model\SiteTree:
   extensions:
