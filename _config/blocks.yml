@@ -6,16 +6,16 @@ After:
 ---
 SilverStripe\CMS\Model\SiteTree:
   extensions:
-    - SheaDawson\Blocks\extensions\BlocksSiteTreeExtension
+    - SheaDawson\Blocks\Extensions\BlocksSiteTreeExtension
 SilverStripe\CMS\Controllers\ContentController:
   extensions:
-    - SheaDawson\Blocks\extensions\BlocksContentControllerExtension
+    - SheaDawson\Blocks\Extensions\BlocksContentControllerExtension
   url_handlers:
     'block/$ID!': 'handleBlock'
 SilverStripe\CMS\Controllers\SiteConfig:
   extensions:
-    - SheaDawson\Blocks\extensions\BlockSiteConfigExtension
-SheaDawson\Blocks\model\Block:
+    - SheaDawson\Blocks\Extensions\BlockSiteConfigExtension
+SheaDawson\Blocks\Model\Block:
   extensions:
     - SilverStripe\ORM\Versioning\Versioned('Stage','Live')
 SilverStripe\Core\Injector\Injector:
