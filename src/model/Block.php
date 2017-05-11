@@ -4,7 +4,7 @@ namespace SheaDawson\Blocks\Model;
 
 use SheaDawson\Blocks\BlockManager;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\Versioning\Versioned;
+use SilverStripe\Versioned\Versioned;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\ValidationException;

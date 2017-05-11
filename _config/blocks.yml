@@ -14,6 +14,6 @@ SilverStripe\CMS\Controllers\SiteConfig:
     - SheaDawson\Blocks\Extensions\BlockSiteConfigExtension
 SheaDawson\Blocks\Model\Block:
   extensions:
-    - SilverStripe\ORM\Versioning\Versioned('Stage','Live')
+    - SilverStripe\Versioned\Versioned('Stage','Live')
 SilverStripe\Core\Injector\Injector:
   blockManager: SheaDawson\Blocks\BlockManager
