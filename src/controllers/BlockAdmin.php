@@ -6,7 +6,7 @@ use SheaDawson\Blocks\Model\Block;
 use SheaDawson\Blocks\Model\BlockSet;
 use SheaDawson\Blocks\Forms\GridFieldConfigBlockManager;
 use SilverStripe\Admin\ModelAdmin;
-use SilverStripe\ORM\Versioning\Versioned;
+use SilverStripe\Versioned\Versioned;
 
 /**
  * BlockAdmin.
