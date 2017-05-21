@@ -17,9 +17,9 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldCopyButton;
 use SilverStripe\Forms\GridField\GridFieldEditButton;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripeAustralia\GridFieldExtensions\GridFieldAddNewMultiClass;
-use SilverStripeAustralia\GridFieldExtensions\GridFieldAddExistingSearchButton;
-use SilverStripeAustralia\GridFieldExtensions\GridFieldEditableColumns;
+use SilverStripe\GridFieldExtensions\GridFieldAddNewMultiClass;
+use SilverStripe\GridFieldExtensions\GridFieldAddExistingSearchButton;
+use SilverStripe\GridFieldExtensions\GridFieldEditableColumns;
 
 /**
  * GridFieldConfig_BlockManager
