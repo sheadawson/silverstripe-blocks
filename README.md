@@ -43,7 +43,7 @@ Install via composer, run `dev/build`
 ### 1. Define Block Areas and Settings for your project in `mysite/_config/config.yml`
 
 ``` yml
-BlockManager:
+SheaDawson\Blocks\BlockManager:
 	areas:
 		Sidebar: true # a Sidebar area will be available on all page types
 		BeforeContent:
