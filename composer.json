@@ -27,7 +27,10 @@
         "micschk/silverstripe-gridfieldsitetreebuttons": "Edit pages directly from a Block's 'used on page' list"
     },
     "extra": {
-        "installer-name": "blocks"
+        "installer-name": "blocks",
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
     },
     "autoload": {
     	"psr-4": {
