@@ -2,20 +2,20 @@
 
 namespace SheaDawson\Blocks;
 
-use SilverStripe\Core\Object;
 use SilverStripe\ORM\ArrayLib;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Forms\FormField;
 use SilverStripe\View\SSViewer;
+use SilverStripe\View\ViewableData;
 
 /**
  * BlockManager.
  *
  * @author Shea Dawson <shea@livesource.co.nz>
  */
-class BlockManager extends Object
+class BlockManager extends ViewableData
 {
 	/**
 	 * Use default ContentBlock class.
