@@ -18,14 +18,16 @@
         "composer/installers": "*",
         "silverstripe/framework": "^4.0",
         "silverstripe/cms": "^4.0",
-        "silverstripe-australia/gridfieldextensions": "2.0.x-dev",
-        "silverstripe/multivaluefield": "3.x-dev",
+        "symbiote/silverstripe-gridfieldextensions": "3.0.x-dev",
+        "symbiote/silverstripe-multivaluefield": "4.x-dev",
         "unclecheese/betterbuttons": "2.x-dev"
     },
     "suggest": {
         "unisolutions/silverstripe-copybutton": "Duplicate Blocks in Block Admin",
         "micschk/silverstripe-gridfieldsitetreebuttons": "Edit pages directly from a Block's 'used on page' list"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
         "installer-name": "blocks",
         "branch-alias": {
