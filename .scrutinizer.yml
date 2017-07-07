@@ -1,9 +1,31 @@
 inherit: true
 
-checks:
+#Copied from https://www.adayinthelifeof.nl/2013/11/20/external-code-coverage-with-travis-scrutinizer/
+tools:
+    external_code_coverage:
+      timeout: 600
+    php_code_sniffer:
+      config:
+        standard: PSR2
+    php_cs_fixer:
+      extensions:
+        # Default:
+        - php
+      fixers: []
+      enabled: false
+      filter:
+            paths: [tests/*,src/*]
+            excluded_paths: []
+coding_style:
   php:
-    code_rating: true
-    duplication: true
+    indentation:
+      general:
+        use_tabs: false
+
+checks:
+    php:
+        code_rating: true
+        duplication: true
 
 filter:
-  paths: [code/*, tests/*]
+    paths: [tests/*,src/*]

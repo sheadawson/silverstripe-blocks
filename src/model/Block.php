@@ -4,6 +4,7 @@ namespace SheaDawson\Blocks\Model;
 
 use SheaDawson\Blocks\BlockManager;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Security;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBHTMLText;
@@ -288,7 +289,7 @@ class Block extends DataObject implements PermissionProvider
     public function canView($member = null)
     {
         if (!$member || !(is_a($member, 'Member')) || is_numeric($member)) {
-            $member = Member::currentUserID();
+            $member = Security::getCurrentUser()->ID;
         }
 
         // admin override
@@ -325,22 +326,22 @@ class Block extends DataObject implements PermissionProvider
 
     public function canEdit($member = null)
     {
-        return Permission::check('ADMIN') || Permission::check('BLOCK_EDIT');
+        return Permission::check('ADMIN', 'any', $member) || Permission::check('BLOCK_EDIT', 'any', $member);
     }
 
     public function canDelete($member = null)
     {
-        return Permission::check('ADMIN') || Permission::check('BLOCK_DELETE');
+        return Permission::check('ADMIN', 'any', $member) || Permission::check('BLOCK_DELETE', 'any', $member);
     }
 
     public function canCreate($member = null, $context = [])
     {
-        return Permission::check('ADMIN') || Permission::check('BLOCK_CREATE');
+        return Permission::check('ADMIN', 'any', $member) || Permission::check('BLOCK_CREATE', 'any', $member);
     }
 
     public function canPublish($member = null)
     {
-        return Permission::check('ADMIN') || Permission::check('BLOCK_PUBLISH');
+        return Permission::check('ADMIN', 'any', $member) || Permission::check('BLOCK_PUBLISH', 'any', $member);
     }
 
     public function providePermissions()

@@ -151,17 +151,17 @@ class BlockSet extends DataObject implements PermissionProvider
 
     public function canEdit($member = null)
     {
-        return Permission::check('ADMIN') || Permission::check('BLOCK_EDIT');
+        return Permission::check('ADMIN', 'any', $member) || Permission::check('BLOCK_EDIT', 'any', $member);
     }
 
     public function canDelete($member = null)
     {
-        return Permission::check('ADMIN') || Permission::check('BLOCK_DELETE');
+        return Permission::check('ADMIN', 'any', $member) || Permission::check('BLOCK_DELETE', 'any', $member);
     }
 
     public function canCreate($member = null, $context = [])
     {
-        return Permission::check('ADMIN') || Permission::check('BLOCK_CREATE');
+        return Permission::check('ADMIN', 'any', $member) || Permission::check('BLOCK_CREATE', 'any', $member);
     }
 
     public function providePermissions()
