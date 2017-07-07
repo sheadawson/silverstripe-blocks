@@ -1,6 +1,8 @@
 # SilverStripe Blocks
 
+[![Build Status](https://travis-ci.org/sheadawson/silverstripe-blocks.svg?branch=master)](https://travis-ci.org/sheadawson/silverstripe-blocks)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sheadawson/silverstripe-blocks/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sheadawson/silverstripe-blocks/?branch=master)
+[![codecov](https://codecov.io/gh/sheadawson/silverstripe-blocks/branch/master/graph/badge.svg)](https://codecov.io/gh/sheadawson/silverstripe-blocks)
 
 The Blocks modules aims to provide developers with a flexible foundation for defining reusable blocks of content or widgets that can be managed in the CMS.
 

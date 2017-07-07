@@ -1,0 +1,31 @@
+SilverStripe\Security\Group:
+  administrators:
+    Title: Administrators
+  content_authors:
+    Title: "Content Authors"
+SilverStripe\Security\Permission:
+  administrators:
+    Code: ADMIN
+    Type: 1
+    Group: =>SilverStripe\Security\Group.administrators
+SilverStripe\Security\Member:
+  admin:
+    FirstName: Default
+    Surname: Admin
+    Email: administrator
+    Groups: =>SilverStripe\Security\Group.administrators
+  author:
+    FirstName: "Content"
+    Surname: "Author"
+    Email: "content"
+    Groups: =>SilverStripe\Security\Group.content_authors
+  default:
+    FirstName: Default
+    Surname: Member
+    Email: member
+SheaDawson\Blocks\Model\Block:
+  default:
+    Title: "Default Block"
+SheaDawson\Blocks\Model\BlockSet:
+  default:
+    Title: "Default BlockSet"
