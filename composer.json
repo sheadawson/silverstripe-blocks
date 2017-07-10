@@ -18,8 +18,8 @@
         "composer/installers": "*",
         "silverstripe/framework": "~3.1",
         "silverstripe/cms": "~3.1",
-        "silverstripe-australia/gridfieldextensions": "~1.0",
-        "silverstripe/multivaluefield": "~2.0",
+        "symbiote/gridfieldextensions": "~1.0",
+        "symbiote/multivaluefield": "~2.0",
         "unclecheese/betterbuttons": "~1.2"
     },
     "suggest": {
