@@ -31,6 +31,7 @@ See [the upgrade guide](docs/upgrading.md)
 
 ## Recommended
 * [GridField Copybutton](https://github.com/unisolutions/silverstripe-copybutton) (duplication of blocks, from BlockAdmin)
+* [GridField Sitetree Buttons](https://github.com/micschk/silverstripe-gridfieldsitetreebuttons) (Edit pages directly from a Block's 'used on page' list)
 
 ## Installation
 
