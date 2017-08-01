@@ -18,9 +18,11 @@
         "composer/installers": "*",
         "silverstripe/framework": "^4.0",
         "silverstripe/cms": "^4.0",
-        "symbiote/silverstripe-gridfieldextensions": "3.0.x-dev",
-        "symbiote/silverstripe-multivaluefield": "4.x-dev",
-        "unclecheese/betterbuttons": "2.x-dev"
+        "symbiote/silverstripe-gridfieldextensions": "^3.0",
+        "symbiote/silverstripe-multivaluefield": "^4.0"
+    },
+    "require-dev": {
+        "phpunit/PHPUnit": "^5.7"
     },
     "suggest": {
         "unisolutions/silverstripe-copybutton": "Duplicate Blocks in Block Admin",
@@ -36,7 +38,8 @@
     },
     "autoload": {
     	"psr-4": {
-    		"SheaDawson\\Blocks\\": "src/"
+    		"SheaDawson\\Blocks\\": "src/",
+            "SheaDawson\\Blocks\\Test\\": "tests/"
     	}
     }
 }
