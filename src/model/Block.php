@@ -34,7 +34,7 @@ use SilverStripe\Forms\Tab;
 class Block extends DataObject implements PermissionProvider
 {
 
-	private static $table_name = 'Block';
+    private static $table_name = 'Block';
 
     /**
      * @var array
@@ -366,15 +366,15 @@ class Block extends DataObject implements PermissionProvider
         ];
     }
 
-		public function onBeforeWrite()
-		{
-				$defaultBlockArea = Block::config()->get('defaultBlockArea');
-				$blockArea = $this->getField('ManyMany[BlockArea]');
-				if ($defaultBlockArea !== false && $blockArea === null) {
-						$this->setField('ManyMany[BlockArea]', $defaultBlockArea);
-				}
-				parent::onBeforeWrite();
-		}
+    public function onBeforeWrite()
+    {
+        $defaultBlockArea = Block::config()->get('defaultBlockArea');
+        $blockArea = $this->getField('ManyMany[BlockArea]');
+        if ($defaultBlockArea !== false && $blockArea === null) {
+          $this->setField('ManyMany[BlockArea]', $defaultBlockArea);
+        }
+        parent::onBeforeWrite();
+    }
 
     public function onAfterWrite()
     {
