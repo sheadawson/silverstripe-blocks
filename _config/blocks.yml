@@ -1,6 +1,8 @@
 ---
 Name: 'blocks'
 ---
+Blocks:
+  defaultBlockArea: false
 SilverStripe\CMS\Model\SiteTree:
   extensions:
     - SheaDawson\Blocks\Extensions\BlocksSiteTreeExtension
