@@ -17,6 +17,6 @@ SiteConfig:
     - BlockSiteConfigExtension
 
 Block:
+  defaultBlockArea: false
   extensions:
     - Versioned('Stage','Live')
-

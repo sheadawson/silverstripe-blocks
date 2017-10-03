@@ -257,6 +257,16 @@ class Block extends DataObject implements PermissionProvider
         $this->BlockSets()->removeAll();
     }
 
+    public function onBeforeWrite()
+    {
+        $defaultBlockArea = Block::config()->get('defaultBlockArea');
+        $blockArea = $this->getField('ManyMany[BlockArea]');
+        if ($defaultBlockArea !== false && $blockArea === null) {
+            $this->setField('ManyMany[BlockArea]', $defaultBlockArea);
+        }
+        parent::onBeforeWrite();
+    }
+
     /*
      * Base permissions
      */
