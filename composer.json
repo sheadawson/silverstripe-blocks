@@ -19,7 +19,7 @@
         "silverstripe/framework": "^4.0",
         "silverstripe/cms": "^4.0",
         "symbiote/silverstripe-gridfieldextensions": "3.0.x-dev",
-        "symbiote/silverstripe-multivaluefield": "4.x-dev",
+        "symbiote/silverstripe-multivaluefield": "^5.0",
         "unclecheese/betterbuttons": "2.x-dev"
     },
     "suggest": {
