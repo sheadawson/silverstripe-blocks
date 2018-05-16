@@ -6,6 +6,10 @@
 
 The Blocks modules aims to provide developers with a flexible foundation for defining reusable blocks of content or widgets that can be managed in the CMS.
 
+## Notice
+
+This module is no longer maintained. If you would like to adopt it and give it a good home please submit your interest and I will be happy to discuss.
+
 ## Features
 
 * Blocks are Versioned
