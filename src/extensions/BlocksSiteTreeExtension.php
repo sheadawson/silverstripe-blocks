@@ -263,7 +263,7 @@ class BlocksSiteTreeExtension extends SiteTreeExtension
 			return $list;
 		}
 
-		$sets = BlockSet::get()->where("(PageTypesValue IS NULL) OR (PageTypesValue LIKE '%:\"{$this->owner->ClassName}%')");
+		$sets = BlockSet::get()->where("(PageTypes IS NULL) OR (PageTypes LIKE '%:\"{$this->owner->ClassName}%')");
 		$ancestors = $this->owner->getAncestors()->column('ID');
 
 		foreach ($sets as $set) {
