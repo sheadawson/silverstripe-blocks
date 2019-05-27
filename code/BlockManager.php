@@ -4,7 +4,7 @@
  *
  * @author Shea Dawson <shea@livesource.co.nz>
  */
-class BlockManager extends Object
+class BlockManager extends SS_Object
 {
 	/**
 	 * Define areas and config on a per theme basis.
