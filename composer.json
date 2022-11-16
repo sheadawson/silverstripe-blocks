@@ -31,7 +31,7 @@
     "extra": {
         "installer-name": "blocks",
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "dev-feature/ss4-upgrade"
         }
     },
     "autoload": {
